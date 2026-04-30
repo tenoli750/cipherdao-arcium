@@ -1,0 +1,24 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Confidential governance network</title>
+  <desc id="desc">A shielded ballot box connected to verification nodes.</desc>
+  <rect width="960" height="640" rx="0" fill="#F7F8FB"/>
+  <path d="M84 520h792" stroke="#D9DEE8" stroke-width="2"/>
+  <path d="M218 428c70-80 138-120 204-120s119 54 180 49c61-6 102-73 190-104" stroke="#B7C7C9" stroke-width="4" stroke-linecap="round"/>
+  <path d="M198 210h564c24 0 44 20 44 44v152c0 24-20 44-44 44H198c-24 0-44-20-44-44V254c0-24 20-44 44-44Z" fill="#FFFFFF" stroke="#18212F" stroke-width="3"/>
+  <path d="M243 171h474c18 0 33 15 33 33v8H210v-8c0-18 15-33 33-33Z" fill="#0F8B8D" stroke="#18212F" stroke-width="3"/>
+  <path d="M333 282h294" stroke="#18212F" stroke-width="10" stroke-linecap="round"/>
+  <path d="M318 324h324" stroke="#CBD3DF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M318 360h218" stroke="#CBD3DF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M446 91c76 31 139 37 189 18v132c0 91-58 160-189 206-131-46-189-115-189-206V109c50 19 113 13 189-18Z" fill="#E8F4F1" stroke="#18212F" stroke-width="4"/>
+  <path d="M446 145c43 18 78 21 106 10v78c0 51-32 90-106 116-74-26-106-65-106-116v-78c28 11 63 8 106-10Z" fill="#2D6A4F"/>
+  <path d="M403 244l29 29 61-74" stroke="white" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="170" cy="147" r="30" fill="#D38B0D" stroke="#18212F" stroke-width="3"/>
+  <circle cx="793" cy="140" r="30" fill="#D38B0D" stroke="#18212F" stroke-width="3"/>
+  <circle cx="801" cy="516" r="30" fill="#D38B0D" stroke="#18212F" stroke-width="3"/>
+  <circle cx="150" cy="500" r="30" fill="#D38B0D" stroke="#18212F" stroke-width="3"/>
+  <path d="M199 155l151 44M763 151l-166 44M179 489l193-101M775 502l-199-111" stroke="#18212F" stroke-width="3" stroke-linecap="round" stroke-dasharray="12 12"/>
+  <rect x="121" y="118" width="98" height="18" rx="9" fill="#FFFFFF"/>
+  <rect x="744" y="111" width="98" height="18" rx="9" fill="#FFFFFF"/>
+  <rect x="752" y="487" width="98" height="18" rx="9" fill="#FFFFFF"/>
+  <rect x="101" y="471" width="98" height="18" rx="9" fill="#FFFFFF"/>
+</svg>

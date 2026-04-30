@@ -1,0 +1,11 @@
+[package]
+name = "encrypted-ixs"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[lib]
+path = "private_vote.rs"
+
+[dependencies]
+arcis = "0.9.7"

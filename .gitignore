@@ -1,0 +1,10 @@
+.DS_Store
+.env
+.anchor/
+target/
+artifacts/
+build/
+node_modules/
+dist/
+coverage/
+*.log

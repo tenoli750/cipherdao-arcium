@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CipherDAO Private Governance</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">C</span>
+        <div>
+          <strong>CipherDAO</strong>
+          <span>Private Solana governance</span>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <span class="cluster-pill">Arcium localnet</span>
+        <button class="icon-button" type="button" data-open-dialog aria-label="Create proposal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button class="connect-button" type="button" data-connect>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1M16 12h5m0 0-2-2m2 2-2 2"/></svg>
+          <span>Connect</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="proposal-rail" aria-label="Proposals">
+        <div class="section-heading">
+          <span>Proposals</span>
+          <strong>Active votes</strong>
+        </div>
+        <div class="proposal-list" data-proposal-list></div>
+      </aside>
+
+      <section class="workspace" aria-label="Voting workspace">
+        <div class="proposal-header">
+          <div>
+            <span class="eyebrow">Encrypted ballot</span>
+            <h1 data-proposal-title></h1>
+            <p data-proposal-summary></p>
+          </div>
+          <span class="state-chip" data-privacy-state>Sealed</span>
+        </div>
+
+        <div class="metrics">
+          <div>
+            <span>Receipts</span>
+            <strong data-receipt-count>0</strong>
+          </div>
+          <div>
+            <span>Quorum</span>
+            <strong data-quorum>0</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong data-close-label>Open</strong>
+          </div>
+        </div>
+
+        <div class="voting-layout">
+          <section class="ballot-panel">
+            <div class="panel-title">
+              <span>Cast vote</span>
+              <strong>Private choice</strong>
+            </div>
+            <div class="choice-grid" data-vote-options></div>
+            <button class="primary-action" type="button" data-cast-vote>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z"/></svg>
+              Cast encrypted vote
+            </button>
+          </section>
+
+          <section class="tally-panel">
+            <div class="panel-title">
+              <span>Final tally</span>
+              <strong data-proof-state>MPC execution pending</strong>
+            </div>
+            <div class="tally-box" data-tally></div>
+            <button class="secondary-action" type="button" data-finalize>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              Close and publish
+            </button>
+          </section>
+        </div>
+
+        <section class="receipt-panel">
+          <div class="panel-title">
+            <span>Public ledger</span>
+            <strong>Encrypted receipts</strong>
+          </div>
+          <ol class="receipt-list" data-receipts></ol>
+        </section>
+      </section>
+
+      <aside class="proof-panel" aria-label="Arcium proof panel">
+        <img src="./assets/confidential-governance.svg" alt="Confidential governance network">
+        <div class="proof-copy">
+          <span>Verified result</span>
+          <code data-proof>Waiting for finalization</code>
+        </div>
+        <div class="node-grid" aria-label="Computation path">
+          <span>Browser encryption</span>
+          <span>Solana queue</span>
+          <span>Arcium MPC</span>
+          <span>BLS verified callback</span>
+        </div>
+      </aside>
+    </main>
+
+    <dialog class="proposal-dialog" data-dialog>
+      <form data-create-form method="dialog">
+        <div class="dialog-header">
+          <strong>New proposal</strong>
+          <button class="icon-button" type="button" data-close-dialog aria-label="Close dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <label>
+          Title
+          <input name="title" type="text" maxlength="72" required>
+        </label>
+        <label>
+          Summary
+          <textarea name="summary" rows="4" maxlength="180" required></textarea>
+        </label>
+        <label>
+          Quorum
+          <input name="quorum" type="number" min="1" max="32" value="5" required>
+        </label>
+        <button class="primary-action" type="submit">Create proposal</button>
+      </form>
+    </dialog>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <script src="./src/governance-core.js"></script>
+    <script src="./src/app.js"></script>
+  </body>
+</html>

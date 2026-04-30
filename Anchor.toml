@@ -1,0 +1,26 @@
+[toolchain]
+package_manager = "npm"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+private_dao = "BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "npm test"
+
+[test]
+startup_wait = 120000
+
+[test.validator]
+gossip_port = 19001
+dynamic_port_range = "19002-19020"
