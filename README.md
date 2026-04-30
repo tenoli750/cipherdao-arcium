@@ -79,13 +79,6 @@ npm run check
 
 ## GitHub publication
 
-Create a public GitHub repository named `cipherdao`, then push this project:
+Public repository:
 
-```bash
-git init
-git add .
-git commit -m "Initial CipherDAO private governance demo"
-git branch -M main
-git remote add origin https://github.com/<your-org>/cipherdao.git
-git push -u origin main
-```
+https://github.com/tenoli750/cipherdao-arcium

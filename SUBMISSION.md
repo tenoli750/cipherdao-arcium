@@ -31,4 +31,6 @@ Private DAO voting can make governance more credible for treasuries, validator d
 
 ## Repository
 
-The project is MIT licensed and ready to publish as an open-source GitHub repository.
+The project is MIT licensed and published as an open-source GitHub repository:
+
+https://github.com/tenoli750/cipherdao-arcium

@@ -14,11 +14,13 @@ Completed:
 - MXE initialized.
 - DAO account initialized.
 - Computation definition accounts initialized.
+- Public GitHub repository published at `https://github.com/tenoli750/cipherdao-arcium`.
 
 Blocked:
 
 - Circuit upload/finalization needs additional devnet SOL for raw circuit account rent.
 - The public devnet faucet rate-limited additional airdrops after initial deployment.
+- The deploy wallet currently has enough for normal transactions, but not enough to upload all Arcis circuit bytes on-chain.
 
 ## Commands
 
@@ -51,3 +53,9 @@ solana airdrop 5 --url https://api.devnet.solana.com
 ```
 
 If the public faucet is rate-limited, use another devnet faucet or a funded devnet wallet, then rerun `npm run dao:bootstrap`.
+The Solana proof-of-work faucet can also help with small amounts:
+
+```bash
+cargo install devnet-pow
+devnet-pow mine -d 3 --reward 0.02 --no-infer -t 100000000 --url https://api.devnet.solana.com
+```
