@@ -11,10 +11,10 @@ DAO votes are often public from the moment they are submitted. That leaks interi
 CipherDAO keeps the ballot state inside an Arcium MPC computation.
 
 - Voters encrypt `VoteInput` with the MXE public key and submit ciphertexts through Solana.
-- `cast_private_vote` runs in Arcis and updates `Enc<Mxe, BallotState>`.
+- `cast_private_vote_v2` runs in Arcis and updates `Enc<Mxe, BallotState>`.
 - The encrypted state is stored back on Solana, but only the MXE can decrypt it.
 - Interim vote choices and running totals are never revealed to voters, validators, RPC providers, or the application host.
-- `publish_private_tally` runs after the close time and reveals only aggregate counts.
+- `publish_private_tally_v2` runs after the close time and reveals only aggregate counts.
 - The Solana callback verifies Arcium's signed output before storing final results.
 
 ## Confidential instruction surface
@@ -24,7 +24,7 @@ CipherDAO keeps the ballot state inside an Arcium MPC computation.
 - `VoteInput`: a private voter hash and choice.
 - `BallotState`: encrypted yes, no, abstain, and total counters.
 - `cast_private_vote_v2`: updates the encrypted counter state inside `Enc<Mxe, BallotState>`.
-- `publish_private_tally`: counts yes, no, and abstain privately, then reveals only totals.
+- `publish_private_tally_v2`: counts yes, no, and abstain privately, then reveals only totals.
 - The compiled `.arcis` circuits are published in `public-circuits/` and referenced as off-chain circuit sources. Arcium nodes verify them with compile-time `circuit_hash!(...)` values before execution.
 
 The circuit uses fixed-size structs because Arcis circuits need static structure. It avoids `Vec`, `String`, `match`, dynamic loops, and early returns.

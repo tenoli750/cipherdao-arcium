@@ -44,17 +44,17 @@ npm run deploy:devnet
 RPC_URL=https://api.devnet.solana.com ARCIUM_CLUSTER_OFFSET=456 npm run dao:bootstrap
 ```
 
-The current devnet program is `BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV`. See `docs/devnet-runbook.md` for the latest deployment state and follow-up commands.
+The current devnet program is `6NvJiHpUPbmnbgrdHx6Pne5K1qzCWXfwkT5MmDxShkKe`. See `docs/devnet-runbook.md` for the latest deployment state, proposal PDA, and follow-up commands.
 
 Large Arcis circuits are configured for off-chain loading from the public GitHub repository. Arx nodes verify each downloaded circuit with `circuit_hash!(...)`, so the bytecode does not need to be stored fully on Solana for new deployments.
 
 ## Arcium flow
 
 1. The voter encrypts a ballot in the browser with the MXE public key using the Arcium JavaScript client.
-2. The Solana program queues the `cast_private_vote` confidential instruction.
+2. The Solana program queues the `cast_private_vote_v2` confidential instruction.
 3. Arcium converts ciphertexts into secret shares and updates `Enc<Mxe, BallotState>`.
 4. No observer sees the vote choice or running tally while the proposal is open.
-5. When the proposal closes, the program queues `publish_private_tally`.
+5. When the proposal closes, the program queues `publish_private_tally_v2`.
 6. Arcium reveals only the aggregate counts and returns a signed output.
 7. The callback verifies the output with `verify_output(...)` before publishing the tally on Solana.
 
