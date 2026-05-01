@@ -2,7 +2,9 @@ import * as anchor from "@coral-xyz/anchor";
 import { AddressLookupTableProgram, Keypair, PublicKey } from "@solana/web3.js";
 import {
   awaitComputationFinalization,
+  CircuitSource,
   getArciumProgram,
+  getCircuitState,
   getClockAccAddress,
   getClusterAccAddress,
   getCompDefAccAddress,
@@ -171,6 +173,12 @@ export async function initComputationDefinitions(params: {
       if (!message.includes("already in use") && !message.includes("already initialized")) {
         throw error;
       }
+    }
+
+    const compDef = await arciumProgram.account.computationDefinitionAccount.fetch(compDefAccount);
+    const circuitState = getCircuitState(compDef.circuitSource as CircuitSource);
+    if (circuitState !== "OnchainPending") {
+      continue;
     }
 
     const rawCircuit = fs.readFileSync(`build/${name}.arcis`);

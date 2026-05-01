@@ -1,5 +1,7 @@
 use anchor_lang::prelude::*;
 use arcium_anchor::prelude::*;
+use arcium_client::idl::arcium::types::{CircuitSource, OffChainCircuitSource};
+use arcium_macros::circuit_hash;
 
 declare_id!("BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV");
 
@@ -24,7 +26,10 @@ pub mod private_dao {
         title_hash: [u8; 32],
         closes_at: i64,
     ) -> Result<()> {
-        require!(closes_at > Clock::get()?.unix_timestamp, ErrorCode::InvalidCloseTime);
+        require!(
+            closes_at > Clock::get()?.unix_timestamp,
+            ErrorCode::InvalidCloseTime
+        );
 
         let dao = &mut ctx.accounts.dao;
         let proposal = &mut ctx.accounts.proposal;
@@ -44,19 +49,40 @@ pub mod private_dao {
     }
 
     pub fn init_cast_private_vote_comp_def(ctx: Context<InitCastPrivateVoteCompDef>) -> Result<()> {
-        init_comp_def(ctx.accounts, None, None)?;
+        init_comp_def(
+            ctx.accounts,
+            Some(CircuitSource::OffChain(OffChainCircuitSource {
+                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/cast_private_vote.arcis".to_string(),
+                hash: circuit_hash!("cast_private_vote"),
+            })),
+            None,
+        )?;
         Ok(())
     }
 
     pub fn init_private_ballot_comp_def(ctx: Context<InitPrivateBallotCompDef>) -> Result<()> {
-        init_comp_def(ctx.accounts, None, None)?;
+        init_comp_def(
+            ctx.accounts,
+            Some(CircuitSource::OffChain(OffChainCircuitSource {
+                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/init_private_ballot.arcis".to_string(),
+                hash: circuit_hash!("init_private_ballot"),
+            })),
+            None,
+        )?;
         Ok(())
     }
 
     pub fn init_publish_private_tally_comp_def(
         ctx: Context<InitPublishPrivateTallyCompDef>,
     ) -> Result<()> {
-        init_comp_def(ctx.accounts, None, None)?;
+        init_comp_def(
+            ctx.accounts,
+            Some(CircuitSource::OffChain(OffChainCircuitSource {
+                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/publish_private_tally.arcis".to_string(),
+                hash: circuit_hash!("publish_private_tally"),
+            })),
+            None,
+        )?;
         Ok(())
     }
 
@@ -106,8 +132,7 @@ pub mod private_dao {
             ErrorCode::BallotNotInitialized
         );
 
-        let mut args = ArgBuilder::new()
-            .plaintext_u128(state_nonce);
+        let mut args = ArgBuilder::new().plaintext_u128(state_nonce);
 
         for chunk in ctx.accounts.proposal.encrypted_state.iter() {
             args = args.encrypted_u128(*chunk);
@@ -147,7 +172,10 @@ pub mod private_dao {
             Clock::get()?.unix_timestamp >= ctx.accounts.proposal.closes_at,
             ErrorCode::ProposalStillOpen
         );
-        require!(!ctx.accounts.proposal.finalized, ErrorCode::AlreadyFinalized);
+        require!(
+            !ctx.accounts.proposal.finalized,
+            ErrorCode::AlreadyFinalized
+        );
         require!(
             !ctx.accounts.proposal.encrypted_state.is_empty(),
             ErrorCode::BallotNotInitialized

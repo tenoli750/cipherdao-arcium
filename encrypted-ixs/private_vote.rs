@@ -62,7 +62,8 @@ mod private_vote {
         let mut written = false;
 
         for i in 0..MAX_VOTES {
-            let same_voter = state.slots[i].occupied && state.slots[i].voter_hash == vote.voter_hash;
+            let same_voter =
+                state.slots[i].occupied && state.slots[i].voter_hash == vote.voter_hash;
             if can_vote && same_voter {
                 state.slots[i].choice = vote.choice;
             }

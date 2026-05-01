@@ -14,6 +14,8 @@ The project includes an Arcium project layout with:
 
 Votes are encrypted client-side, processed inside Arcium MPC, stored as MXE-owned encrypted state, and revealed only as final yes, no, abstain, and total counts.
 
+The compiled Arcis circuits are published as public off-chain artifacts and referenced from the Solana program with `OffChainCircuitSource` plus `circuit_hash!(...)`, reducing Solana rent while preserving circuit integrity checks.
+
 ## Privacy Benefits
 
 - No public interim vote choices.

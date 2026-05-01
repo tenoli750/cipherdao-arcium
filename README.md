@@ -12,6 +12,7 @@ Public voting creates vote-copying, bribery, retaliation, and tactical last-minu
 - A Solana and Arcium project layout with `Anchor.toml`, `Arcium.toml`, `programs/private_dao/`, and `encrypted-ixs/`.
 - A confidential Arcis instruction design for encrypted vote state and final tallying.
 - A TypeScript client integration guide in `app/privateDaoClient.ts`.
+- Public off-chain Arcis circuit artifacts in `public-circuits/`.
 - English submission documentation in `docs/arcium-integration.md`.
 - MIT license for open-source publication.
 
@@ -44,6 +45,8 @@ RPC_URL=https://api.devnet.solana.com ARCIUM_CLUSTER_OFFSET=456 npm run dao:boot
 ```
 
 The current devnet program is `BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV`. See `docs/devnet-runbook.md` for the latest deployment state and follow-up commands.
+
+Large Arcis circuits are configured for off-chain loading from the public GitHub repository. Arx nodes verify each downloaded circuit with `circuit_hash!(...)`, so the bytecode does not need to be stored fully on Solana for new deployments.
 
 ## Arcium flow
 

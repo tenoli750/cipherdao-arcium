@@ -25,6 +25,7 @@ CipherDAO keeps the ballot state inside an Arcium MPC computation.
 - `BallotState`: a fixed-size private ballot array.
 - `cast_private_vote`: inserts or updates a voter's private ballot inside `Enc<Mxe, BallotState>`.
 - `publish_private_tally`: counts yes, no, and abstain privately, then reveals only totals.
+- The compiled `.arcis` circuits are published in `public-circuits/` and referenced as off-chain circuit sources. Arcium nodes verify them with compile-time `circuit_hash!(...)` values before execution.
 
 The circuit uses fixed arrays and compile-time loops because Arcis circuits need static structure. It avoids `Vec`, `String`, `match`, dynamic loops, and early returns.
 

@@ -15,12 +15,14 @@ Completed:
 - DAO account initialized.
 - Computation definition accounts initialized.
 - Public GitHub repository published at `https://github.com/tenoli750/cipherdao-arcium`.
+- Repository updated to use off-chain circuit sources for future deployments.
 
 Blocked:
 
 - Circuit upload/finalization needs additional devnet SOL for raw circuit account rent.
 - The public devnet faucet rate-limited additional airdrops after initial deployment.
 - The deploy wallet currently has enough for normal transactions, but not enough to upload all Arcis circuit bytes on-chain.
+- The already-created devnet computation definitions still point to on-chain circuit storage. The off-chain circuit source update applies to a fresh deployment or a program version that uses fresh computation definition accounts.
 
 ## Commands
 
@@ -59,3 +61,5 @@ The Solana proof-of-work faucet can also help with small amounts:
 cargo install devnet-pow
 devnet-pow mine -d 3 --reward 0.02 --no-infer -t 100000000 --url https://api.devnet.solana.com
 ```
+
+For a cleaner low-rent devnet run, deploy a fresh program after the off-chain circuit source update. The new computation definitions will reference the public GitHub `.arcis` URLs and skip raw circuit account upload.
