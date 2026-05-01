@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-private_dao = "BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV"
+private_dao = "6NvJiHpUPbmnbgrdHx6Pne5K1qzCWXfwkT5MmDxShkKe"
 
 [registry]
 url = "https://api.apr.dev"

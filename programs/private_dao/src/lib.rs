@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 use arcium_anchor::prelude::*;
-use arcium_client::idl::arcium::types::{CircuitSource, OffChainCircuitSource};
+use arcium_client::idl::arcium::types::{CallbackAccount, CircuitSource, OffChainCircuitSource};
 use arcium_macros::circuit_hash;
 
-declare_id!("BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV");
+declare_id!("6NvJiHpUPbmnbgrdHx6Pne5K1qzCWXfwkT5MmDxShkKe");
 
 const COMP_DEF_OFFSET_CAST_PRIVATE_VOTE: u32 = comp_def_offset("cast_private_vote");
 const COMP_DEF_OFFSET_INIT_PRIVATE_BALLOT: u32 = comp_def_offset("init_private_ballot");
@@ -107,7 +107,10 @@ pub mod private_dao {
             vec![InitPrivateBallotCallback::callback_ix(
                 computation_offset,
                 &ctx.accounts.mxe_account,
-                &[],
+                &[CallbackAccount {
+                    pubkey: ctx.accounts.proposal.key(),
+                    is_writable: true,
+                }],
             )?],
             1,
             0,
@@ -154,7 +157,10 @@ pub mod private_dao {
             vec![CastPrivateVoteCallback::callback_ix(
                 computation_offset,
                 &ctx.accounts.mxe_account,
-                &[],
+                &[CallbackAccount {
+                    pubkey: ctx.accounts.proposal.key(),
+                    is_writable: true,
+                }],
             )?],
             1,
             0,
@@ -194,7 +200,10 @@ pub mod private_dao {
             vec![PublishPrivateTallyCallback::callback_ix(
                 computation_offset,
                 &ctx.accounts.mxe_account,
-                &[],
+                &[CallbackAccount {
+                    pubkey: ctx.accounts.proposal.key(),
+                    is_writable: true,
+                }],
             )?],
             1,
             0,
@@ -573,8 +582,6 @@ pub struct PublishPrivateTally<'info> {
 #[callback_accounts("cast_private_vote")]
 #[derive(Accounts)]
 pub struct CastPrivateVoteCallback<'info> {
-    #[account(mut)]
-    pub proposal: Account<'info, Proposal>,
     pub arcium_program: Program<'info, Arcium>,
     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_CAST_PRIVATE_VOTE))]
     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
@@ -587,13 +594,13 @@ pub struct CastPrivateVoteCallback<'info> {
     #[account(address = ::anchor_lang::solana_program::sysvar::instructions::ID)]
     /// CHECK: instructions sysvar.
     pub instructions_sysvar: AccountInfo<'info>,
+    #[account(mut)]
+    pub proposal: Account<'info, Proposal>,
 }
 
 #[callback_accounts("init_private_ballot")]
 #[derive(Accounts)]
 pub struct InitPrivateBallotCallback<'info> {
-    #[account(mut)]
-    pub proposal: Account<'info, Proposal>,
     pub arcium_program: Program<'info, Arcium>,
     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_INIT_PRIVATE_BALLOT))]
     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
@@ -606,13 +613,13 @@ pub struct InitPrivateBallotCallback<'info> {
     #[account(address = ::anchor_lang::solana_program::sysvar::instructions::ID)]
     /// CHECK: instructions sysvar.
     pub instructions_sysvar: AccountInfo<'info>,
+    #[account(mut)]
+    pub proposal: Account<'info, Proposal>,
 }
 
 #[callback_accounts("publish_private_tally")]
 #[derive(Accounts)]
 pub struct PublishPrivateTallyCallback<'info> {
-    #[account(mut)]
-    pub proposal: Account<'info, Proposal>,
     pub arcium_program: Program<'info, Arcium>,
     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_PUBLISH_PRIVATE_TALLY))]
     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
@@ -625,6 +632,8 @@ pub struct PublishPrivateTallyCallback<'info> {
     #[account(address = ::anchor_lang::solana_program::sysvar::instructions::ID)]
     /// CHECK: instructions sysvar.
     pub instructions_sysvar: AccountInfo<'info>,
+    #[account(mut)]
+    pub proposal: Account<'info, Proposal>,
 }
 
 #[account]

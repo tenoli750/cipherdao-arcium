@@ -1,5 +1,5 @@
 {
-  "address": "BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV",
+  "address": "6NvJiHpUPbmnbgrdHx6Pne5K1qzCWXfwkT5MmDxShkKe",
   "metadata": {
     "name": "private_dao",
     "version": "0.1.0",
@@ -158,10 +158,6 @@
       ],
       "accounts": [
         {
-          "name": "proposal",
-          "writable": true
-        },
-        {
           "name": "arcium_program",
           "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
         },
@@ -180,6 +176,10 @@
         {
           "name": "instructions_sysvar",
           "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
         }
       ],
       "args": [
@@ -452,10 +452,6 @@
       ],
       "accounts": [
         {
-          "name": "proposal",
-          "writable": true
-        },
-        {
           "name": "arcium_program",
           "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
         },
@@ -474,6 +470,10 @@
         {
           "name": "instructions_sysvar",
           "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
         }
       ],
       "args": [
@@ -753,10 +753,6 @@
       ],
       "accounts": [
         {
-          "name": "proposal",
-          "writable": true
-        },
-        {
           "name": "arcium_program",
           "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
         },
@@ -775,6 +771,10 @@
         {
           "name": "instructions_sysvar",
           "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
         }
       ],
       "args": [

@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/private_dao.json`.
  */
 export type PrivateDao = {
-  "address": "BasNpiyU8fAv9zYjZxS59p47tSKLA2UbJCWJu6vGPqUV",
+  "address": "6NvJiHpUPbmnbgrdHx6Pne5K1qzCWXfwkT5MmDxShkKe",
   "metadata": {
     "name": "privateDao",
     "version": "0.1.0",
@@ -164,10 +164,6 @@ export type PrivateDao = {
       ],
       "accounts": [
         {
-          "name": "proposal",
-          "writable": true
-        },
-        {
           "name": "arciumProgram",
           "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
         },
@@ -186,6 +182,10 @@ export type PrivateDao = {
         {
           "name": "instructionsSysvar",
           "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
         }
       ],
       "args": [
@@ -458,10 +458,6 @@ export type PrivateDao = {
       ],
       "accounts": [
         {
-          "name": "proposal",
-          "writable": true
-        },
-        {
           "name": "arciumProgram",
           "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
         },
@@ -480,6 +476,10 @@ export type PrivateDao = {
         {
           "name": "instructionsSysvar",
           "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
         }
       ],
       "args": [
@@ -759,10 +759,6 @@ export type PrivateDao = {
       ],
       "accounts": [
         {
-          "name": "proposal",
-          "writable": true
-        },
-        {
           "name": "arciumProgram",
           "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
         },
@@ -781,6 +777,10 @@ export type PrivateDao = {
         {
           "name": "instructionsSysvar",
           "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
         }
       ],
       "args": [
