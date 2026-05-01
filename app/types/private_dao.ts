@@ -151,16 +151,16 @@ export type PrivateDao = {
       ]
     },
     {
-      "name": "castPrivateVoteCallback",
+      "name": "castPrivateVoteV2Callback",
       "discriminator": [
-        125,
-        166,
-        114,
-        225,
-        18,
-        74,
-        66,
-        100
+        12,
+        253,
+        246,
+        219,
+        208,
+        177,
+        51,
+        91
       ],
       "accounts": [
         {
@@ -199,7 +199,7 @@ export type PrivateDao = {
                   "kind": "type",
                   "type": {
                     "defined": {
-                      "name": "castPrivateVoteOutput"
+                      "name": "castPrivateVoteV2Output"
                     }
                   }
                 }
@@ -445,65 +445,6 @@ export type PrivateDao = {
       ]
     },
     {
-      "name": "initPrivateBallotCallback",
-      "discriminator": [
-        115,
-        25,
-        91,
-        10,
-        251,
-        159,
-        12,
-        170
-      ],
-      "accounts": [
-        {
-          "name": "arciumProgram",
-          "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
-        },
-        {
-          "name": "compDefAccount"
-        },
-        {
-          "name": "mxeAccount"
-        },
-        {
-          "name": "computationAccount"
-        },
-        {
-          "name": "clusterAccount"
-        },
-        {
-          "name": "instructionsSysvar",
-          "address": "Sysvar1nstructions1111111111111111111111111"
-        },
-        {
-          "name": "proposal",
-          "writable": true
-        }
-      ],
-      "args": [
-        {
-          "name": "output",
-          "type": {
-            "defined": {
-              "name": "signedComputationOutputs",
-              "generics": [
-                {
-                  "kind": "type",
-                  "type": {
-                    "defined": {
-                      "name": "initPrivateBallotOutput"
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
       "name": "initPrivateBallotCompDef",
       "discriminator": [
         65,
@@ -547,6 +488,65 @@ export type PrivateDao = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "initPrivateBallotV2Callback",
+      "discriminator": [
+        117,
+        0,
+        152,
+        37,
+        183,
+        224,
+        60,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "arciumProgram",
+          "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
+        },
+        {
+          "name": "compDefAccount"
+        },
+        {
+          "name": "mxeAccount"
+        },
+        {
+          "name": "computationAccount"
+        },
+        {
+          "name": "clusterAccount"
+        },
+        {
+          "name": "instructionsSysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "output",
+          "type": {
+            "defined": {
+              "name": "signedComputationOutputs",
+              "generics": [
+                {
+                  "kind": "type",
+                  "type": {
+                    "defined": {
+                      "name": "initPrivateBallotV2Output"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
     },
     {
       "name": "initPublishPrivateTallyCompDef",
@@ -746,16 +746,16 @@ export type PrivateDao = {
       ]
     },
     {
-      "name": "publishPrivateTallyCallback",
+      "name": "publishPrivateTallyV2Callback",
       "discriminator": [
-        127,
-        189,
-        132,
-        239,
-        88,
-        242,
-        70,
-        28
+        159,
+        130,
+        46,
+        247,
+        76,
+        163,
+        141,
+        66
       ],
       "accounts": [
         {
@@ -794,7 +794,7 @@ export type PrivateDao = {
                   "kind": "type",
                   "type": {
                     "defined": {
-                      "name": "publishPrivateTallyOutput"
+                      "name": "publishPrivateTallyV2Output"
                     }
                   }
                 }
@@ -1046,7 +1046,7 @@ export type PrivateDao = {
       }
     },
     {
-      "name": "castPrivateVoteOutput",
+      "name": "castPrivateVoteV2Output",
       "docs": [
         "The output of the callback instruction. Provided as a struct with ordered fields",
         "as anchor does not support tuples and tuple structs yet."
@@ -1062,7 +1062,7 @@ export type PrivateDao = {
                 "generics": [
                   {
                     "kind": "const",
-                    "value": "25"
+                    "value": "5"
                   }
                 ]
               }
@@ -1399,7 +1399,7 @@ export type PrivateDao = {
       }
     },
     {
-      "name": "initPrivateBallotOutput",
+      "name": "initPrivateBallotV2Output",
       "docs": [
         "The output of the callback instruction. Provided as a struct with ordered fields",
         "as anchor does not support tuples and tuple structs yet."
@@ -1415,7 +1415,7 @@ export type PrivateDao = {
                 "generics": [
                   {
                     "kind": "const",
-                    "value": "25"
+                    "value": "5"
                   }
                 ]
               }
@@ -1871,7 +1871,7 @@ export type PrivateDao = {
       }
     },
     {
-      "name": "publishPrivateTallyOutput",
+      "name": "publishPrivateTallyV2Output",
       "docs": [
         "The output of the callback instruction. Provided as a struct with ordered fields",
         "as anchor does not support tuples and tuple structs yet."
@@ -1883,7 +1883,7 @@ export type PrivateDao = {
             "name": "field0",
             "type": {
               "defined": {
-                "name": "publishPrivateTallyOutputStruct0"
+                "name": "publishPrivateTallyV2OutputStruct0"
               }
             }
           }
@@ -1891,7 +1891,7 @@ export type PrivateDao = {
       }
     },
     {
-      "name": "publishPrivateTallyOutputStruct0",
+      "name": "publishPrivateTallyV2OutputStruct0",
       "type": {
         "kind": "struct",
         "fields": [

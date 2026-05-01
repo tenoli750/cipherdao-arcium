@@ -145,16 +145,16 @@
       ]
     },
     {
-      "name": "cast_private_vote_callback",
+      "name": "cast_private_vote_v2_callback",
       "discriminator": [
-        125,
-        166,
-        114,
-        225,
-        18,
-        74,
-        66,
-        100
+        12,
+        253,
+        246,
+        219,
+        208,
+        177,
+        51,
+        91
       ],
       "accounts": [
         {
@@ -193,7 +193,7 @@
                   "kind": "type",
                   "type": {
                     "defined": {
-                      "name": "CastPrivateVoteOutput"
+                      "name": "CastPrivateVoteV2Output"
                     }
                   }
                 }
@@ -439,65 +439,6 @@
       ]
     },
     {
-      "name": "init_private_ballot_callback",
-      "discriminator": [
-        115,
-        25,
-        91,
-        10,
-        251,
-        159,
-        12,
-        170
-      ],
-      "accounts": [
-        {
-          "name": "arcium_program",
-          "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
-        },
-        {
-          "name": "comp_def_account"
-        },
-        {
-          "name": "mxe_account"
-        },
-        {
-          "name": "computation_account"
-        },
-        {
-          "name": "cluster_account"
-        },
-        {
-          "name": "instructions_sysvar",
-          "address": "Sysvar1nstructions1111111111111111111111111"
-        },
-        {
-          "name": "proposal",
-          "writable": true
-        }
-      ],
-      "args": [
-        {
-          "name": "output",
-          "type": {
-            "defined": {
-              "name": "SignedComputationOutputs",
-              "generics": [
-                {
-                  "kind": "type",
-                  "type": {
-                    "defined": {
-                      "name": "InitPrivateBallotOutput"
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
       "name": "init_private_ballot_comp_def",
       "discriminator": [
         65,
@@ -541,6 +482,65 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "init_private_ballot_v2_callback",
+      "discriminator": [
+        117,
+        0,
+        152,
+        37,
+        183,
+        224,
+        60,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "arcium_program",
+          "address": "Arcj82pX7HxYKLR92qvgZUAd7vGS1k4hQvAFcPATFdEQ"
+        },
+        {
+          "name": "comp_def_account"
+        },
+        {
+          "name": "mxe_account"
+        },
+        {
+          "name": "computation_account"
+        },
+        {
+          "name": "cluster_account"
+        },
+        {
+          "name": "instructions_sysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "proposal",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "output",
+          "type": {
+            "defined": {
+              "name": "SignedComputationOutputs",
+              "generics": [
+                {
+                  "kind": "type",
+                  "type": {
+                    "defined": {
+                      "name": "InitPrivateBallotV2Output"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
     },
     {
       "name": "init_publish_private_tally_comp_def",
@@ -740,16 +740,16 @@
       ]
     },
     {
-      "name": "publish_private_tally_callback",
+      "name": "publish_private_tally_v2_callback",
       "discriminator": [
-        127,
-        189,
-        132,
-        239,
-        88,
-        242,
-        70,
-        28
+        159,
+        130,
+        46,
+        247,
+        76,
+        163,
+        141,
+        66
       ],
       "accounts": [
         {
@@ -788,7 +788,7 @@
                   "kind": "type",
                   "type": {
                     "defined": {
-                      "name": "PublishPrivateTallyOutput"
+                      "name": "PublishPrivateTallyV2Output"
                     }
                   }
                 }
@@ -1040,7 +1040,7 @@
       }
     },
     {
-      "name": "CastPrivateVoteOutput",
+      "name": "CastPrivateVoteV2Output",
       "docs": [
         "The output of the callback instruction. Provided as a struct with ordered fields",
         "as anchor does not support tuples and tuple structs yet."
@@ -1056,7 +1056,7 @@
                 "generics": [
                   {
                     "kind": "const",
-                    "value": "25"
+                    "value": "5"
                   }
                 ]
               }
@@ -1393,7 +1393,7 @@
       }
     },
     {
-      "name": "InitPrivateBallotOutput",
+      "name": "InitPrivateBallotV2Output",
       "docs": [
         "The output of the callback instruction. Provided as a struct with ordered fields",
         "as anchor does not support tuples and tuple structs yet."
@@ -1409,7 +1409,7 @@
                 "generics": [
                   {
                     "kind": "const",
-                    "value": "25"
+                    "value": "5"
                   }
                 ]
               }
@@ -1865,7 +1865,7 @@
       }
     },
     {
-      "name": "PublishPrivateTallyOutput",
+      "name": "PublishPrivateTallyV2Output",
       "docs": [
         "The output of the callback instruction. Provided as a struct with ordered fields",
         "as anchor does not support tuples and tuple structs yet."
@@ -1877,7 +1877,7 @@
             "name": "field_0",
             "type": {
               "defined": {
-                "name": "PublishPrivateTallyOutputStruct0"
+                "name": "PublishPrivateTallyV2OutputStruct0"
               }
             }
           }
@@ -1885,7 +1885,7 @@
       }
     },
     {
-      "name": "PublishPrivateTallyOutputStruct0",
+      "name": "PublishPrivateTallyV2OutputStruct0",
       "type": {
         "kind": "struct",
         "fields": [

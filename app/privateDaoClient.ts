@@ -39,15 +39,15 @@ const CHOICE_TO_U8: Record<PrivateVoteChoice, number> = {
 };
 
 const COMP_DEF_NAMES = [
-  "init_private_ballot",
-  "cast_private_vote",
-  "publish_private_tally"
+  "init_private_ballot_v2",
+  "cast_private_vote_v2",
+  "publish_private_tally_v2"
 ] as const;
 
 const COMP_DEF_METHODS = {
-  init_private_ballot: "initPrivateBallotCompDef",
-  cast_private_vote: "initCastPrivateVoteCompDef",
-  publish_private_tally: "initPublishPrivateTallyCompDef"
+  init_private_ballot_v2: "initPrivateBallotCompDef",
+  cast_private_vote_v2: "initCastPrivateVoteCompDef",
+  publish_private_tally_v2: "initPublishPrivateTallyCompDef"
 } as const;
 
 const MAX_REALLOC_PER_IX = 10240;
@@ -289,7 +289,7 @@ export async function initPrivateBallot(params: {
         programId: params.program.programId,
         clusterOffset: params.clusterOffset,
         computationOffset,
-        compDefName: "init_private_ballot"
+        compDefName: "init_private_ballot_v2"
       })
     })
     .rpc({ commitment: "confirmed" });
@@ -353,7 +353,7 @@ export async function castPrivateVote(params: {
         programId: params.program.programId,
         clusterOffset: params.clusterOffset,
         computationOffset,
-        compDefName: "cast_private_vote"
+        compDefName: "cast_private_vote_v2"
       })
     })
     .rpc({ commitment: "confirmed" });
@@ -393,7 +393,7 @@ export async function publishPrivateTally(params: {
         programId: params.program.programId,
         clusterOffset: params.clusterOffset,
         computationOffset,
-        compDefName: "publish_private_tally"
+        compDefName: "publish_private_tally_v2"
       })
     })
     .rpc({ commitment: "confirmed" });

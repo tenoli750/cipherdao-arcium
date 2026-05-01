@@ -5,9 +5,9 @@ use arcium_macros::circuit_hash;
 
 declare_id!("6NvJiHpUPbmnbgrdHx6Pne5K1qzCWXfwkT5MmDxShkKe");
 
-const COMP_DEF_OFFSET_CAST_PRIVATE_VOTE: u32 = comp_def_offset("cast_private_vote");
-const COMP_DEF_OFFSET_INIT_PRIVATE_BALLOT: u32 = comp_def_offset("init_private_ballot");
-const COMP_DEF_OFFSET_PUBLISH_PRIVATE_TALLY: u32 = comp_def_offset("publish_private_tally");
+const COMP_DEF_OFFSET_CAST_PRIVATE_VOTE: u32 = comp_def_offset("cast_private_vote_v2");
+const COMP_DEF_OFFSET_INIT_PRIVATE_BALLOT: u32 = comp_def_offset("init_private_ballot_v2");
+const COMP_DEF_OFFSET_PUBLISH_PRIVATE_TALLY: u32 = comp_def_offset("publish_private_tally_v2");
 
 #[arcium_program]
 pub mod private_dao {
@@ -52,8 +52,8 @@ pub mod private_dao {
         init_comp_def(
             ctx.accounts,
             Some(CircuitSource::OffChain(OffChainCircuitSource {
-                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/cast_private_vote.arcis".to_string(),
-                hash: circuit_hash!("cast_private_vote"),
+                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/cast_private_vote_v2.arcis".to_string(),
+                hash: circuit_hash!("cast_private_vote_v2"),
             })),
             None,
         )?;
@@ -64,8 +64,8 @@ pub mod private_dao {
         init_comp_def(
             ctx.accounts,
             Some(CircuitSource::OffChain(OffChainCircuitSource {
-                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/init_private_ballot.arcis".to_string(),
-                hash: circuit_hash!("init_private_ballot"),
+                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/init_private_ballot_v2.arcis".to_string(),
+                hash: circuit_hash!("init_private_ballot_v2"),
             })),
             None,
         )?;
@@ -78,8 +78,8 @@ pub mod private_dao {
         init_comp_def(
             ctx.accounts,
             Some(CircuitSource::OffChain(OffChainCircuitSource {
-                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/publish_private_tally.arcis".to_string(),
-                hash: circuit_hash!("publish_private_tally"),
+                source: "https://raw.githubusercontent.com/tenoli750/cipherdao-arcium/main/public-circuits/publish_private_tally_v2.arcis".to_string(),
+                hash: circuit_hash!("publish_private_tally_v2"),
             })),
             None,
         )?;
@@ -104,7 +104,7 @@ pub mod private_dao {
             ctx.accounts,
             computation_offset,
             args,
-            vec![InitPrivateBallotCallback::callback_ix(
+            vec![InitPrivateBallotV2Callback::callback_ix(
                 computation_offset,
                 &ctx.accounts.mxe_account,
                 &[CallbackAccount {
@@ -154,7 +154,7 @@ pub mod private_dao {
             ctx.accounts,
             computation_offset,
             args,
-            vec![CastPrivateVoteCallback::callback_ix(
+            vec![CastPrivateVoteV2Callback::callback_ix(
                 computation_offset,
                 &ctx.accounts.mxe_account,
                 &[CallbackAccount {
@@ -197,7 +197,7 @@ pub mod private_dao {
             ctx.accounts,
             computation_offset,
             args.build(),
-            vec![PublishPrivateTallyCallback::callback_ix(
+            vec![PublishPrivateTallyV2Callback::callback_ix(
                 computation_offset,
                 &ctx.accounts.mxe_account,
                 &[CallbackAccount {
@@ -212,16 +212,16 @@ pub mod private_dao {
         Ok(())
     }
 
-    #[arcium_callback(encrypted_ix = "cast_private_vote")]
-    pub fn cast_private_vote_callback(
-        ctx: Context<CastPrivateVoteCallback>,
-        output: SignedComputationOutputs<CastPrivateVoteOutput>,
+    #[arcium_callback(encrypted_ix = "cast_private_vote_v2")]
+    pub fn cast_private_vote_v2_callback(
+        ctx: Context<CastPrivateVoteV2Callback>,
+        output: SignedComputationOutputs<CastPrivateVoteV2Output>,
     ) -> Result<()> {
         let result = match output.verify_output(
             &ctx.accounts.cluster_account,
             &ctx.accounts.computation_account,
         ) {
-            Ok(CastPrivateVoteOutput { field_0 }) => field_0,
+            Ok(CastPrivateVoteV2Output { field_0 }) => field_0,
             Err(_) => return Err(ErrorCode::AbortedComputation.into()),
         };
 
@@ -237,16 +237,16 @@ pub mod private_dao {
         Ok(())
     }
 
-    #[arcium_callback(encrypted_ix = "init_private_ballot")]
-    pub fn init_private_ballot_callback(
-        ctx: Context<InitPrivateBallotCallback>,
-        output: SignedComputationOutputs<InitPrivateBallotOutput>,
+    #[arcium_callback(encrypted_ix = "init_private_ballot_v2")]
+    pub fn init_private_ballot_v2_callback(
+        ctx: Context<InitPrivateBallotV2Callback>,
+        output: SignedComputationOutputs<InitPrivateBallotV2Output>,
     ) -> Result<()> {
         let result = match output.verify_output(
             &ctx.accounts.cluster_account,
             &ctx.accounts.computation_account,
         ) {
-            Ok(InitPrivateBallotOutput { field_0 }) => field_0,
+            Ok(InitPrivateBallotV2Output { field_0 }) => field_0,
             Err(_) => return Err(ErrorCode::AbortedComputation.into()),
         };
 
@@ -262,16 +262,16 @@ pub mod private_dao {
         Ok(())
     }
 
-    #[arcium_callback(encrypted_ix = "publish_private_tally")]
-    pub fn publish_private_tally_callback(
-        ctx: Context<PublishPrivateTallyCallback>,
-        output: SignedComputationOutputs<PublishPrivateTallyOutput>,
+    #[arcium_callback(encrypted_ix = "publish_private_tally_v2")]
+    pub fn publish_private_tally_v2_callback(
+        ctx: Context<PublishPrivateTallyV2Callback>,
+        output: SignedComputationOutputs<PublishPrivateTallyV2Output>,
     ) -> Result<()> {
         let result = match output.verify_output(
             &ctx.accounts.cluster_account,
             &ctx.accounts.computation_account,
         ) {
-            Ok(PublishPrivateTallyOutput { field_0 }) => field_0,
+            Ok(PublishPrivateTallyV2Output { field_0 }) => field_0,
             Err(_) => return Err(ErrorCode::AbortedComputation.into()),
         };
 
@@ -327,7 +327,7 @@ pub struct CreateProposal<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[init_computation_definition_accounts("cast_private_vote", payer)]
+#[init_computation_definition_accounts("cast_private_vote_v2", payer)]
 #[derive(Accounts)]
 pub struct InitCastPrivateVoteCompDef<'info> {
     #[account(mut)]
@@ -353,7 +353,7 @@ pub struct InitCastPrivateVoteCompDef<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[init_computation_definition_accounts("init_private_ballot", payer)]
+#[init_computation_definition_accounts("init_private_ballot_v2", payer)]
 #[derive(Accounts)]
 pub struct InitPrivateBallotCompDef<'info> {
     #[account(mut)]
@@ -379,7 +379,7 @@ pub struct InitPrivateBallotCompDef<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[init_computation_definition_accounts("publish_private_tally", payer)]
+#[init_computation_definition_accounts("publish_private_tally_v2", payer)]
 #[derive(Accounts)]
 pub struct InitPublishPrivateTallyCompDef<'info> {
     #[account(mut)]
@@ -405,7 +405,7 @@ pub struct InitPublishPrivateTallyCompDef<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[queue_computation_accounts("cast_private_vote", payer)]
+#[queue_computation_accounts("cast_private_vote_v2", payer)]
 #[derive(Accounts)]
 #[instruction(computation_offset: u64)]
 pub struct CastPrivateVote<'info> {
@@ -463,7 +463,7 @@ pub struct CastPrivateVote<'info> {
     pub arcium_program: Program<'info, Arcium>,
 }
 
-#[queue_computation_accounts("init_private_ballot", payer)]
+#[queue_computation_accounts("init_private_ballot_v2", payer)]
 #[derive(Accounts)]
 #[instruction(computation_offset: u64)]
 pub struct InitPrivateBallot<'info> {
@@ -521,7 +521,7 @@ pub struct InitPrivateBallot<'info> {
     pub arcium_program: Program<'info, Arcium>,
 }
 
-#[queue_computation_accounts("publish_private_tally", payer)]
+#[queue_computation_accounts("publish_private_tally_v2", payer)]
 #[derive(Accounts)]
 #[instruction(computation_offset: u64)]
 pub struct PublishPrivateTally<'info> {
@@ -579,9 +579,9 @@ pub struct PublishPrivateTally<'info> {
     pub arcium_program: Program<'info, Arcium>,
 }
 
-#[callback_accounts("cast_private_vote")]
+#[callback_accounts("cast_private_vote_v2")]
 #[derive(Accounts)]
-pub struct CastPrivateVoteCallback<'info> {
+pub struct CastPrivateVoteV2Callback<'info> {
     pub arcium_program: Program<'info, Arcium>,
     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_CAST_PRIVATE_VOTE))]
     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
@@ -598,9 +598,9 @@ pub struct CastPrivateVoteCallback<'info> {
     pub proposal: Account<'info, Proposal>,
 }
 
-#[callback_accounts("init_private_ballot")]
+#[callback_accounts("init_private_ballot_v2")]
 #[derive(Accounts)]
-pub struct InitPrivateBallotCallback<'info> {
+pub struct InitPrivateBallotV2Callback<'info> {
     pub arcium_program: Program<'info, Arcium>,
     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_INIT_PRIVATE_BALLOT))]
     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
@@ -617,9 +617,9 @@ pub struct InitPrivateBallotCallback<'info> {
     pub proposal: Account<'info, Proposal>,
 }
 
-#[callback_accounts("publish_private_tally")]
+#[callback_accounts("publish_private_tally_v2")]
 #[derive(Accounts)]
-pub struct PublishPrivateTallyCallback<'info> {
+pub struct PublishPrivateTallyV2Callback<'info> {
     pub arcium_program: Program<'info, Arcium>,
     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_PUBLISH_PRIVATE_TALLY))]
     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
