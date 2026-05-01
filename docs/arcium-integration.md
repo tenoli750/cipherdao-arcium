@@ -22,12 +22,12 @@ CipherDAO keeps the ballot state inside an Arcium MPC computation.
 `encrypted-ixs/private_vote.rs` defines:
 
 - `VoteInput`: a private voter hash and choice.
-- `BallotState`: encrypted yes, no, abstain, and total counters.
-- `cast_private_vote`: updates the encrypted counter state inside `Enc<Mxe, BallotState>`.
+- `BallotState`: a fixed-size private ballot array.
+- `cast_private_vote`: inserts or updates a voter's private ballot inside `Enc<Mxe, BallotState>`.
 - `publish_private_tally`: counts yes, no, and abstain privately, then reveals only totals.
 - The compiled `.arcis` circuits are published in `public-circuits/` and referenced as off-chain circuit sources. Arcium nodes verify them with compile-time `circuit_hash!(...)` values before execution.
 
-The circuit uses fixed-size structs because Arcis circuits need static structure. It avoids `Vec`, `String`, `match`, dynamic loops, and early returns.
+The circuit uses fixed arrays and compile-time loops because Arcis circuits need static structure. It avoids `Vec`, `String`, `match`, dynamic loops, and early returns.
 
 ## Solana program surface
 
@@ -49,6 +49,5 @@ The public chain sees that a voter participated and sees encrypted receipt data,
 - Use `@arcium-hq/client@0.9.7` to fetch the MXE public key, encrypt inputs, derive Arcium PDAs, and wait for finalization.
 - Use unique nonces for every encrypted input.
 - Initialize computation definitions once per deployment.
-- Add membership and nullifier checks before production use. The devnet demo focuses on private tallying and does not enforce one-vote-per-wallet.
 - Reclaim rent from finalized computation accounts when appropriate.
 - Keep callback payloads under Solana transaction limits. Split large proposals or use compact packed state if needed.
