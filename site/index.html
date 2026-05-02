@@ -16,13 +16,13 @@
         </div>
       </div>
       <div class="topbar__actions">
-        <span class="cluster-pill">Arcium localnet</span>
+        <span class="cluster-pill" data-cluster-label>Solana devnet</span>
         <button class="icon-button" type="button" data-open-dialog aria-label="Create proposal">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         </button>
         <button class="connect-button" type="button" data-connect>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1M16 12h5m0 0-2-2m2 2-2 2"/></svg>
-          <span>Connect</span>
+          <span>Relayer</span>
         </button>
       </div>
     </header>
@@ -130,6 +130,10 @@
         <label>
           Quorum
           <input name="quorum" type="number" min="1" max="32" value="5" required>
+        </label>
+        <label>
+          Duration minutes
+          <input name="duration" type="number" min="1" max="10080" value="3" required>
         </label>
         <button class="primary-action" type="submit">Create proposal</button>
       </form>

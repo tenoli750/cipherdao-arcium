@@ -18,13 +18,22 @@ Public voting creates vote-copying, bribery, retaliation, and tactical last-minu
 
 ## Run the site
 
-Open `site/index.html` in a browser, or run:
+Run the local web server:
 
 ```bash
 npm run dev
 ```
 
 Then visit `http://127.0.0.1:4173`.
+
+The local server serves the app and exposes a small devnet relayer API:
+
+- `GET /api/status`
+- `POST /api/proposals`
+- `POST /api/vote`
+- `POST /api/tally`
+
+That means the browser buttons create proposals, submit encrypted votes, and publish private tallies on Solana devnet without requiring terminal commands.
 
 ## Run checks
 

@@ -1,6 +1,14 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+require("tsx/cjs");
+
+const {
+  castSiteVote,
+  createSiteProposal,
+  getStatus,
+  publishSiteTally
+} = require("../app/siteApi.ts");
 
 const root = path.join(__dirname, "..", "site");
 const port = Number(process.env.PORT || 4173);
@@ -12,8 +20,82 @@ const types = {
   ".svg": "image/svg+xml; charset=utf-8"
 };
 
-const server = http.createServer((req, res) => {
-  const cleanUrl = decodeURIComponent(req.url.split("?")[0]);
+function sendJson(res, statusCode, payload) {
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store"
+  });
+  res.end(JSON.stringify(payload));
+}
+
+function readJsonBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk;
+      if (body.length > 1024 * 1024) {
+        reject(new Error("Request body is too large"));
+        req.destroy();
+      }
+    });
+    req.on("end", () => {
+      if (!body.trim()) {
+        resolve({});
+        return;
+      }
+      try {
+        resolve(JSON.parse(body));
+      } catch {
+        reject(new Error("Invalid JSON body"));
+      }
+    });
+    req.on("error", reject);
+  });
+}
+
+async function handleApi(req, res, cleanUrl) {
+  if (req.method === "GET" && cleanUrl === "/api/status") {
+    sendJson(res, 200, await getStatus());
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/proposals") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await createSiteProposal(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/vote") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await castSiteVote(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/tally") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await publishSiteTally(body));
+    return true;
+  }
+
+  if (cleanUrl.startsWith("/api/")) {
+    sendJson(res, 404, { error: "API route not found" });
+    return true;
+  }
+
+  return false;
+}
+
+const server = http.createServer(async (req, res) => {
+  const cleanUrl = decodeURIComponent((req.url || "/").split("?")[0]);
+
+  try {
+    if (await handleApi(req, res, cleanUrl)) return;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    sendJson(res, 500, { error: message });
+    return;
+  }
+
   const requestPath = cleanUrl === "/" ? "/index.html" : cleanUrl;
   const filePath = path.normalize(path.join(root, requestPath));
 

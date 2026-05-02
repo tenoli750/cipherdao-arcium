@@ -1,56 +1,17 @@
 (function () {
   const core = window.GovernanceCore;
   const state = {
-    wallet: null,
-    selectedProposalId: "treasury-privacy-grants",
+    config: null,
+    proposals: [],
+    selectedProposalId: null,
     selectedChoice: "yes",
-    toast: "",
-    proposals: [
-      {
-        id: "treasury-privacy-grants",
-        title: "Fund confidential governance grants",
-        summary: "Allocate 15,000 USDC from the treasury to privacy-first DAO tooling.",
-        quorum: 7,
-        closesLabel: "21h remaining",
-        finalized: false,
-        receipts: seedReceipts("treasury-privacy-grants", ["yes", "no", "yes"]),
-        result: null,
-        proof: null
-      },
-      {
-        id: "validator-delegation",
-        title: "Delegate stake to privacy validators",
-        summary: "Move 8 percent of treasury SOL into validators that operate Arcium infrastructure.",
-        quorum: 6,
-        closesLabel: "2d remaining",
-        finalized: false,
-        receipts: seedReceipts("validator-delegation", ["abstain", "yes"]),
-        result: null,
-        proof: null
-      },
-      {
-        id: "retro-funding",
-        title: "Approve retroactive builder rewards",
-        summary: "Reward contributors who shipped open-source governance analytics.",
-        quorum: 4,
-        closesLabel: "Finalized",
-        finalized: true,
-        receipts: seedReceipts("retro-funding", ["yes", "yes", "no", "abstain", "yes"]),
-        result: null,
-        proof: null
-      }
-    ]
+    busy: false,
+    loading: true
   };
-
-  state.proposals.forEach(function (proposal) {
-    if (proposal.finalized) {
-      proposal.result = core.tallyVotes(proposal.receipts);
-      proposal.proof = core.createProofId(proposal.id, proposal.receipts, proposal.result);
-    }
-  });
 
   const els = {
     walletButton: document.querySelector("[data-connect]"),
+    clusterLabel: document.querySelector("[data-cluster-label]"),
     proposalList: document.querySelector("[data-proposal-list]"),
     proposalTitle: document.querySelector("[data-proposal-title]"),
     proposalSummary: document.querySelector("[data-proposal-summary]"),
@@ -72,108 +33,114 @@
     createForm: document.querySelector("[data-create-form]")
   };
 
-  function seedReceipts(proposalId, choices) {
-    return choices.map(function (choice, index) {
-      return core.makeEncryptedReceipt({
-        proposalId: proposalId,
-        wallet: "seed_wallet_" + index,
-        choice: choice,
-        round: index
-      });
-    });
-  }
-
   function selectedProposal() {
     return state.proposals.find(function (proposal) {
-      return proposal.id === state.selectedProposalId;
-    });
-  }
-
-  function formatWallet(wallet) {
-    if (!wallet) {
-      return "Connect";
-    }
-    return wallet.slice(0, 4) + "..." + wallet.slice(-4);
+      return proposal.proposal === state.selectedProposalId;
+    }) || state.proposals[0] || null;
   }
 
   function showToast(message) {
-    state.toast = message;
     els.toast.textContent = message;
     els.toast.classList.add("is-visible");
     window.clearTimeout(showToast.timer);
     showToast.timer = window.setTimeout(function () {
       els.toast.classList.remove("is-visible");
-    }, 2600);
+    }, 3200);
   }
 
-  function render() {
-    const proposal = selectedProposal();
-    const percentages = proposal.result ? core.resultPercentages(proposal.result) : null;
-
-    els.walletButton.querySelector("span").textContent = formatWallet(state.wallet);
-    els.proposalTitle.textContent = proposal.title;
-    els.proposalSummary.textContent = proposal.summary;
-    els.closeLabel.textContent = proposal.finalized ? "Finalized" : proposal.closesLabel;
-    els.receiptCount.textContent = String(proposal.receipts.length);
-    els.quorumValue.textContent = String(proposal.quorum);
-    els.privacyState.textContent = proposal.finalized ? "Public result" : "Sealed";
-    els.castButton.disabled = proposal.finalized;
-    els.finalizeButton.disabled = proposal.finalized || proposal.receipts.length === 0;
-
-    els.proposalList.innerHTML = state.proposals.map(function (item) {
-      const active = item.id === proposal.id ? " is-active" : "";
-      const status = item.finalized ? "Finalized" : "Open";
-      return [
-        '<button class="proposal-item' + active + '" data-select-proposal="' + item.id + '">',
-        '<span class="proposal-item__top">',
-        '<strong>' + escapeHtml(item.title) + '</strong>',
-        '<span>' + status + '</span>',
-        '</span>',
-        '<span class="proposal-item__meta">' + item.receipts.length + " encrypted receipts</span>",
-        '</button>'
-      ].join("");
-    }).join("");
-
-    els.voteOptions.innerHTML = core.CHOICES.map(function (choice) {
-      const checked = state.selectedChoice === choice ? " checked" : "";
-      const disabled = proposal.finalized ? " disabled" : "";
-      return [
-        '<label class="choice">',
-        '<input type="radio" name="choice" value="' + choice + '"' + checked + disabled + '>',
-        '<span>' + titleCase(choice) + '</span>',
-        '</label>'
-      ].join("");
-    }).join("");
-
-    els.receipts.innerHTML = proposal.receipts.slice().reverse().map(function (receipt) {
-      return [
-        '<li>',
-        '<span>' + receipt.ciphertext + '</span>',
-        '<code>' + receipt.commitment + '</code>',
-        '</li>'
-      ].join("");
-    }).join("");
-
-    if (proposal.result) {
-      els.tally.innerHTML = [
-        tallyRow("Yes", proposal.result.yes, percentages.yes, "yes"),
-        tallyRow("No", proposal.result.no, percentages.no, "no"),
-        tallyRow("Abstain", proposal.result.abstain, percentages.abstain, "abstain")
-      ].join("");
-      els.proof.textContent = proposal.proof;
-      els.proofState.textContent = "Verified callback output";
-    } else {
-      els.tally.innerHTML = [
-        '<div class="sealed-tally">',
-        '<strong>Interim tally sealed</strong>',
-        '<span>Only encrypted receipts are visible before finalization.</span>',
-        '</div>'
-      ].join("");
-      els.proof.textContent = "Waiting for finalization";
-      els.proofState.textContent = "MPC execution pending";
+  async function api(path, options) {
+    const response = await fetch(path, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      ...options
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed");
     }
+    return data;
+  }
 
-    bindDynamicEvents();
+  async function refresh(options) {
+    const silent = options && options.silent;
+    try {
+      if (!silent) state.loading = true;
+      const data = await api("/api/status");
+      state.config = data.config;
+      state.proposals = data.proposals || [];
+      if (!state.selectedProposalId && state.proposals.length > 0) {
+        state.selectedProposalId = state.proposals[0].proposal;
+      }
+      if (state.selectedProposalId && !state.proposals.some(function (proposal) {
+        return proposal.proposal === state.selectedProposalId;
+      })) {
+        state.selectedProposalId = state.proposals[0] ? state.proposals[0].proposal : null;
+      }
+    } catch (error) {
+      showToast(error.message);
+    } finally {
+      state.loading = false;
+      render();
+    }
+  }
+
+  function setBusy(value, message) {
+    state.busy = value;
+    if (message) showToast(message);
+    render();
+  }
+
+  function postJson(path, body) {
+    return api(path, {
+      method: "POST",
+      body: JSON.stringify(body)
+    });
+  }
+
+  function short(value) {
+    if (!value) return "";
+    return value.slice(0, 6) + "..." + value.slice(-6);
+  }
+
+  function explorerTx(signature) {
+    return "https://explorer.solana.com/tx/" + signature + "?cluster=devnet";
+  }
+
+  function formatClose(proposal) {
+    if (!proposal) return "Loading";
+    if (proposal.finalized) return "Finalized";
+    const diff = Math.ceil(proposal.closesAt - Date.now() / 1000);
+    if (diff <= 0) return "Ready to tally";
+    if (diff < 60) return diff + "s remaining";
+    if (diff < 3600) return Math.ceil(diff / 60) + "m remaining";
+    if (diff < 86400) return Math.ceil(diff / 3600) + "h remaining";
+    return Math.ceil(diff / 86400) + "d remaining";
+  }
+
+  function isClosed(proposal) {
+    return proposal && Date.now() / 1000 >= proposal.closesAt;
+  }
+
+  function canVote(proposal) {
+    return proposal && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0;
+  }
+
+  function canTally(proposal) {
+    return proposal && !state.busy && !proposal.finalized && isClosed(proposal) && proposal.encryptedStateChunks > 0;
+  }
+
+  function titleCase(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
   function tallyRow(label, count, percent, tone) {
@@ -184,6 +151,111 @@
       '<strong>' + count + '</strong>',
       '</div>'
     ].join("");
+  }
+
+  function renderEmpty() {
+    els.walletButton.querySelector("span").textContent = state.busy ? "Working" : "Relayer";
+    els.proposalTitle.textContent = state.loading ? "Loading devnet proposals" : "No proposals";
+    els.proposalSummary.textContent = state.loading ? "Fetching current on-chain state." : "Create a proposal to start private voting.";
+    els.closeLabel.textContent = "Idle";
+    els.receiptCount.textContent = "0";
+    els.quorumValue.textContent = "0";
+    els.privacyState.textContent = "Ready";
+    els.proposalList.innerHTML = "";
+    els.voteOptions.innerHTML = "";
+    els.receipts.innerHTML = "";
+    els.tally.innerHTML = '<div class="sealed-tally"><strong>No on-chain proposal selected</strong></div>';
+    els.proof.textContent = "Waiting";
+    els.proofState.textContent = "Relayer idle";
+    els.castButton.disabled = true;
+    els.finalizeButton.disabled = true;
+  }
+
+  function render() {
+    const proposal = selectedProposal();
+    if (!proposal) {
+      renderEmpty();
+      return;
+    }
+
+    const result = {
+      yes: proposal.yes,
+      no: proposal.no,
+      abstain: proposal.abstain,
+      total: proposal.total
+    };
+    const percentages = proposal.finalized ? core.resultPercentages(result) : null;
+
+    els.clusterLabel.textContent = state.config ? "Solana devnet" : "Connecting";
+    els.walletButton.querySelector("span").textContent = state.busy ? "Working" : "Relayer";
+    els.proposalTitle.textContent = proposal.title;
+    els.proposalSummary.textContent = proposal.summary;
+    els.closeLabel.textContent = formatClose(proposal);
+    els.receiptCount.textContent = String(proposal.receipts.length);
+    els.quorumValue.textContent = String(proposal.quorum);
+    els.privacyState.textContent = proposal.finalized ? "Public result" : "Sealed";
+    els.castButton.disabled = !canVote(proposal);
+    els.finalizeButton.disabled = !canTally(proposal);
+
+    els.proposalList.innerHTML = state.proposals.map(function (item) {
+      const active = item.proposal === proposal.proposal ? " is-active" : "";
+      const status = item.finalized ? "Finalized" : isClosed(item) ? "Tally" : "Open";
+      return [
+        '<button class="proposal-item' + active + '" data-select-proposal="' + item.proposal + '">',
+        '<span class="proposal-item__top">',
+        '<strong>' + escapeHtml(item.title) + '</strong>',
+        '<span>' + status + '</span>',
+        '</span>',
+        '<span class="proposal-item__meta">' + item.receipts.length + " encrypted receipts</span>",
+        '<code class="proposal-item__signature">' + short(item.proposal) + '</code>',
+        '</button>'
+      ].join("");
+    }).join("");
+
+    els.voteOptions.innerHTML = core.CHOICES.map(function (choice) {
+      const checked = state.selectedChoice === choice ? " checked" : "";
+      const disabled = !canVote(proposal) ? " disabled" : "";
+      return [
+        '<label class="choice">',
+        '<input type="radio" name="choice" value="' + choice + '"' + checked + disabled + '>',
+        '<span>' + titleCase(choice) + '</span>',
+        '</label>'
+      ].join("");
+    }).join("");
+
+    if (proposal.receipts.length === 0) {
+      els.receipts.innerHTML = '<li><span>No encrypted receipts yet</span><code>' + short(proposal.proposal) + '</code></li>';
+    } else {
+      els.receipts.innerHTML = proposal.receipts.slice().reverse().map(function (receipt) {
+        return [
+          '<li>',
+          '<span>' + short(receipt.signature) + '</span>',
+          '<a href="' + explorerTx(receipt.signature) + '" target="_blank" rel="noreferrer">' + short(receipt.finalizeSignature) + '</a>',
+          '</li>'
+        ].join("");
+      }).join("");
+    }
+
+    if (proposal.finalized) {
+      els.tally.innerHTML = [
+        tallyRow("Yes", result.yes, percentages.yes, "yes"),
+        tallyRow("No", result.no, percentages.no, "no"),
+        tallyRow("Abstain", result.abstain, percentages.abstain, "abstain")
+      ].join("");
+      els.proof.textContent = proposal.tallyFinalizeSignature ? short(proposal.tallyFinalizeSignature) : short(proposal.proposal);
+      els.proofState.textContent = "Verified callback output";
+    } else {
+      els.tally.innerHTML = [
+        '<div class="sealed-tally">',
+        '<strong>Interim tally sealed</strong>',
+        '<span>' + proposal.encryptedStateChunks + " encrypted state chunks on devnet</span>",
+        '</div>'
+      ].join("");
+      els.proof.textContent = proposal.stateNonce === "0" ? "Initializing state" : short(proposal.stateNonce);
+      els.proofState.textContent = isClosed(proposal) ? "Ready to publish" : "MPC execution pending";
+    }
+
+    bindDynamicEvents();
   }
 
   function bindDynamicEvents() {
@@ -201,67 +273,47 @@
     });
   }
 
-  function titleCase(value) {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-  }
+  els.walletButton.addEventListener("click", function () {
+    if (!state.config) {
+      refresh();
+      return;
+    }
+    showToast("Relayer " + short(state.config.relayer) + " ready");
+  });
 
-  function escapeHtml(value) {
-    return value
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  els.walletButton.addEventListener("click", async function () {
+  els.castButton.addEventListener("click", async function () {
+    const proposal = selectedProposal();
+    if (!proposal || !canVote(proposal)) return;
     try {
-      if (window.solana && window.solana.isPhantom) {
-        const response = await window.solana.connect();
-        state.wallet = response.publicKey.toString();
-        render();
-        showToast("Wallet connected");
-        return;
-      }
+      setBusy(true, "Submitting encrypted vote");
+      await postJson("/api/vote", {
+        proposal: proposal.proposal,
+        choice: state.selectedChoice
+      });
+      await refresh({ silent: true });
+      showToast("Encrypted vote finalized");
     } catch (error) {
-      showToast("Wallet connection rejected");
-      return;
+      showToast(error.message);
+    } finally {
+      setBusy(false);
     }
-
-    state.wallet = state.wallet || "9nYk7pQ2CipherDemo42";
-    render();
-    showToast("Demo wallet connected");
   });
 
-  els.castButton.addEventListener("click", function () {
+  els.finalizeButton.addEventListener("click", async function () {
     const proposal = selectedProposal();
-    if (!state.wallet) {
-      showToast("Connect a wallet first");
-      return;
+    if (!proposal || !canTally(proposal)) return;
+    try {
+      setBusy(true, "Publishing private tally");
+      await postJson("/api/tally", {
+        proposal: proposal.proposal
+      });
+      await refresh({ silent: true });
+      showToast("Final tally published");
+    } catch (error) {
+      showToast(error.message);
+    } finally {
+      setBusy(false);
     }
-    if (proposal.finalized) {
-      showToast("This proposal is finalized");
-      return;
-    }
-    const receipt = core.makeEncryptedReceipt({
-      proposalId: proposal.id,
-      wallet: state.wallet,
-      choice: state.selectedChoice,
-      round: proposal.receipts.length
-    });
-    proposal.receipts.push(receipt);
-    render();
-    showToast("Encrypted vote queued");
-  });
-
-  els.finalizeButton.addEventListener("click", function () {
-    const proposal = selectedProposal();
-    proposal.result = core.tallyVotes(proposal.receipts);
-    proposal.proof = core.createProofId(proposal.id, proposal.receipts, proposal.result);
-    proposal.finalized = true;
-    proposal.closesLabel = "Finalized";
-    render();
-    showToast("Final tally published");
   });
 
   els.openDialog.addEventListener("click", function () {
@@ -272,34 +324,45 @@
     els.dialog.close();
   });
 
-  els.createForm.addEventListener("submit", function (event) {
+  els.createForm.addEventListener("submit", async function (event) {
     event.preventDefault();
     const form = new FormData(els.createForm);
     const title = String(form.get("title")).trim();
     const summary = String(form.get("summary")).trim();
     const quorum = Number(form.get("quorum"));
-    if (!title || !summary || !quorum) {
+    const durationMinutes = Number(form.get("duration"));
+    if (!title || !summary || !quorum || !durationMinutes) {
       showToast("Fill every proposal field");
       return;
     }
-    const id = core.stableHash(title + ":" + Date.now());
-    state.proposals.unshift({
-      id: id,
-      title: title,
-      summary: summary,
-      quorum: quorum,
-      closesLabel: "3d remaining",
-      finalized: false,
-      receipts: [],
-      result: null,
-      proof: null
-    });
-    state.selectedProposalId = id;
-    els.createForm.reset();
-    els.dialog.close();
-    render();
-    showToast("Proposal created");
+
+    try {
+      els.dialog.close();
+      setBusy(true, "Creating devnet proposal");
+      const data = await postJson("/api/proposals", {
+        title: title,
+        summary: summary,
+        quorum: quorum,
+        closesInSeconds: durationMinutes * 60
+      });
+      state.selectedProposalId = data.proposal.proposal;
+      els.createForm.reset();
+      await refresh({ silent: true });
+      showToast("Proposal initialized on devnet");
+    } catch (error) {
+      showToast(error.message);
+    } finally {
+      setBusy(false);
+    }
   });
 
-  render();
+  window.setInterval(function () {
+    if (!state.busy) render();
+  }, 1000);
+
+  window.setInterval(function () {
+    if (!state.busy) refresh({ silent: true });
+  }, 15000);
+
+  refresh();
 })();
