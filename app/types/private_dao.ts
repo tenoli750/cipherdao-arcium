@@ -10,7 +10,7 @@ export type PrivateDao = {
     "name": "privateDao",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "CipherDAO Solana program with Arcium private vote tallying"
+    "description": "Would You DAO Solana program with Arcium private vote tallying"
   },
   "instructions": [
     {

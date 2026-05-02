@@ -1,7 +1,7 @@
 {
-  "name": "cipherdao",
+  "name": "would-you-dao",
   "version": "0.1.0",
-  "description": "A private DAO voting demo for Solana, designed around Arcium encrypted computation.",
+  "description": "A private A/B balance-game DAO on Solana, sealed by Arcium encrypted computation.",
   "private": false,
   "license": "MIT",
   "scripts": {

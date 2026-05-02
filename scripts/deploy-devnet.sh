@@ -6,7 +6,7 @@ KEYPAIR="${KEYPAIR:-$HOME/.config/solana/id.json}"
 CLUSTER_OFFSET="${ARCIUM_CLUSTER_OFFSET:-456}"
 RECOVERY_SET_SIZE="${RECOVERY_SET_SIZE:-4}"
 
-echo "Building CipherDAO..."
+echo "Building Would You DAO..."
 arcium build
 
 echo "Deploying to devnet RPC: $RPC_URL"

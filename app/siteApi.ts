@@ -26,6 +26,11 @@ import {
 
 export type VoteChoice = "yes" | "no" | "abstain";
 
+type LocalizedText = {
+  en: string;
+  ko?: string;
+};
+
 type ReceiptRecord = {
   id: string;
   signature: string;
@@ -42,6 +47,11 @@ type ProposalRecord = {
   quorum: number;
   createdAt: number;
   receipts: ReceiptRecord[];
+  slug?: string;
+  prompt?: LocalizedText;
+  category?: LocalizedText;
+  optionA?: LocalizedText;
+  optionB?: LocalizedText;
   initSignature?: string;
   initFinalizeSignature?: string;
   tallySignature?: string;
@@ -59,6 +69,11 @@ type WalletProposalMetadata = {
   title: string;
   summary: string;
   quorum: number;
+  slug?: string;
+  prompt?: LocalizedText;
+  category?: LocalizedText;
+  optionA?: LocalizedText;
+  optionB?: LocalizedText;
   initComputationOffset: string;
   signature: string;
 };
@@ -74,6 +89,34 @@ const STATE_PATH = path.join(process.cwd(), "artifacts", "site-proposals.json");
 
 const DEFAULT_STATE: SiteState = {
   proposals: [
+    {
+      proposal: "8PJcPGsSDCbSTngufhhodSdFE93rReFwka8UpXaXYAYg",
+      proposalId: "1777764333672",
+      title: "Teleportation vs Pause time",
+      summary: "Superpowers balance round",
+      quorum: 1,
+      createdAt: 1777764336,
+      receipts: [],
+      slug: "powers-teleport-time",
+      prompt: {
+        en: "Would you rather...",
+        ko: "당신의 선택은?"
+      },
+      category: {
+        en: "Superpowers",
+        ko: "초능력/상상"
+      },
+      optionA: {
+        en: "Teleportation",
+        ko: "순간이동 능력"
+      },
+      optionB: {
+        en: "Pause time",
+        ko: "시간 멈추기 능력"
+      },
+      initSignature: "3fzDnJkuJ2hFBinayNnqcvrQa4RurjTTsDPxeriQQ8cK4ufVC1kDuEdwLsxkZNoDY3U3n5wfJgbiETzwryW4hAjx",
+      initFinalizeSignature: "4k5AytXsZYM8jqCE2E3fiJq3LZFVux1j36TD5rWmT85bFVQzKfaMfcqz3GNBx1BFbM5F3VjxdWqPXCPKbf69Mnin"
+    },
     {
       proposal: "45jmnipw7eUj6hpUuemxDKRqP6JpSiXghuCJ2LECPyg6",
       proposalId: "1021",
@@ -239,6 +282,39 @@ function normalizeError(error: unknown) {
   return String(error);
 }
 
+function normalizeLocalizedText(value: unknown): LocalizedText | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const record = value as Record<string, unknown>;
+  const en = typeof record.en === "string" ? record.en.trim() : "";
+  const ko = typeof record.ko === "string" ? record.ko.trim() : "";
+  if (!en && !ko) return undefined;
+  return {
+    en: en || ko,
+    ...(ko ? { ko } : {})
+  };
+}
+
+function roundMetadata(params: {
+  slug?: unknown;
+  prompt?: unknown;
+  category?: unknown;
+  optionA?: unknown;
+  optionB?: unknown;
+}) {
+  const slug = typeof params.slug === "string" ? params.slug.trim().slice(0, 96) : undefined;
+  const prompt = normalizeLocalizedText(params.prompt);
+  const category = normalizeLocalizedText(params.category);
+  const optionA = normalizeLocalizedText(params.optionA);
+  const optionB = normalizeLocalizedText(params.optionB);
+  return {
+    ...(slug ? { slug } : {}),
+    ...(prompt ? { prompt } : {}),
+    ...(category ? { category } : {}),
+    ...(optionA ? { optionA } : {}),
+    ...(optionB ? { optionB } : {})
+  };
+}
+
 async function fetchProposal(record: ProposalRecord) {
   const { program } = providerAndProgram();
   const proposalKey = new PublicKey(record.proposal);
@@ -251,6 +327,11 @@ async function fetchProposal(record: ProposalRecord) {
     title: record.title,
     summary: record.summary,
     quorum: record.quorum,
+    slug: record.slug,
+    prompt: record.prompt,
+    category: record.category,
+    optionA: record.optionA,
+    optionB: record.optionB,
     closesAt: Number(account.closesAt.toString()),
     finalized: account.finalized,
     encryptedStateChunks: account.encryptedState.length,
@@ -325,6 +406,11 @@ export async function createSiteProposal(params: {
   summary: string;
   quorum: number;
   closesInSeconds: number;
+  slug?: string;
+  prompt?: LocalizedText;
+  category?: LocalizedText;
+  optionA?: LocalizedText;
+  optionB?: LocalizedText;
 }) {
   const title = params.title.trim();
   const summary = params.summary.trim();
@@ -369,6 +455,7 @@ export async function createSiteProposal(params: {
     quorum,
     createdAt: Math.floor(Date.now() / 1000),
     receipts: [],
+    ...roundMetadata(params),
     initSignature: initialized.signature,
     initFinalizeSignature: initialized.finalizeSignature
   };
@@ -393,6 +480,11 @@ export async function buildWalletProposalTransaction(params: {
   summary: string;
   quorum: number;
   closesInSeconds: number;
+  slug?: string;
+  prompt?: LocalizedText;
+  category?: LocalizedText;
+  optionA?: LocalizedText;
+  optionB?: LocalizedText;
 }) {
   const payer = new PublicKey(params.publicKey);
   const title = params.title.trim();
@@ -426,6 +518,7 @@ export async function buildWalletProposalTransaction(params: {
     title,
     summary,
     quorum,
+    ...roundMetadata(params),
     closesAt: Number(closesAtUnix.toString()),
     initComputationOffset: initialized.computationOffset.toString(),
     transaction: await unsignedTransaction({
@@ -466,9 +559,12 @@ export async function confirmWalletProposalTransaction(params: WalletProposalMet
       summary: params.summary.trim(),
       quorum: Math.max(1, Math.min(99, Math.floor(params.quorum || 1))),
       createdAt: Math.floor(Date.now() / 1000),
-      receipts: []
+      receipts: [],
+      ...roundMetadata(params)
     };
     state.proposals.unshift(record);
+  } else {
+    Object.assign(record, roundMetadata(params));
   }
   record.initSignature = params.signature;
   record.initFinalizeSignature = finalizeSignature;

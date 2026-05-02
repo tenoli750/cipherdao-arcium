@@ -1,16 +1,17 @@
 # Arcium Integration
 
-CipherDAO uses Arcium to make DAO voting private until the final result is published.
+Would You DAO? uses Arcium to make balance-game voting private until the final result is published.
 
 ## Problem
 
-DAO votes are often public from the moment they are submitted. That leaks interim sentiment, encourages vote-copying, and can expose voters to coercion or retaliation.
+DAO votes are often public from the moment they are submitted. In a balance game, that leaks the live split and makes people follow the majority instead of picking honestly.
 
 ## Arcium design
 
-CipherDAO keeps the ballot state inside an Arcium MPC computation.
+Would You DAO? keeps the ballot state inside an Arcium MPC computation.
 
 - Voters encrypt `VoteInput` in the browser with the MXE public key and submit ciphertexts through Solana.
+- Option A maps to `yes`, option B maps to `no`, and skip maps to `abstain`.
 - `cast_private_vote_v2` runs in Arcis and updates `Enc<Mxe, BallotState>`.
 - The encrypted state is stored back on Solana, but only the MXE can decrypt it.
 - Interim vote choices and running totals are never revealed to voters, validators, RPC providers, or the application host.
@@ -41,7 +42,7 @@ The circuit uses fixed-size structs because Arcis circuits need static structure
 
 ## Privacy benefit
 
-The public chain sees that a voter participated and sees encrypted receipt data, but it does not see the voter's choice or any interim aggregate. Only the final tally is revealed after the proposal closes. This reduces tactical voting, bribery markets, and social pressure while keeping the final result auditable on Solana.
+The public chain sees that a voter participated and sees encrypted receipt data, but it does not see the voter's A/B choice or any interim aggregate. Only the final tally is revealed after the round closes. This keeps the funny social-voting experience suspenseful while keeping the final result auditable on Solana.
 
 ## Production notes
 

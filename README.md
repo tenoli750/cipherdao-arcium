@@ -1,14 +1,16 @@
-# CipherDAO
+# Would You DAO?
 
-CipherDAO is a simple DAO voting site that demonstrates private governance on Solana with Arcium. The app keeps votes hidden while the proposal is open, then publishes only the final tally and a verified computation result after finalization.
+Would You DAO? is a private balance-game DAO for funny everyday dilemmas. It started with hygiene questions as `씻었DAO`, then expanded into daily life, food, money, relationships, school, work, superpowers, and absurd choices. The app keeps live vote splits hidden while a round is open, then publishes only the final tally and a verified computation result after finalization.
 
 ## Why this matters
 
-Public voting creates vote-copying, bribery, retaliation, and tactical last-minute voting incentives because every ballot is observable before the vote closes. CipherDAO removes that signal. Voters receive public encrypted receipts, but observers cannot learn interim preferences. The final result is computed by Arcium's MPC network and verified on Solana.
+Public voting creates vote-copying, social pressure, and tactical last-minute voting because every ballot is observable before the vote closes. Would You DAO? removes that signal for a lighter, more viral format: users choose A or B, receive public encrypted receipts, and only see the aggregate result after Arcium finalizes the round.
 
 ## What is included
 
-- A usable static DAO dashboard in `site/`.
+- A usable bilingual balance-game site in `site/`.
+- English-first UI with a Korean `씻었DAO` mode.
+- A built-in bank of everyday A/B dilemmas.
 - A Solana and Arcium project layout with `Anchor.toml`, `Arcium.toml`, `programs/private_dao/`, and `encrypted-ixs/`.
 - A confidential Arcis instruction design for encrypted vote state and final tallying.
 - A TypeScript client integration guide in `app/privateDaoClient.ts`.
@@ -46,7 +48,7 @@ npm test
 npm run check
 ```
 
-The smoke test validates the static app files and the deterministic governance helper logic.
+The smoke test validates the static app files, bilingual balance-game UI, and deterministic governance helper logic.
 If `site/src/arcium-vote-client.js` changes, rebuild the browser crypto bundle with `npm run build:site-crypto`.
 
 ## Devnet workflow
@@ -64,9 +66,9 @@ Large Arcis circuits are configured for off-chain loading from the public GitHub
 
 ## Arcium flow
 
-1. The browser fetches the MXE public key and encrypts the voter hash plus vote choice with the Arcium JavaScript crypto client.
+1. The browser fetches the MXE public key and encrypts the voter hash plus balance-game choice with the Arcium JavaScript crypto client.
 2. The local API builds an unsigned Solana transaction whose fee payer is the connected wallet.
-3. The wallet signs and sends the transaction, queuing `cast_private_vote_v2`.
+3. The wallet signs and sends the transaction, queuing `cast_private_vote_v2`. Option A maps to `yes`, option B maps to `no`, and skip maps to `abstain`.
 4. Arcium converts ciphertexts into secret shares and updates `Enc<Mxe, BallotState>`.
 5. No observer sees the vote choice or running tally while the proposal is open.
 6. When the proposal closes, the wallet signs a transaction that queues `publish_private_tally_v2`.

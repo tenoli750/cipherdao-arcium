@@ -3,21 +3,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CipherDAO Private Governance</title>
+    <title>Would You DAO?</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
     <header class="topbar">
       <div class="brand">
-        <span class="brand__mark" aria-hidden="true">C</span>
+        <span class="brand__mark" aria-hidden="true">?</span>
         <div>
-          <strong>CipherDAO</strong>
-          <span>Private Solana governance</span>
+          <strong data-brand-title>Would You DAO?</strong>
+          <span data-brand-subtitle>Started with hygiene dilemmas. Now judging all of life's impossible choices.</span>
         </div>
       </div>
       <div class="topbar__actions">
+        <div class="lang-toggle" aria-label="Language">
+          <button type="button" data-lang="en" class="is-active">EN</button>
+          <button type="button" data-lang="ko">한국어</button>
+        </div>
         <span class="cluster-pill" data-cluster-label>Solana devnet</span>
-        <button class="icon-button" type="button" data-open-dialog aria-label="Create proposal">
+        <button class="icon-button" type="button" data-open-dialog aria-label="Create round">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         </button>
         <button class="connect-button" type="button" data-connect>
@@ -28,120 +32,143 @@
     </header>
 
     <main class="app-shell">
-      <aside class="proposal-rail" aria-label="Proposals">
+      <aside class="round-rail" aria-label="Rounds">
         <div class="section-heading">
-          <span>Proposals</span>
-          <strong>Active votes</strong>
+          <span data-copy="liveRoundsEyebrow">Live Rounds</span>
+          <strong data-copy="liveRoundsTitle">Sealed votes</strong>
         </div>
-        <div class="proposal-list" data-proposal-list></div>
+        <div class="category-strip" data-category-strip></div>
+        <div class="round-list" data-round-list></div>
       </aside>
 
-      <section class="workspace" aria-label="Voting workspace">
-        <div class="proposal-header">
-          <div>
-            <span class="eyebrow">Encrypted ballot</span>
-            <h1 data-proposal-title></h1>
-            <p data-proposal-summary></p>
+      <section class="duel-workspace" aria-label="Balance game workspace">
+        <section class="duel-stage">
+          <div class="duel-stage__top">
+            <span class="category-pill" data-round-category>Daily Life</span>
+            <span class="state-chip" data-round-status>Sealed</span>
           </div>
-          <span class="state-chip" data-privacy-state>Sealed</span>
-        </div>
+          <div class="duel-copy">
+            <span class="eyebrow" data-copy="questionEyebrow">Would you rather...</span>
+            <h1 data-round-question>Loading rounds</h1>
+          </div>
 
-        <div class="metrics">
+          <div class="option-grid" data-vote-options>
+            <button class="option-card option-card--a is-selected" type="button" data-choice="yes">
+              <span>A</span>
+              <strong data-option-a-text></strong>
+            </button>
+            <div class="versus-mark" aria-hidden="true">VS</div>
+            <button class="option-card option-card--b" type="button" data-choice="no">
+              <span>B</span>
+              <strong data-option-b-text></strong>
+            </button>
+          </div>
+
+          <div class="action-row">
+            <button class="primary-action" type="button" data-cast-vote>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z"/></svg>
+              <span data-copy="voteAction">Vote privately</span>
+            </button>
+            <button class="ghost-action" type="button" data-skip-vote>
+              <span data-copy="skipAction">Skip</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="status-grid">
           <div>
-            <span>Receipts</span>
+            <span data-copy="receiptsMetric">Receipts</span>
             <strong data-receipt-count>0</strong>
           </div>
           <div>
-            <span>Quorum</span>
-            <strong data-quorum>0</strong>
-          </div>
-          <div>
-            <span>Status</span>
+            <span data-copy="roundStatusMetric">Status</span>
             <strong data-close-label>Open</strong>
           </div>
-        </div>
+          <div>
+            <span data-copy="categoryMetric">Category</span>
+            <strong data-category-value>Daily</strong>
+          </div>
+        </section>
 
-        <div class="voting-layout">
-          <section class="ballot-panel">
+        <div class="lower-grid">
+          <section class="reveal-panel">
             <div class="panel-title">
-              <span>Cast vote</span>
-              <strong>Private choice</strong>
-            </div>
-            <div class="choice-grid" data-vote-options></div>
-            <button class="primary-action" type="button" data-cast-vote>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z"/></svg>
-              Cast encrypted vote
-            </button>
-          </section>
-
-          <section class="tally-panel">
-            <div class="panel-title">
-              <span>Final tally</span>
-              <strong data-proof-state>MPC execution pending</strong>
+              <span data-copy="resultEyebrow">Result reveal</span>
+              <strong data-proof-state>Arcium tally pending</strong>
             </div>
             <div class="tally-box" data-tally></div>
             <button class="secondary-action" type="button" data-finalize>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              Close and publish
+              <span data-copy="revealAction">Reveal final result</span>
             </button>
           </section>
-        </div>
 
-        <section class="receipt-panel">
-          <div class="panel-title">
-            <span>Public ledger</span>
-            <strong>Encrypted receipts</strong>
-          </div>
-          <ol class="receipt-list" data-receipts></ol>
-        </section>
+          <section class="receipt-panel">
+            <div class="panel-title">
+              <span data-copy="ledgerEyebrow">Public ledger</span>
+              <strong data-copy="ledgerTitle">Encrypted receipts</strong>
+            </div>
+            <ol class="receipt-list" data-receipts></ol>
+          </section>
+        </div>
       </section>
 
-      <aside class="proof-panel" aria-label="Arcium proof panel">
-        <img src="./assets/confidential-governance.svg" alt="Confidential governance network">
+      <aside class="queue-panel" aria-label="Dilemma queue">
+        <img src="./assets/confidential-governance.svg" alt="Encrypted voting network">
         <div class="proof-copy">
-          <span>Verified result</span>
-          <code data-proof>Waiting for finalization</code>
+          <span data-copy="proofEyebrow">Verified privacy</span>
+          <code data-proof>Waiting</code>
         </div>
-        <div class="node-grid" aria-label="Computation path">
-          <span>Wallet signed</span>
-          <span>Solana queue</span>
-          <span>Arcium MPC</span>
-          <span>BLS verified callback</span>
+        <div class="section-heading">
+          <span data-copy="queueEyebrow">Question Bank</span>
+          <strong data-copy="queueTitle">Launch a round</strong>
         </div>
+        <div class="template-list" data-template-list></div>
       </aside>
     </main>
 
-    <dialog class="proposal-dialog" data-dialog>
+    <dialog class="round-dialog" data-dialog>
       <form data-create-form method="dialog">
         <div class="dialog-header">
-          <strong>New proposal</strong>
+          <strong data-copy="customRoundTitle">Custom round</strong>
           <button class="icon-button" type="button" data-close-dialog aria-label="Close dialog">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
           </button>
         </div>
         <label>
-          Title
-          <input name="title" type="text" maxlength="72" required>
+          <span data-copy="categoryLabel">Category</span>
+          <select name="category" required></select>
         </label>
         <label>
-          Summary
-          <textarea name="summary" rows="4" maxlength="180" required></textarea>
+          <span data-copy="optionAEnLabel">Option A in English</span>
+          <textarea name="optionAEn" rows="2" maxlength="140" required></textarea>
         </label>
         <label>
-          Quorum
-          <input name="quorum" type="number" min="1" max="32" value="5" required>
+          <span data-copy="optionBEnLabel">Option B in English</span>
+          <textarea name="optionBEn" rows="2" maxlength="140" required></textarea>
         </label>
         <label>
-          Duration minutes
-          <input name="duration" type="number" min="1" max="10080" value="3" required>
+          <span data-copy="optionAKoLabel">Option A in Korean</span>
+          <textarea name="optionAKo" rows="2" maxlength="140"></textarea>
         </label>
-        <button class="primary-action" type="submit">Create proposal</button>
+        <label>
+          <span data-copy="optionBKoLabel">Option B in Korean</span>
+          <textarea name="optionBKo" rows="2" maxlength="140"></textarea>
+        </label>
+        <label>
+          <span data-copy="durationLabel">Duration minutes</span>
+          <input name="duration" type="number" min="1" max="10080" value="5" required>
+        </label>
+        <button class="primary-action" type="submit">
+          <span data-copy="createRoundAction">Create sealed round</span>
+        </button>
       </form>
     </dialog>
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
 
     <script src="./src/governance-core.js"></script>
+    <script src="./src/dilemmas.js"></script>
     <script src="./vendor/solana-web3.min.js"></script>
     <script src="./vendor/arcium-vote.js"></script>
     <script src="./src/app.js"></script>

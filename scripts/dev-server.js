@@ -167,10 +167,10 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.on("error", (err) => {
-  console.error(`Unable to start local server on 127.0.0.1:${port}: ${err.message}`);
+  console.error(`Unable to start local Would You DAO server on 127.0.0.1:${port}: ${err.message}`);
   process.exit(1);
 });
 
 server.listen(port, "127.0.0.1", () => {
-  console.log(`CipherDAO running at http://127.0.0.1:${port}`);
+  console.log(`Would You DAO running at http://127.0.0.1:${port}`);
 });
