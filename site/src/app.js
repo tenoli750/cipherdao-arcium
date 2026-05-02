@@ -154,7 +154,10 @@
     wallet: null,
     busy: false,
     loading: true,
-    wheelLocked: false
+    scrollLocked: false,
+    touchStartX: 0,
+    touchStartY: 0,
+    touchStartIndex: 0
   };
 
   const els = {
@@ -595,36 +598,43 @@
     if (!cards.length) return;
     const nextIndex = Math.max(0, Math.min(index, cards.length - 1));
     state.activeIndex = nextIndex;
-    cards[nextIndex].scrollIntoView({
-      behavior: behavior || "smooth",
-      block: "start"
+    els.voteFeed.scrollTo({
+      top: cards[nextIndex].offsetTop,
+      behavior: behavior || "smooth"
     });
+  }
+
+  function navigateBy(direction, fromIndex) {
+    if (state.view === "profile" || state.scrollLocked || direction === 0) return;
+    state.scrollLocked = true;
+    scrollToIndex((fromIndex ?? state.activeIndex) + Math.sign(direction));
+    window.setTimeout(function () {
+      state.scrollLocked = false;
+    }, 560);
   }
 
   function handleWheel(event) {
-    if (state.view === "profile" || state.wheelLocked || Math.abs(event.deltaY) < 6) return;
+    if (state.view === "profile") return;
+    if (Math.abs(event.deltaY) < 6) return;
     event.preventDefault();
-    state.wheelLocked = true;
-    scrollToIndex(state.activeIndex + (event.deltaY > 0 ? 1 : -1));
-    window.setTimeout(function () {
-      state.wheelLocked = false;
-    }, 420);
+    if (state.scrollLocked) return;
+    navigateBy(event.deltaY > 0 ? 1 : -1);
   }
 
-  function syncActiveFromScroll() {
-    const cards = Array.from(els.voteFeed.querySelectorAll(".vote-card"));
-    if (!cards.length) return;
-    const top = els.voteFeed.scrollTop;
-    let bestIndex = 0;
-    let bestDistance = Infinity;
-    cards.forEach(function (card, index) {
-      const distance = Math.abs(card.offsetTop - top);
-      if (distance < bestDistance) {
-        bestDistance = distance;
-        bestIndex = index;
-      }
-    });
-    state.activeIndex = bestIndex;
+  function handleTouchStart(event) {
+    if (state.view === "profile" || event.touches.length !== 1) return;
+    state.touchStartX = event.touches[0].clientX;
+    state.touchStartY = event.touches[0].clientY;
+    state.touchStartIndex = state.activeIndex;
+  }
+
+  function handleTouchEnd(event) {
+    if (state.view === "profile" || !event.changedTouches.length) return;
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - state.touchStartX;
+    const deltaY = state.touchStartY - touch.clientY;
+    if (Math.abs(deltaY) < 28 || Math.abs(deltaY) < Math.abs(deltaX)) return;
+    navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex);
   }
 
   async function createRound(payload) {
@@ -775,10 +785,8 @@
   });
 
   els.voteFeed.addEventListener("wheel", handleWheel, { passive: false });
-  els.voteFeed.addEventListener("scroll", function () {
-    window.clearTimeout(els.voteFeed.scrollTimer);
-    els.voteFeed.scrollTimer = window.setTimeout(syncActiveFromScroll, 90);
-  });
+  els.voteFeed.addEventListener("touchstart", handleTouchStart, { passive: true });
+  els.voteFeed.addEventListener("touchend", handleTouchEnd, { passive: true });
 
   els.voteFeed.addEventListener("click", async function (event) {
     const voteButton = event.target.closest("[data-vote-proposal]");
