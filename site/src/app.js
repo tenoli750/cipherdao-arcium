@@ -5,6 +5,7 @@
     proposals: [],
     selectedProposalId: null,
     selectedChoice: "yes",
+    wallet: null,
     busy: false,
     loading: true
   };
@@ -98,9 +99,68 @@
     });
   }
 
+  function walletProvider() {
+    return window.solana && (window.solana.isPhantom || window.solana.publicKey)
+      ? window.solana
+      : null;
+  }
+
+  async function connectWallet() {
+    const provider = walletProvider();
+    if (!provider) {
+      showToast("Install Phantom or another Solana wallet");
+      return null;
+    }
+    const response = await provider.connect();
+    state.wallet = response.publicKey.toBase58();
+    render();
+    return state.wallet;
+  }
+
+  async function ensureWallet() {
+    if (state.wallet) return state.wallet;
+    return connectWallet();
+  }
+
+  function transactionFromBase64(value) {
+    if (!window.solanaWeb3) {
+      throw new Error("Solana web3 bundle did not load");
+    }
+    const raw = window.atob(value);
+    const bytes = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i += 1) {
+      bytes[i] = raw.charCodeAt(i);
+    }
+    return window.solanaWeb3.Transaction.from(bytes);
+  }
+
+  async function signAndSend(serializedTransaction) {
+    const provider = walletProvider();
+    if (!provider) throw new Error("Connect a Solana wallet first");
+
+    const transaction = transactionFromBase64(serializedTransaction);
+    if (provider.signAndSendTransaction) {
+      const result = await provider.signAndSendTransaction(transaction);
+      return typeof result === "string" ? result : result.signature;
+    }
+
+    if (provider.signTransaction) {
+      const signed = await provider.signTransaction(transaction);
+      const connection = new window.solanaWeb3.Connection(state.config.rpcUrl, "confirmed");
+      return connection.sendRawTransaction(signed.serialize());
+    }
+
+    throw new Error("Wallet cannot sign Solana transactions");
+  }
+
   function short(value) {
     if (!value) return "";
     return value.slice(0, 6) + "..." + value.slice(-6);
+  }
+
+  function walletLabel() {
+    if (state.busy) return "Working";
+    return state.wallet ? short(state.wallet) : "Connect";
   }
 
   function explorerTx(signature) {
@@ -123,11 +183,11 @@
   }
 
   function canVote(proposal) {
-    return proposal && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0;
+    return Boolean(state.wallet && proposal && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0);
   }
 
   function canTally(proposal) {
-    return proposal && !state.busy && !proposal.finalized && isClosed(proposal) && proposal.encryptedStateChunks > 0;
+    return Boolean(state.wallet && proposal && !state.busy && !proposal.finalized && isClosed(proposal) && proposal.encryptedStateChunks > 0);
   }
 
   function titleCase(value) {
@@ -154,7 +214,7 @@
   }
 
   function renderEmpty() {
-    els.walletButton.querySelector("span").textContent = state.busy ? "Working" : "Relayer";
+    els.walletButton.querySelector("span").textContent = walletLabel();
     els.proposalTitle.textContent = state.loading ? "Loading devnet proposals" : "No proposals";
     els.proposalSummary.textContent = state.loading ? "Fetching current on-chain state." : "Create a proposal to start private voting.";
     els.closeLabel.textContent = "Idle";
@@ -166,7 +226,7 @@
     els.receipts.innerHTML = "";
     els.tally.innerHTML = '<div class="sealed-tally"><strong>No on-chain proposal selected</strong></div>';
     els.proof.textContent = "Waiting";
-    els.proofState.textContent = "Relayer idle";
+    els.proofState.textContent = state.wallet ? "Wallet connected" : "Wallet required";
     els.castButton.disabled = true;
     els.finalizeButton.disabled = true;
   }
@@ -187,7 +247,7 @@
     const percentages = proposal.finalized ? core.resultPercentages(result) : null;
 
     els.clusterLabel.textContent = state.config ? "Solana devnet" : "Connecting";
-    els.walletButton.querySelector("span").textContent = state.busy ? "Working" : "Relayer";
+    els.walletButton.querySelector("span").textContent = walletLabel();
     els.proposalTitle.textContent = proposal.title;
     els.proposalSummary.textContent = proposal.summary;
     els.closeLabel.textContent = formatClose(proposal);
@@ -273,22 +333,45 @@
     });
   }
 
-  els.walletButton.addEventListener("click", function () {
-    if (!state.config) {
-      refresh();
-      return;
+  els.walletButton.addEventListener("click", async function () {
+    try {
+      const wallet = await connectWallet();
+      if (wallet) showToast("Wallet connected " + short(wallet));
+    } catch (error) {
+      showToast(error.message);
     }
-    showToast("Relayer " + short(state.config.relayer) + " ready");
   });
 
   els.castButton.addEventListener("click", async function () {
     const proposal = selectedProposal();
     if (!proposal || !canVote(proposal)) return;
     try {
-      setBusy(true, "Submitting encrypted vote");
-      await postJson("/api/vote", {
+      const wallet = await ensureWallet();
+      if (!wallet) return;
+      if (!window.CipherDaoCrypto) {
+        throw new Error("Arcium browser crypto bundle did not load");
+      }
+      setBusy(true, "Encrypting vote in browser");
+      const encryption = await api("/api/vote-encryption");
+      const encryptedVote = await window.CipherDaoCrypto.encryptVote({
+        publicKey: wallet,
+        choice: state.selectedChoice,
+        mxePublicKey: encryption.mxePublicKey
+      });
+      setBusy(true, "Preparing encrypted vote");
+      const prepared = await postJson("/api/wallet/vote-tx", {
+        publicKey: wallet,
         proposal: proposal.proposal,
-        choice: state.selectedChoice
+        encryptedVote: encryptedVote
+      });
+      showToast("Approve vote in wallet");
+      const signature = await signAndSend(prepared.transaction.transaction);
+      setBusy(true, "Waiting for Arcium finalization");
+      await postJson("/api/wallet/vote-confirm", {
+        publicKey: wallet,
+        proposal: proposal.proposal,
+        computationOffset: prepared.computationOffset,
+        signature: signature
       });
       await refresh({ silent: true });
       showToast("Encrypted vote finalized");
@@ -303,9 +386,26 @@
     const proposal = selectedProposal();
     if (!proposal || !canTally(proposal)) return;
     try {
-      setBusy(true, "Publishing private tally");
-      await postJson("/api/tally", {
+      const wallet = await ensureWallet();
+      if (!wallet) return;
+      setBusy(true, "Preparing private tally");
+      const prepared = await postJson("/api/wallet/tally-tx", {
+        publicKey: wallet,
         proposal: proposal.proposal
+      });
+      if (prepared.alreadyFinalized) {
+        await refresh({ silent: true });
+        showToast("Final tally already published");
+        return;
+      }
+      showToast("Approve tally in wallet");
+      const signature = await signAndSend(prepared.transaction.transaction);
+      setBusy(true, "Waiting for Arcium finalization");
+      await postJson("/api/wallet/tally-confirm", {
+        publicKey: wallet,
+        proposal: proposal.proposal,
+        computationOffset: prepared.computationOffset,
+        signature: signature
       });
       await refresh({ silent: true });
       showToast("Final tally published");
@@ -337,13 +437,29 @@
     }
 
     try {
+      const wallet = await ensureWallet();
+      if (!wallet) return;
       els.dialog.close();
-      setBusy(true, "Creating devnet proposal");
-      const data = await postJson("/api/proposals", {
+      setBusy(true, "Preparing proposal transaction");
+      const prepared = await postJson("/api/wallet/proposal-tx", {
+        publicKey: wallet,
         title: title,
         summary: summary,
         quorum: quorum,
         closesInSeconds: durationMinutes * 60
+      });
+      showToast("Approve proposal in wallet");
+      const signature = await signAndSend(prepared.transaction.transaction);
+      setBusy(true, "Waiting for Arcium initialization");
+      const data = await postJson("/api/wallet/proposal-confirm", {
+        publicKey: wallet,
+        proposal: prepared.proposal,
+        proposalId: prepared.proposalId,
+        title: prepared.title,
+        summary: prepared.summary,
+        quorum: prepared.quorum,
+        initComputationOffset: prepared.initComputationOffset,
+        signature: signature
       });
       state.selectedProposalId = data.proposal.proposal;
       els.createForm.reset();
@@ -355,6 +471,25 @@
       setBusy(false);
     }
   });
+
+  const provider = walletProvider();
+  if (provider) {
+    if (provider.isConnected && provider.publicKey) {
+      state.wallet = provider.publicKey.toBase58();
+    }
+    provider.on && provider.on("connect", function (publicKey) {
+      state.wallet = publicKey.toBase58();
+      render();
+    });
+    provider.on && provider.on("disconnect", function () {
+      state.wallet = null;
+      render();
+    });
+    provider.on && provider.on("accountChanged", function (publicKey) {
+      state.wallet = publicKey ? publicKey.toBase58() : null;
+      render();
+    });
+  }
 
   window.setInterval(function () {
     if (!state.busy) render();

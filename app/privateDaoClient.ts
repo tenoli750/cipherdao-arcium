@@ -1,5 +1,10 @@
 import * as anchor from "@coral-xyz/anchor";
-import { AddressLookupTableProgram, Keypair, PublicKey } from "@solana/web3.js";
+import {
+  AddressLookupTableProgram,
+  Keypair,
+  PublicKey,
+  Transaction
+} from "@solana/web3.js";
 import {
   awaitComputationFinalization,
   CircuitSource,
@@ -138,6 +143,22 @@ export async function createProposal(params: {
     .rpc();
 
   return { signature, dao, proposal };
+}
+
+export async function buildCreateProposalInstruction(params: {
+  program: anchor.Program<PrivateDao>;
+  proposalId: anchor.BN;
+  title: string;
+  closesAtUnix: anchor.BN;
+}) {
+  const dao = deriveDaoPda(params.program.programId);
+  const proposal = deriveProposalPda(params.proposalId, dao, params.program.programId);
+  const instruction = await params.program.methods
+    .createProposal(params.proposalId, hash32(params.title), params.closesAtUnix)
+    .accountsPartial({ dao, proposal })
+    .instruction();
+
+  return { instruction, dao, proposal };
 }
 
 export async function initComputationDefinitions(params: {
@@ -279,9 +300,30 @@ export async function initPrivateBallot(params: {
   proposal: PublicKey;
   clusterOffset: number;
 }) {
-  const computationOffset = bnFromRandomU64();
+  const { instruction, computationOffset } = await buildInitPrivateBallotInstruction(params);
+  const provider = params.program.provider as anchor.AnchorProvider;
+  const signature = await provider.sendAndConfirm(new Transaction().add(instruction), [], {
+    commitment: "confirmed",
+    preflightCommitment: "confirmed"
+  });
 
-  const signature = await params.program.methods
+  const finalizeSignature = await awaitComputationFinalization(
+    provider,
+    computationOffset,
+    params.program.programId,
+    "confirmed"
+  );
+
+  return { signature, finalizeSignature, computationOffset };
+}
+
+export async function buildInitPrivateBallotInstruction(params: {
+  program: anchor.Program<PrivateDao>;
+  proposal: PublicKey;
+  clusterOffset: number;
+}) {
+  const computationOffset = bnFromRandomU64();
+  const instruction = await params.program.methods
     .initPrivateBallot(computationOffset)
     .accountsPartial({
       proposal: params.proposal,
@@ -292,16 +334,9 @@ export async function initPrivateBallot(params: {
         compDefName: "init_private_ballot_v2"
       })
     })
-    .rpc({ commitment: "confirmed" });
+    .instruction();
 
-  const finalizeSignature = await awaitComputationFinalization(
-    params.program.provider as anchor.AnchorProvider,
-    computationOffset,
-    params.program.programId,
-    "confirmed"
-  );
-
-  return { signature, finalizeSignature, computationOffset };
+  return { instruction, computationOffset };
 }
 
 async function getMXEPublicKeyWithRetry(
@@ -317,6 +352,15 @@ async function getMXEPublicKeyWithRetry(
   throw new Error("MXE X25519 public key is not available yet");
 }
 
+export async function fetchMxePublicKey(params: {
+  program: anchor.Program<PrivateDao>;
+}) {
+  return getMXEPublicKeyWithRetry(
+    params.program.provider as anchor.AnchorProvider,
+    params.program.programId
+  );
+}
+
 export async function castPrivateVote(params: {
   program: anchor.Program<PrivateDao>;
   proposal: PublicKey;
@@ -326,37 +370,12 @@ export async function castPrivateVote(params: {
   clusterOffset: number;
 }) {
   const provider = params.program.provider as anchor.AnchorProvider;
-  const privateKey = x25519.utils.randomSecretKey();
-  const publicKey = x25519.getPublicKey(privateKey);
-  const mxePublicKey = await getMXEPublicKeyWithRetry(provider, params.program.programId);
-  const sharedSecret = x25519.getSharedSecret(privateKey, mxePublicKey);
-  const cipher = new RescueCipher(sharedSecret);
-  const nonce = randomBytes(16);
-  const ciphertext = cipher.encrypt(
-    [params.voterHash, BigInt(CHOICE_TO_U8[params.choice])],
-    nonce
-  );
-  const computationOffset = bnFromRandomU64();
-
-  const signature = await params.program.methods
-    .castPrivateVote(
-      computationOffset,
-      new anchor.BN(params.encryptedStateNonce.toString()),
-      ciphertext[0],
-      ciphertext[1],
-      Array.from(publicKey),
-      new anchor.BN(leBytesToBigInt(nonce).toString())
-    )
-    .accountsPartial({
-      proposal: params.proposal,
-      ...arciumQueueAccounts({
-        programId: params.program.programId,
-        clusterOffset: params.clusterOffset,
-        computationOffset,
-        compDefName: "cast_private_vote_v2"
-      })
-    })
-    .rpc({ commitment: "confirmed" });
+  const { instruction, computationOffset, ephemeralPublicKey, ciphertexts } =
+    await buildCastPrivateVoteInstruction(params);
+  const signature = await provider.sendAndConfirm(new Transaction().add(instruction), [], {
+    commitment: "confirmed",
+    preflightCommitment: "confirmed"
+  });
 
   const finalizeSignature = await awaitComputationFinalization(
     provider,
@@ -369,9 +388,74 @@ export async function castPrivateVote(params: {
     signature,
     finalizeSignature,
     computationOffset,
-    publicKey: Array.from(publicKey),
-    ciphertexts: ciphertext
+    publicKey: Array.from(ephemeralPublicKey),
+    ciphertexts
   };
+}
+
+export async function buildCastPrivateVoteInstruction(params: {
+  program: anchor.Program<PrivateDao>;
+  proposal: PublicKey;
+  voterHash: bigint;
+  choice: PrivateVoteChoice;
+  encryptedStateNonce: bigint;
+  clusterOffset: number;
+}) {
+  const provider = params.program.provider as anchor.AnchorProvider;
+  const privateKey = x25519.utils.randomSecretKey();
+  const ephemeralPublicKey = x25519.getPublicKey(privateKey);
+  const mxePublicKey = await getMXEPublicKeyWithRetry(provider, params.program.programId);
+  const sharedSecret = x25519.getSharedSecret(privateKey, mxePublicKey);
+  const cipher = new RescueCipher(sharedSecret);
+  const nonce = randomBytes(16);
+  const ciphertexts = cipher.encrypt(
+    [params.voterHash, BigInt(CHOICE_TO_U8[params.choice])],
+    nonce
+  );
+  const built = await buildCastPrivateVoteInstructionFromCiphertexts({
+    program: params.program,
+    proposal: params.proposal,
+    encryptedStateNonce: params.encryptedStateNonce,
+    clusterOffset: params.clusterOffset,
+    ciphertexts,
+    ephemeralPublicKey: Array.from(ephemeralPublicKey),
+    nonce: leBytesToBigInt(nonce)
+  });
+
+  return { ...built, ephemeralPublicKey, ciphertexts };
+}
+
+export async function buildCastPrivateVoteInstructionFromCiphertexts(params: {
+  program: anchor.Program<PrivateDao>;
+  proposal: PublicKey;
+  encryptedStateNonce: bigint;
+  clusterOffset: number;
+  ciphertexts: number[][];
+  ephemeralPublicKey: number[];
+  nonce: bigint;
+}) {
+  const computationOffset = bnFromRandomU64();
+  const instruction = await params.program.methods
+    .castPrivateVote(
+      computationOffset,
+      new anchor.BN(params.encryptedStateNonce.toString()),
+      params.ciphertexts[0],
+      params.ciphertexts[1],
+      params.ephemeralPublicKey,
+      new anchor.BN(params.nonce.toString())
+    )
+    .accountsPartial({
+      proposal: params.proposal,
+      ...arciumQueueAccounts({
+        programId: params.program.programId,
+        clusterOffset: params.clusterOffset,
+        computationOffset,
+        compDefName: "cast_private_vote_v2"
+      })
+    })
+    .instruction();
+
+  return { instruction, computationOffset };
 }
 
 export async function publishPrivateTally(params: {
@@ -380,9 +464,31 @@ export async function publishPrivateTally(params: {
   encryptedStateNonce: bigint;
   clusterOffset: number;
 }) {
-  const computationOffset = bnFromRandomU64();
+  const { instruction, computationOffset } = await buildPublishPrivateTallyInstruction(params);
+  const provider = params.program.provider as anchor.AnchorProvider;
+  const signature = await provider.sendAndConfirm(new Transaction().add(instruction), [], {
+    commitment: "confirmed",
+    preflightCommitment: "confirmed"
+  });
 
-  const signature = await params.program.methods
+  const finalizeSignature = await awaitComputationFinalization(
+    provider,
+    computationOffset,
+    params.program.programId,
+    "confirmed"
+  );
+
+  return { signature, finalizeSignature, computationOffset };
+}
+
+export async function buildPublishPrivateTallyInstruction(params: {
+  program: anchor.Program<PrivateDao>;
+  proposal: PublicKey;
+  encryptedStateNonce: bigint;
+  clusterOffset: number;
+}) {
+  const computationOffset = bnFromRandomU64();
+  const instruction = await params.program.methods
     .publishPrivateTally(
       computationOffset,
       new anchor.BN(params.encryptedStateNonce.toString())
@@ -396,14 +502,19 @@ export async function publishPrivateTally(params: {
         compDefName: "publish_private_tally_v2"
       })
     })
-    .rpc({ commitment: "confirmed" });
+    .instruction();
 
-  const finalizeSignature = await awaitComputationFinalization(
+  return { instruction, computationOffset };
+}
+
+export async function waitForPrivateComputationFinalization(params: {
+  program: anchor.Program<PrivateDao>;
+  computationOffset: anchor.BN;
+}) {
+  return awaitComputationFinalization(
     params.program.provider as anchor.AnchorProvider,
-    computationOffset,
+    params.computationOffset,
     params.program.programId,
     "confirmed"
   );
-
-  return { signature, finalizeSignature, computationOffset };
 }

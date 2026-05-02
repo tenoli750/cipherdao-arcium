@@ -8,6 +8,7 @@
     "dev": "node scripts/dev-server.js",
     "test": "node tests/smoke.test.js",
     "check": "node tests/smoke.test.js && tsc --noEmit",
+    "build:site-crypto": "esbuild site/src/arcium-vote-client.js --bundle --format=iife --global-name=CipherDaoCrypto --alias:crypto=./site/src/node-crypto-shim.js --outfile=site/vendor/arcium-vote.js",
     "dao:bootstrap": "tsx app/scripts/bootstrapDao.ts",
     "dao:vote": "tsx app/scripts/castVote.ts",
     "dao:tally": "tsx app/scripts/publishTally.ts",
@@ -28,6 +29,7 @@
     "bs58": "^6.0.0"
   },
   "devDependencies": {
+    "esbuild": "^0.27.7",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   }

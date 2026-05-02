@@ -22,7 +22,7 @@
         </button>
         <button class="connect-button" type="button" data-connect>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1M16 12h5m0 0-2-2m2 2-2 2"/></svg>
-          <span>Relayer</span>
+          <span>Connect</span>
         </button>
       </div>
     </header>
@@ -103,7 +103,7 @@
           <code data-proof>Waiting for finalization</code>
         </div>
         <div class="node-grid" aria-label="Computation path">
-          <span>Browser encryption</span>
+          <span>Wallet signed</span>
           <span>Solana queue</span>
           <span>Arcium MPC</span>
           <span>BLS verified callback</span>
@@ -142,6 +142,8 @@
     <div class="toast" data-toast role="status" aria-live="polite"></div>
 
     <script src="./src/governance-core.js"></script>
+    <script src="./vendor/solana-web3.min.js"></script>
+    <script src="./vendor/arcium-vote.js"></script>
     <script src="./src/app.js"></script>
   </body>
 </html>

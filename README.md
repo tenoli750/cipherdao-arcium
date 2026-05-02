@@ -26,14 +26,18 @@ npm run dev
 
 Then visit `http://127.0.0.1:4173`.
 
-The local server serves the app and exposes a small devnet relayer API:
+The local server serves the app and exposes a small devnet API that builds unsigned transactions for a connected Solana wallet:
 
 - `GET /api/status`
-- `POST /api/proposals`
-- `POST /api/vote`
-- `POST /api/tally`
+- `GET /api/vote-encryption`
+- `POST /api/wallet/proposal-tx`
+- `POST /api/wallet/proposal-confirm`
+- `POST /api/wallet/vote-tx`
+- `POST /api/wallet/vote-confirm`
+- `POST /api/wallet/tally-tx`
+- `POST /api/wallet/tally-confirm`
 
-That means the browser buttons create proposals, submit encrypted votes, and publish private tallies on Solana devnet without requiring terminal commands.
+That means the browser buttons connect Phantom or another injected Solana wallet, encrypt votes in the browser, ask the wallet to sign Solana devnet transactions, and then wait for Arcium finalization. Legacy relayer endpoints remain for scripted local demos, but the site UI uses the connected wallet path.
 
 ## Run checks
 
@@ -43,6 +47,7 @@ npm run check
 ```
 
 The smoke test validates the static app files and the deterministic governance helper logic.
+If `site/src/arcium-vote-client.js` changes, rebuild the browser crypto bundle with `npm run build:site-crypto`.
 
 ## Devnet workflow
 
@@ -59,13 +64,14 @@ Large Arcis circuits are configured for off-chain loading from the public GitHub
 
 ## Arcium flow
 
-1. The voter encrypts a ballot in the browser with the MXE public key using the Arcium JavaScript client.
-2. The Solana program queues the `cast_private_vote_v2` confidential instruction.
-3. Arcium converts ciphertexts into secret shares and updates `Enc<Mxe, BallotState>`.
-4. No observer sees the vote choice or running tally while the proposal is open.
-5. When the proposal closes, the program queues `publish_private_tally_v2`.
-6. Arcium reveals only the aggregate counts and returns a signed output.
-7. The callback verifies the output with `verify_output(...)` before publishing the tally on Solana.
+1. The browser fetches the MXE public key and encrypts the voter hash plus vote choice with the Arcium JavaScript crypto client.
+2. The local API builds an unsigned Solana transaction whose fee payer is the connected wallet.
+3. The wallet signs and sends the transaction, queuing `cast_private_vote_v2`.
+4. Arcium converts ciphertexts into secret shares and updates `Enc<Mxe, BallotState>`.
+5. No observer sees the vote choice or running tally while the proposal is open.
+6. When the proposal closes, the wallet signs a transaction that queues `publish_private_tally_v2`.
+7. Arcium reveals only the aggregate counts and returns a signed output.
+8. The callback verifies the output with `verify_output(...)` before publishing the tally on Solana.
 
 ## Project status
 

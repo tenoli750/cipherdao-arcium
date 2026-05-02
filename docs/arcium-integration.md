@@ -10,7 +10,7 @@ DAO votes are often public from the moment they are submitted. That leaks interi
 
 CipherDAO keeps the ballot state inside an Arcium MPC computation.
 
-- Voters encrypt `VoteInput` with the MXE public key and submit ciphertexts through Solana.
+- Voters encrypt `VoteInput` in the browser with the MXE public key and submit ciphertexts through Solana.
 - `cast_private_vote_v2` runs in Arcis and updates `Enc<Mxe, BallotState>`.
 - The encrypted state is stored back on Solana, but only the MXE can decrypt it.
 - Interim vote choices and running totals are never revealed to voters, validators, RPC providers, or the application host.
@@ -45,8 +45,8 @@ The public chain sees that a voter participated and sees encrypted receipt data,
 
 ## Production notes
 
-- Replace demo wallet behavior in `site/` with a wallet adapter.
-- Use `@arcium-hq/client@0.9.7` to fetch the MXE public key, encrypt inputs, derive Arcium PDAs, and wait for finalization.
+- The demo site now uses an injected Solana wallet for proposal, vote, and tally signatures. A production frontend should replace the lightweight Phantom integration with a maintained wallet adapter.
+- Use `@arcium-hq/client@0.9.7` to fetch the MXE public key, encrypt inputs, derive Arcium PDAs, and wait for finalization. The browser bundle in `site/vendor/arcium-vote.js` contains the vote-encryption subset used by the site.
 - Use unique nonces for every encrypted input.
 - Initialize computation definitions once per deployment.
 - Add membership and nullifier checks before production use. The devnet demo focuses on private tallying and does not enforce one-vote-per-wallet.

@@ -4,9 +4,16 @@ const path = require("path");
 require("tsx/cjs");
 
 const {
+  buildWalletProposalTransaction,
+  buildWalletTallyTransaction,
+  buildWalletVoteTransaction,
   castSiteVote,
+  confirmWalletProposalTransaction,
+  confirmWalletTallyTransaction,
+  confirmWalletVoteTransaction,
   createSiteProposal,
   getStatus,
+  getVoteEncryptionConfig,
   publishSiteTally
 } = require("../app/siteApi.ts");
 
@@ -59,9 +66,26 @@ async function handleApi(req, res, cleanUrl) {
     return true;
   }
 
+  if (req.method === "GET" && cleanUrl === "/api/vote-encryption") {
+    sendJson(res, 200, await getVoteEncryptionConfig());
+    return true;
+  }
+
   if (req.method === "POST" && cleanUrl === "/api/proposals") {
     const body = await readJsonBody(req);
     sendJson(res, 200, await createSiteProposal(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/wallet/proposal-tx") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await buildWalletProposalTransaction(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/wallet/proposal-confirm") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await confirmWalletProposalTransaction(body));
     return true;
   }
 
@@ -71,9 +95,33 @@ async function handleApi(req, res, cleanUrl) {
     return true;
   }
 
+  if (req.method === "POST" && cleanUrl === "/api/wallet/vote-tx") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await buildWalletVoteTransaction(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/wallet/vote-confirm") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await confirmWalletVoteTransaction(body));
+    return true;
+  }
+
   if (req.method === "POST" && cleanUrl === "/api/tally") {
     const body = await readJsonBody(req);
     sendJson(res, 200, await publishSiteTally(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/wallet/tally-tx") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await buildWalletTallyTransaction(body));
+    return true;
+  }
+
+  if (req.method === "POST" && cleanUrl === "/api/wallet/tally-confirm") {
+    const body = await readJsonBody(req);
+    sendJson(res, 200, await confirmWalletTallyTransaction(body));
     return true;
   }
 
