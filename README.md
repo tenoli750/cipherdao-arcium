@@ -9,7 +9,8 @@ Public voting creates vote-copying, social pressure, and tactical last-minute vo
 ## What is included
 
 - A usable bilingual balance-game site in `site/`.
-- English-first UI with a Korean `씻었DAO` mode.
+- English-first mobile UI with a Korean `씻었DAO` mode in Profile.
+- Scroll-snap voting feed with `Hot`, `New`, and `Profile` bottom navigation.
 - A built-in bank of everyday A/B dilemmas.
 - A Solana and Arcium project layout with `Anchor.toml`, `Arcium.toml`, `programs/private_dao/`, and `encrypted-ixs/`.
 - A confidential Arcis instruction design for encrypted vote state and final tallying.

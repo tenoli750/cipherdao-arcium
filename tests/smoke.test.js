@@ -15,11 +15,15 @@ const program = read("programs/private_dao/src/lib.rs");
 const encryptedIx = read("encrypted-ixs/private_vote.rs");
 
 assert(html.includes("Would You DAO?"), "site title should be present");
-assert(html.includes("data-cast-vote"), "cast vote action should exist");
+assert(html.includes("data-vote-feed"), "scroll-sensitive vote feed should exist");
+assert(html.includes('data-tab="hot"'), "hot bottom tab should exist");
+assert(html.includes('data-tab="new"'), "new bottom tab should exist");
+assert(html.includes('data-tab="profile"'), "profile bottom tab should exist");
 assert(html.includes("data-lang"), "language selector should exist");
 assert(html.includes("src/dilemmas.js"), "dilemma bank should load");
-assert(css.includes(".app-shell"), "app layout styles should exist");
-assert(css.includes(".option-card"), "A/B option card styles should exist");
+assert(css.includes("scroll-snap-type"), "feed should use scroll snapping");
+assert(css.includes(".bottom-nav"), "bottom navigation styles should exist");
+assert(css.includes(".vote-card"), "single-vote card styles should exist");
 assert(program.includes("#[arcium_program]"), "Solana program should use Arcium macro");
 assert(program.includes("verify_output"), "callbacks should verify Arcium output");
 assert(encryptedIx.includes("Enc<Mxe, BallotState>"), "encrypted shared state should be MXE-owned");

@@ -2,130 +2,90 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Would You DAO?</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand__mark" aria-hidden="true">?</span>
-        <div>
-          <strong data-brand-title>Would You DAO?</strong>
-          <span data-brand-subtitle>Started with hygiene dilemmas. Now judging all of life's impossible choices.</span>
-        </div>
-      </div>
-      <div class="topbar__actions">
-        <div class="lang-toggle" aria-label="Language">
-          <button type="button" data-lang="en" class="is-active">EN</button>
-          <button type="button" data-lang="ko">한국어</button>
-        </div>
-        <span class="cluster-pill" data-cluster-label>Solana devnet</span>
-        <button class="icon-button" type="button" data-open-dialog aria-label="Create round">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-        </button>
-        <button class="connect-button" type="button" data-connect>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1M16 12h5m0 0-2-2m2 2-2 2"/></svg>
-          <span>Connect</span>
-        </button>
-      </div>
+    <header class="app-topbar">
+      <div class="logo-mark" aria-hidden="true">?</div>
+      <strong data-brand-title>Would You DAO?</strong>
+      <button class="connect-button" type="button" data-connect>
+        <span>Connect</span>
+      </button>
     </header>
 
-    <main class="app-shell">
-      <aside class="round-rail" aria-label="Rounds">
-        <div class="section-heading">
-          <span data-copy="liveRoundsEyebrow">Live Rounds</span>
-          <strong data-copy="liveRoundsTitle">Sealed votes</strong>
-        </div>
-        <div class="category-strip" data-category-strip></div>
-        <div class="round-list" data-round-list></div>
-      </aside>
-
-      <section class="duel-workspace" aria-label="Balance game workspace">
-        <section class="duel-stage">
-          <div class="duel-stage__top">
-            <span class="category-pill" data-round-category>Daily Life</span>
-            <span class="state-chip" data-round-status>Sealed</span>
-          </div>
-          <div class="duel-copy">
-            <span class="eyebrow" data-copy="questionEyebrow">Would you rather...</span>
-            <h1 data-round-question>Loading rounds</h1>
-          </div>
-
-          <div class="option-grid" data-vote-options>
-            <button class="option-card option-card--a is-selected" type="button" data-choice="yes">
-              <span>A</span>
-              <strong data-option-a-text></strong>
-            </button>
-            <div class="versus-mark" aria-hidden="true">VS</div>
-            <button class="option-card option-card--b" type="button" data-choice="no">
-              <span>B</span>
-              <strong data-option-b-text></strong>
-            </button>
-          </div>
-
-          <div class="action-row">
-            <button class="primary-action" type="button" data-cast-vote>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z"/></svg>
-              <span data-copy="voteAction">Vote privately</span>
-            </button>
-            <button class="ghost-action" type="button" data-skip-vote>
-              <span data-copy="skipAction">Skip</span>
-            </button>
-          </div>
-        </section>
-
-        <section class="status-grid">
-          <div>
-            <span data-copy="receiptsMetric">Receipts</span>
-            <strong data-receipt-count>0</strong>
-          </div>
-          <div>
-            <span data-copy="roundStatusMetric">Status</span>
-            <strong data-close-label>Open</strong>
-          </div>
-          <div>
-            <span data-copy="categoryMetric">Category</span>
-            <strong data-category-value>Daily</strong>
-          </div>
-        </section>
-
-        <div class="lower-grid">
-          <section class="reveal-panel">
-            <div class="panel-title">
-              <span data-copy="resultEyebrow">Result reveal</span>
-              <strong data-proof-state>Arcium tally pending</strong>
-            </div>
-            <div class="tally-box" data-tally></div>
-            <button class="secondary-action" type="button" data-finalize>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              <span data-copy="revealAction">Reveal final result</span>
-            </button>
-          </section>
-
-          <section class="receipt-panel">
-            <div class="panel-title">
-              <span data-copy="ledgerEyebrow">Public ledger</span>
-              <strong data-copy="ledgerTitle">Encrypted receipts</strong>
-            </div>
-            <ol class="receipt-list" data-receipts></ol>
-          </section>
-        </div>
+    <main class="mobile-shell">
+      <section class="feed-view" data-feed-view aria-label="Voting feed">
+        <div class="vote-feed" data-vote-feed></div>
       </section>
 
-      <aside class="queue-panel" aria-label="Dilemma queue">
-        <img src="./assets/confidential-governance.svg" alt="Encrypted voting network">
-        <div class="proof-copy">
-          <span data-copy="proofEyebrow">Verified privacy</span>
-          <code data-proof>Waiting</code>
+      <section class="profile-view" data-profile-view hidden aria-label="Profile">
+        <div class="profile-card">
+          <span class="eyebrow" data-copy="profileEyebrow">Profile</span>
+          <h1 data-copy="profileTitle">Private voting settings</h1>
+          <p data-copy="profileBody">Choose your language, connect your wallet, and launch custom sealed rounds.</p>
         </div>
-        <div class="section-heading">
-          <span data-copy="queueEyebrow">Question Bank</span>
-          <strong data-copy="queueTitle">Launch a round</strong>
+
+        <div class="profile-card">
+          <div class="profile-row">
+            <span data-copy="walletLabel">Wallet</span>
+            <strong data-profile-wallet>Not connected</strong>
+          </div>
+          <button class="full-action" type="button" data-profile-connect>
+            <span data-copy="connectWalletAction">Connect wallet</span>
+          </button>
         </div>
-        <div class="template-list" data-template-list></div>
-      </aside>
+
+        <div class="profile-card">
+          <span class="profile-label" data-copy="languageLabel">Language</span>
+          <div class="lang-toggle" aria-label="Language">
+            <button type="button" data-lang="en" class="is-active">EN</button>
+            <button type="button" data-lang="ko">한국어</button>
+          </div>
+        </div>
+
+        <div class="profile-card stats-card">
+          <div>
+            <span data-copy="liveRoundsLabel">Live rounds</span>
+            <strong data-profile-rounds>0</strong>
+          </div>
+          <div>
+            <span data-copy="questionBankLabel">Question bank</span>
+            <strong data-profile-bank>0</strong>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="profile-row">
+            <span data-copy="networkLabel">Network</span>
+            <strong data-profile-network>Solana devnet</strong>
+          </div>
+          <code data-profile-program>Loading</code>
+        </div>
+
+        <div class="profile-card">
+          <span class="eyebrow" data-copy="privacyEyebrow">Sealed by Arcium</span>
+          <p data-copy="privacyBody">Choices are encrypted in your browser. Live results stay hidden until the round closes and Arcium publishes the verified final tally.</p>
+        </div>
+
+        <button class="full-action full-action--secondary" type="button" data-open-dialog>
+          <span data-copy="createRoundAction">Create custom round</span>
+        </button>
+      </section>
     </main>
+
+    <nav class="bottom-nav" aria-label="Primary">
+      <button type="button" data-tab="hot" class="is-active">
+        <span data-copy="hotTab">Hot</span>
+      </button>
+      <button type="button" data-tab="new">
+        <span data-copy="newTab">New</span>
+      </button>
+      <button type="button" data-tab="profile">
+        <span data-copy="profileTab">Profile</span>
+      </button>
+    </nav>
 
     <dialog class="round-dialog" data-dialog>
       <form data-create-form method="dialog">
@@ -159,8 +119,8 @@
           <span data-copy="durationLabel">Duration minutes</span>
           <input name="duration" type="number" min="1" max="10080" value="5" required>
         </label>
-        <button class="primary-action" type="submit">
-          <span data-copy="createRoundAction">Create sealed round</span>
+        <button class="full-action" type="submit">
+          <span data-copy="submitRoundAction">Create sealed round</span>
         </button>
       </form>
     </dialog>
