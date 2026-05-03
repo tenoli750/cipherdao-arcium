@@ -607,7 +607,7 @@
 
   function navigateBy(direction, fromIndex, cooldown) {
     if (state.view === "profile" || direction === 0 || Date.now() < state.scrollCooldownUntil) return false;
-    state.scrollCooldownUntil = Date.now() + (cooldown || 5);
+    state.scrollCooldownUntil = Date.now() + (cooldown || 100);
     scrollToIndex((fromIndex ?? state.activeIndex) + Math.sign(direction));
     return true;
   }
@@ -648,7 +648,7 @@
     const deltaX = touch.clientX - state.touchStartX;
     const deltaY = state.touchStartY - touch.clientY;
     if (Math.abs(deltaY) < 28 || Math.abs(deltaY) < Math.abs(deltaX)) return;
-    navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex, 5);
+    navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex, 100);
   }
 
   function handleTouchMove(event) {
