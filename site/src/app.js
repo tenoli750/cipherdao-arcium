@@ -155,8 +155,6 @@
     busy: false,
     loading: true,
     scrollCooldownUntil: 0,
-    wheelGestureConsumed: false,
-    wheelIdleTimer: 0,
     wheelDelta: 0,
     touchStartX: 0,
     touchStartY: 0,
@@ -607,16 +605,6 @@
     });
   }
 
-  function resetWheelGesture() {
-    state.wheelGestureConsumed = false;
-    state.wheelDelta = 0;
-  }
-
-  function markWheelActivity() {
-    window.clearTimeout(state.wheelIdleTimer);
-    state.wheelIdleTimer = window.setTimeout(resetWheelGesture, 100);
-  }
-
   function navigateBy(direction, fromIndex, cooldown) {
     if (state.view === "profile" || direction === 0 || Date.now() < state.scrollCooldownUntil) return false;
     state.scrollCooldownUntil = Date.now() + (cooldown || 100);
@@ -631,22 +619,19 @@
     if (Math.abs(deltaY) <= Math.abs(deltaX) || Math.abs(deltaY) < 1) return;
     event.preventDefault();
 
-    markWheelActivity();
-    if (state.wheelGestureConsumed) return;
-
-    state.wheelDelta += deltaY;
+    state.wheelDelta = Math.sign(state.wheelDelta) === Math.sign(deltaY)
+      ? state.wheelDelta + deltaY
+      : deltaY;
     if (Math.abs(state.wheelDelta) < 28) return;
 
     if (navigateBy(state.wheelDelta > 0 ? 1 : -1)) {
-      state.wheelGestureConsumed = true;
       state.wheelDelta = 0;
     }
   }
 
   function resetScrollGuards() {
     state.scrollCooldownUntil = 0;
-    resetWheelGesture();
-    window.clearTimeout(state.wheelIdleTimer);
+    state.wheelDelta = 0;
   }
 
   function handleTouchStart(event) {
