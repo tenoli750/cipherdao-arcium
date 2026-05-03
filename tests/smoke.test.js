@@ -25,7 +25,7 @@ assert(html.includes("src/dilemmas.js"), "dilemma bank should load");
 assert(css.includes("scroll-snap-type"), "feed should use scroll snapping");
 assert(css.includes(".bottom-nav"), "bottom navigation styles should exist");
 assert(css.includes(".vote-card"), "single-vote card styles should exist");
-assert(app.includes("scrollUnlockAt"), "feed scroll lock should use a deadline");
+assert(app.includes("wheelGestureConsumed"), "feed scroll should advance once per wheel gesture");
 assert(app.includes('addEventListener("touchmove", handleTouchMove, { passive: false })'), "touch movement should be cancelable");
 assert(program.includes("#[arcium_program]"), "Solana program should use Arcium macro");
 assert(program.includes("verify_output"), "callbacks should verify Arcium output");

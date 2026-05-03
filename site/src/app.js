@@ -154,9 +154,10 @@
     wallet: null,
     busy: false,
     loading: true,
-    scrollLocked: false,
-    scrollUnlockTimer: 0,
-    scrollUnlockAt: 0,
+    scrollCooldownUntil: 0,
+    wheelGestureConsumed: false,
+    wheelIdleTimer: 0,
+    wheelDelta: 0,
     touchStartX: 0,
     touchStartY: 0,
     touchStartIndex: 0
@@ -606,42 +607,53 @@
     });
   }
 
-  function keepScrollLocked(delay) {
-    const unlockAt = Date.now() + delay;
-    state.scrollLocked = true;
-    if (unlockAt <= state.scrollUnlockAt) return;
-    state.scrollUnlockAt = unlockAt;
-    window.clearTimeout(state.scrollUnlockTimer);
-    state.scrollUnlockTimer = window.setTimeout(function () {
-      state.scrollLocked = false;
-      state.scrollUnlockAt = 0;
-    }, Math.max(0, state.scrollUnlockAt - Date.now()));
+  function resetWheelGesture() {
+    state.wheelGestureConsumed = false;
+    state.wheelDelta = 0;
   }
 
-  function navigateBy(direction, fromIndex) {
-    if (state.view === "profile" || state.scrollLocked || direction === 0) return;
-    keepScrollLocked(820);
+  function markWheelActivity() {
+    window.clearTimeout(state.wheelIdleTimer);
+    state.wheelIdleTimer = window.setTimeout(resetWheelGesture, 180);
+  }
+
+  function navigateBy(direction, fromIndex, cooldown) {
+    if (state.view === "profile" || direction === 0 || Date.now() < state.scrollCooldownUntil) return false;
+    state.scrollCooldownUntil = Date.now() + (cooldown || 340);
     scrollToIndex((fromIndex ?? state.activeIndex) + Math.sign(direction));
+    return true;
   }
 
   function handleWheel(event) {
     if (state.view === "profile") return;
+    const deltaX = event.deltaX || 0;
+    const deltaY = event.deltaY || 0;
+    if (Math.abs(deltaY) <= Math.abs(deltaX) || Math.abs(deltaY) < 1) return;
     event.preventDefault();
-    if (Math.abs(event.deltaY) < 8) {
-      if (state.scrollLocked) keepScrollLocked(520);
-      return;
+
+    markWheelActivity();
+    if (state.wheelGestureConsumed) return;
+
+    state.wheelDelta += deltaY;
+    if (Math.abs(state.wheelDelta) < 28) return;
+
+    if (navigateBy(state.wheelDelta > 0 ? 1 : -1)) {
+      state.wheelGestureConsumed = true;
+      state.wheelDelta = 0;
     }
-    if (state.scrollLocked) {
-      keepScrollLocked(520);
-      return;
-    }
-    navigateBy(event.deltaY > 0 ? 1 : -1);
+  }
+
+  function resetScrollGuards() {
+    state.scrollCooldownUntil = 0;
+    resetWheelGesture();
+    window.clearTimeout(state.wheelIdleTimer);
   }
 
   function handleTouchStart(event) {
     if (state.view === "profile" || event.touches.length !== 1) return;
-    state.touchStartX = event.touches[0].clientX;
-    state.touchStartY = event.touches[0].clientY;
+    const touch = event.touches[0];
+    state.touchStartX = touch.clientX;
+    state.touchStartY = touch.clientY;
     state.touchStartIndex = state.activeIndex;
   }
 
@@ -651,7 +663,7 @@
     const deltaX = touch.clientX - state.touchStartX;
     const deltaY = state.touchStartY - touch.clientY;
     if (Math.abs(deltaY) < 28 || Math.abs(deltaY) < Math.abs(deltaX)) return;
-    navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex);
+    navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex, 300);
   }
 
   function handleTouchMove(event) {
@@ -661,7 +673,20 @@
     const deltaY = touch.clientY - state.touchStartY;
     if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 8) {
       event.preventDefault();
-      if (state.scrollLocked) keepScrollLocked(520);
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (state.view === "profile") return;
+    if (event.target.closest && event.target.closest("input, textarea, select, button, dialog")) return;
+    if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === " ") {
+      event.preventDefault();
+      navigateBy(1);
+      return;
+    }
+    if (event.key === "ArrowUp" || event.key === "PageUp") {
+      event.preventDefault();
+      navigateBy(-1);
     }
   }
 
@@ -789,9 +814,7 @@
     button.addEventListener("click", function () {
       state.view = button.getAttribute("data-tab");
       state.activeIndex = 0;
-      state.scrollLocked = false;
-      state.scrollUnlockAt = 0;
-      window.clearTimeout(state.scrollUnlockTimer);
+      resetScrollGuards();
       render();
     });
   });
@@ -819,6 +842,7 @@
   els.voteFeed.addEventListener("touchstart", handleTouchStart, { passive: true });
   els.voteFeed.addEventListener("touchmove", handleTouchMove, { passive: false });
   els.voteFeed.addEventListener("touchend", handleTouchEnd, { passive: true });
+  window.addEventListener("keydown", handleKeyDown);
 
   els.voteFeed.addEventListener("click", async function (event) {
     const voteButton = event.target.closest("[data-vote-proposal]");

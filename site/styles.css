@@ -147,7 +147,7 @@ svg {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
-  touch-action: pan-x;
+  touch-action: none;
 }
 
 .vote-feed::-webkit-scrollbar {
