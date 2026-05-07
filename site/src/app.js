@@ -72,9 +72,11 @@
       approveVote: "Approve vote in wallet",
       waitingVote: "Waiting for Arcium finalization",
       voteFinalized: "Encrypted vote finalized",
+      voteQueued: "Vote submitted. Arcium finalization is still running.",
       preparingReveal: "Preparing reveal",
       approveReveal: "Approve reveal in wallet",
       resultPublished: "Final result published",
+      resultQueued: "Reveal submitted. Arcium finalization is still running.",
       alreadyFinalized: "Final result already published",
       solanaDevnet: "Solana devnet",
       loading: "Loading",
@@ -152,9 +154,11 @@
       approveVote: "지갑에서 투표를 승인하세요",
       waitingVote: "Arcium 최종화 대기 중",
       voteFinalized: "암호화 투표 완료",
+      voteQueued: "투표가 제출됐고 Arcium 최종화가 계속 진행 중이에요",
       preparingReveal: "결과 공개 준비 중",
       approveReveal: "지갑에서 결과 공개를 승인하세요",
       resultPublished: "최종 결과 공개 완료",
+      resultQueued: "결과 공개가 제출됐고 Arcium 최종화가 계속 진행 중이에요",
       alreadyFinalized: "이미 최종 결과가 공개됐어요",
       solanaDevnet: "Solana devnet",
       loading: "로딩",
@@ -252,7 +256,17 @@
       },
       ...options
     });
-    const data = await response.json();
+    const raw = await response.text();
+    let data = {};
+    if (raw.trim()) {
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        throw new Error(response.ok
+          ? "Server returned a non-JSON response"
+          : raw.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 180) || "Request failed");
+      }
+    }
     if (!response.ok) throw new Error(data.error || "Request failed");
     return data;
   }
@@ -981,14 +995,16 @@
       showToast(t("approveVote"));
       const signature = await signAndSend(prepared.transaction.transaction);
       showToast(t("waitingVote"));
-      await postJson("/api/wallet/vote-confirm", {
+      const confirmed = await postJson("/api/wallet/vote-confirm", {
         publicKey: wallet,
         proposal: proposal.proposal,
         computationOffset: prepared.computationOffset,
         signature
       });
       await refresh({ silent: true });
-      showToast(t("voteFinalized"));
+      showToast(confirmed.transactions && confirmed.transactions.finalizationStatus === "pending"
+        ? t("voteQueued")
+        : t("voteFinalized"));
     } catch (error) {
       showToast(error.message);
     } finally {
@@ -1021,14 +1037,16 @@
       showToast(t("approveReveal"));
       const signature = await signAndSend(prepared.transaction.transaction);
       showToast(t("waitingVote"));
-      await postJson("/api/wallet/tally-confirm", {
+      const confirmed = await postJson("/api/wallet/tally-confirm", {
         publicKey: wallet,
         proposal: proposal.proposal,
         computationOffset: prepared.computationOffset,
         signature
       });
       await refresh({ silent: true });
-      showToast(t("resultPublished"));
+      showToast(confirmed.transactions && confirmed.transactions.finalizationStatus === "pending"
+        ? t("resultQueued")
+        : t("resultPublished"));
     } catch (error) {
       showToast(error.message);
     } finally {

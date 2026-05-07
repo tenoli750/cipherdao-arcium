@@ -74,6 +74,9 @@ assert(app.includes("topbarNewVote.hidden = !state.wallet"), "topbar new vote ac
 assert(app.includes("Why Arcium?"), "app copy should explain why Arcium is useful");
 assert(app.includes("Absurd questions. Serious privacy."), "about copy should balance funny topic with professional privacy framing");
 assert(app.includes("aboutDialog.showModal()"), "about action should open the Arcium explanation dialog");
+assert(app.includes("Server returned a non-JSON response"), "API helper should avoid raw JSON parse errors on Vercel timeout pages");
+assert(app.includes("voteQueued"), "vote UX should handle serverless Arcium finalization timeouts");
+assert(app.includes("resultQueued"), "reveal UX should handle serverless Arcium finalization timeouts");
 assert(app.includes("connectedWalletAction"), "profile wallet action should change copy after connect");
 assert(app.includes("els.profileConnect.disabled = Boolean(state.wallet)"), "profile connect action should disable after wallet connect");
 assert(app.includes("HANGUL_PATTERN"), "custom round submission should detect Korean input");
@@ -126,6 +129,8 @@ assert(siteApi.includes("SUPABASE_SERVICE_ROLE_KEY"), "server should use a serve
 assert(siteApi.includes("DATABASE_URL"), "server should support direct Supabase Postgres URLs");
 assert(siteApi.includes("readStateFromPostgres"), "server should read metadata from Postgres when configured");
 assert(siteApi.includes("writeStateToPostgres"), "server should write metadata to Postgres when configured");
+assert(siteApi.includes("waitForFinalizationOrPending"), "serverless vote confirmation should return JSON before Vercel timeouts");
+assert(siteApi.includes("ARCIUM_FINALIZATION_WAIT_MS"), "finalization wait should be configurable");
 assert(siteApi.includes("metadataStorageMode"), "status should report the active metadata storage mode");
 assert(siteApi.includes("writeStateToSupabase"), "server should persist metadata to Supabase when configured");
 assert(siteApi.includes("persistentState"), "server should not persist regenerated demo rounds as durable metadata");

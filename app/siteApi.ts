@@ -24,6 +24,7 @@ import {
   waitForPrivateComputationFinalization,
   voterHashFromWallet
 } from "./privateDaoClient";
+import type { PrivateDao } from "./types/private_dao";
 
 export type VoteChoice = "yes" | "no" | "abstain";
 
@@ -701,6 +702,39 @@ function shortSignature(signature: string) {
 function normalizeError(error: unknown) {
   if (error instanceof Error) return error.message;
   return String(error);
+}
+
+function arciumFinalizationWaitMs() {
+  const fallback = process.env.VERCEL ? 18000 : 120000;
+  const configured = Number(process.env.ARCIUM_FINALIZATION_WAIT_MS || fallback);
+  return Number.isFinite(configured) && configured > 0 ? Math.floor(configured) : fallback;
+}
+
+async function waitForFinalizationOrPending(params: {
+  program: anchor.Program<PrivateDao>;
+  computationOffset: anchor.BN;
+}) {
+  const pending = Symbol("pending");
+  const wait = waitForPrivateComputationFinalization(params);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const result = await Promise.race([
+    wait,
+    new Promise<typeof pending>((resolve) => {
+      timer = setTimeout(() => resolve(pending), arciumFinalizationWaitMs());
+    })
+  ]);
+  if (timer) clearTimeout(timer);
+  if (result === pending) {
+    wait.catch(() => {});
+    return {
+      status: "pending" as const,
+      signature: "pending"
+    };
+  }
+  return {
+    status: "finalized" as const,
+    signature: result
+  };
 }
 
 function normalizeLocalizedText(value: unknown): LocalizedText | undefined {
@@ -1436,12 +1470,14 @@ export async function confirmWalletVoteTransaction(params: {
 
   const { provider, program } = providerAndProgramForWallet(payer);
   await confirmSubmittedTransaction(provider, params.signature);
-  const finalizeSignature = await waitForPrivateComputationFinalization({
+  const finalization = await waitForFinalizationOrPending({
     program,
     computationOffset: new anchor.BN(params.computationOffset)
   });
+  const finalizeSignature = finalization.signature;
 
-  if (!record.receipts.some((receipt) => receipt.signature === params.signature)) {
+  const existingReceipt = record.receipts.find((receipt) => receipt.signature === params.signature);
+  if (!existingReceipt) {
     record.receipts.push({
       id: `rcpt_${shortSignature(params.signature)}`,
       signature: params.signature,
@@ -1450,13 +1486,17 @@ export async function confirmWalletVoteTransaction(params: {
       wallet: payer.toBase58()
     });
     await writeState(state);
+  } else if (finalization.status === "finalized" && existingReceipt.finalizeSignature === "pending") {
+    existingReceipt.finalizeSignature = finalizeSignature;
+    await writeState(state);
   }
 
   return {
     proposal: await fetchProposal(record),
     transactions: {
       castPrivateVote: params.signature,
-      finalized: finalizeSignature
+      finalized: finalizeSignature,
+      finalizationStatus: finalization.status
     }
   };
 }
@@ -1509,10 +1549,11 @@ export async function confirmWalletTallyTransaction(params: {
 
   const { provider, program } = providerAndProgramForWallet(payer);
   await confirmSubmittedTransaction(provider, params.signature);
-  const finalizeSignature = await waitForPrivateComputationFinalization({
+  const finalization = await waitForFinalizationOrPending({
     program,
     computationOffset: new anchor.BN(params.computationOffset)
   });
+  const finalizeSignature = finalization.signature;
 
   record.tallySignature = params.signature;
   record.tallyFinalizeSignature = finalizeSignature;
@@ -1522,7 +1563,8 @@ export async function confirmWalletTallyTransaction(params: {
     proposal: await fetchProposal(record),
     transactions: {
       publishPrivateTally: params.signature,
-      finalized: finalizeSignature
+      finalized: finalizeSignature,
+      finalizationStatus: finalization.status
     }
   };
 }
