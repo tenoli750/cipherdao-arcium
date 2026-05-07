@@ -74,8 +74,20 @@ function hash32(input: string): number[] {
   return Array.from(createHash("sha256").update(input).digest());
 }
 
-export function loadKeypair(path: string): Keypair {
-  const raw = JSON.parse(fs.readFileSync(path, "utf8")) as number[];
+function keypairText(source: string) {
+  const trimmed = source.trim();
+  if (!trimmed) return "";
+  if (trimmed.startsWith("[")) return trimmed;
+  if (trimmed.startsWith("base64:")) {
+    return Buffer.from(trimmed.slice("base64:".length), "base64").toString("utf8");
+  }
+  return fs.readFileSync(trimmed, "utf8");
+}
+
+export function loadKeypair(source: string): Keypair {
+  const text = keypairText(source);
+  if (!text) return Keypair.generate();
+  const raw = JSON.parse(text) as number[];
   return Keypair.fromSecretKey(Uint8Array.from(raw));
 }
 

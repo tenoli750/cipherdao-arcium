@@ -2,6 +2,10 @@
 
 Would You DAO? is a private balance-game DAO for funny everyday dilemmas. It started with hygiene questions as `씻었DAO`, then expanded into daily life, food, money, relationships, school, work, superpowers, and absurd choices. The app keeps live vote splits hidden while a round is open, then publishes only the final tally and a verified computation result after finalization.
 
+Live site: https://wouldudao.vercel.app
+
+Open-source repository: https://github.com/tenoli750/cipherdao-arcium
+
 ## Why this matters
 
 Public voting creates vote-copying, social pressure, and tactical last-minute voting because every ballot is observable before the vote closes. Would You DAO? removes that signal for a lighter, more viral format: users choose A or B, receive public encrypted receipts, and only see the aggregate result after Arcium finalizes the round.
@@ -10,12 +14,14 @@ Public voting creates vote-copying, social pressure, and tactical last-minute vo
 
 - A usable bilingual balance-game site in `site/`.
 - English-first mobile UI with a Korean `씻었DAO` mode in Profile.
-- Scroll-snap voting feed with `Hot`, `New`, and `Profile` bottom navigation.
+- Scroll-snap voting feed with `Finalized`, `New`, and `Profile` bottom navigation.
 - A built-in bank of everyday A/B dilemmas.
 - A Solana and Arcium project layout with `Anchor.toml`, `Arcium.toml`, `programs/private_dao/`, and `encrypted-ixs/`.
 - A confidential Arcis instruction design for encrypted vote state and final tallying.
 - A TypeScript client integration guide in `app/privateDaoClient.ts`.
 - Public off-chain Arcis circuit artifacts in `public-circuits/`.
+- Supabase/Postgres metadata storage for question text, translations, categories, and feed state.
+- Vercel deployment configuration for the public mobile app and API routes.
 - English submission documentation in `docs/arcium-integration.md`.
 - MIT license for open-source publication.
 
@@ -51,6 +57,14 @@ npm run check
 
 The smoke test validates the static app files, bilingual balance-game UI, and deterministic governance helper logic.
 If `site/src/arcium-vote-client.js` changes, rebuild the browser crypto bundle with `npm run build:site-crypto`.
+
+## Deployment
+
+The live app is deployed on Vercel at:
+
+https://wouldudao.vercel.app
+
+The serverless API reads durable proposal metadata from Supabase/Postgres when `DATABASE_URL` or `POSTGRES_URL` is configured. Without that env var it falls back to local file storage for development. See `docs/deployment.md` for setup details.
 
 ## Devnet workflow
 

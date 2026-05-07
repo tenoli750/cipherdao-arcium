@@ -11,259 +11,141 @@
     hygiene: { en: "Hygiene Chaos", ko: "위생/찝찝함" }
   };
 
+  function d(id, category, aEn, aKo, bEn, bKo) {
+    return {
+      id,
+      category,
+      a: { en: aEn, ko: aKo },
+      b: { en: bEn, ko: bKo }
+    };
+  }
+
   const dilemmas = [
-    {
-      id: "daily-morning-night",
-      category: "daily",
-      a: { en: "Live as a morning person forever", ko: "평생 아침형 인간으로 살기" },
-      b: { en: "Live as a night owl forever", ko: "평생 새벽형 인간으로 살기" }
-    },
-    {
-      id: "daily-auto-wake-sleep",
-      category: "daily",
-      a: { en: "Automatically wake up at 7 AM every day", ko: "매일 7시에 자동 기상" },
-      b: { en: "Sleep whenever you want and always get 8 perfect hours", ko: "매일 원하는 시간에 자도 8시간 숙면 보장" }
-    },
-    {
-      id: "daily-no-elevator-escalator",
-      category: "daily",
-      a: { en: "Never use elevators again", ko: "평생 엘리베이터 못 타기" },
-      b: { en: "Never use escalators again", ko: "평생 에스컬레이터 못 타기" }
-    },
-    {
-      id: "daily-phone-wallet",
-      category: "daily",
-      a: { en: "Spend a whole day without your phone", ko: "하루 종일 핸드폰 없이 살기" },
-      b: { en: "Spend a whole day without your wallet", ko: "하루 종일 지갑 없이 살기" }
-    },
-    {
-      id: "daily-summer-winter",
-      category: "daily",
-      a: { en: "Live in endless summer", ko: "평생 여름만 살기" },
-      b: { en: "Live in endless winter", ko: "평생 겨울만 살기" }
-    },
-    {
-      id: "daily-wide-home-transit",
-      category: "daily",
-      a: { en: "Huge home, terrible transit", ko: "집은 엄청 넓은데 교통 최악" },
-      b: { en: "Tiny home, perfect transit", ko: "집은 좁은데 교통 최고" }
-    },
-    {
-      id: "food-no-chicken-pizza",
-      category: "food",
-      a: { en: "Never eat fried chicken again", ko: "평생 치킨 못 먹기" },
-      b: { en: "Never eat pizza again", ko: "평생 피자 못 먹기" }
-    },
-    {
-      id: "food-no-tteokbokki-ramen",
-      category: "food",
-      a: { en: "Give up tteokbokki forever", ko: "떡볶이 평생 금지" },
-      b: { en: "Give up ramen forever", ko: "라면 평생 금지" }
-    },
-    {
-      id: "food-bland-salty",
-      category: "food",
-      a: { en: "Every meal is slightly bland", ko: "모든 음식이 조금 싱거움" },
-      b: { en: "Every meal is slightly too salty", ko: "모든 음식이 조금 짬" }
-    },
-    {
-      id: "food-spicy-sweet",
-      category: "food",
-      a: { en: "Never eat spicy food again", ko: "평생 매운 음식 못 먹기" },
-      b: { en: "Never eat sweet food again", ko: "평생 단 음식 못 먹기" }
-    },
-    {
-      id: "food-americano-latte",
-      category: "food",
-      a: { en: "Only drink Americanos forever", ko: "평생 아메리카노만 마시기" },
-      b: { en: "Only drink lattes forever", ko: "평생 라떼만 마시기" }
-    },
-    {
-      id: "food-waiting-average",
-      category: "food",
-      a: { en: "Wait two hours for a famous restaurant", ko: "맛집 웨이팅 2시간 하기" },
-      b: { en: "Eat immediately somewhere average", ko: "바로 먹지만 맛은 평범한 집 가기" }
-    },
-    {
-      id: "money-now-billion-monthly",
-      category: "money",
-      a: { en: "Get 100 million won right now", ko: "지금 당장 1억 받기" },
-      b: { en: "Get 1 million won every month for life", ko: "매달 100만 원씩 평생 받기" }
-    },
-    {
-      id: "money-time",
-      category: "money",
-      a: { en: "Have money but no time", ko: "돈은 많은데 시간이 없음" },
-      b: { en: "Have time but not enough money", ko: "시간은 많은데 돈이 부족함" }
-    },
-    {
-      id: "money-six-four-work",
-      category: "money",
-      a: { en: "Double salary, six-day workweek", ko: "월급 2배지만 주 6일 근무" },
-      b: { en: "Same salary, four-day workweek", ko: "월급 그대로지만 주 4일 근무" }
-    },
-    {
-      id: "money-delivery-taxi",
-      category: "money",
-      a: { en: "Free delivery forever", ko: "평생 공짜 배달" },
-      b: { en: "Free taxis forever", ko: "평생 공짜 택시" }
-    },
-    {
-      id: "money-rent-food",
-      category: "money",
-      a: { en: "Never pay rent again", ko: "평생 집세 없음" },
-      b: { en: "Never pay for food again", ko: "평생 식비 없음" }
-    },
-    {
-      id: "friends-many-one",
-      category: "friends",
-      a: { en: "Have 100 friends but no deep connection", ko: "친구 100명인데 깊은 친구 없음" },
-      b: { en: "Have one truly ride-or-die friend", ko: "친구 1명인데 완전 찐친" }
-    },
-    {
-      id: "friends-secret-history",
-      category: "friends",
-      a: { en: "One friend knows your secret", ko: "내 비밀을 친구 1명이 알기" },
-      b: { en: "100 strangers know your most embarrassing era", ko: "내 흑역사를 모르는 사람 100명이 알기" }
-    },
-    {
-      id: "friends-late-early",
-      category: "friends",
-      a: { en: "Your friend is always 10 minutes late", ko: "친구가 약속 매번 10분 늦음" },
-      b: { en: "Your friend always arrives one hour early", ko: "친구가 약속 매번 1시간 일찍 옴" }
-    },
-    {
-      id: "friends-fact-comfort",
-      category: "friends",
-      a: { en: "A friend who tells brutal truths", ko: "친구가 팩폭 잘함" },
-      b: { en: "A friend who only comforts you", ko: "친구가 위로만 해줌" }
-    },
-    {
-      id: "dating-contact-trust",
-      category: "dating",
-      a: { en: "A partner who texts every day", ko: "매일 연락하는 애인" },
-      b: { en: "A partner you trust even without constant texts", ko: "자주 안 해도 믿음 가는 애인" }
-    },
-    {
-      id: "dating-taste-personality",
-      category: "dating",
-      a: { en: "A partner with exactly your taste", ko: "취향이 완전 같은 애인" },
-      b: { en: "A partner whose personality fits perfectly", ko: "성격이 완전 잘 맞는 애인" }
-    },
-    {
-      id: "dating-words-actions",
-      category: "dating",
-      a: { en: "Someone who says beautiful things", ko: "말을 예쁘게 하는 애인" },
-      b: { en: "Someone who proves it through actions", ko: "행동으로 잘 보여주는 애인" }
-    },
-    {
-      id: "dating-fast-cold-slow-warm",
-      category: "dating",
-      a: { en: "Fast replies, stiff tone", ko: "연락은 빠른데 말투 딱딱함" },
-      b: { en: "Slow replies, warm tone", ko: "연락은 느린데 말투 다정함" }
-    },
-    {
-      id: "work-cramming-focus",
-      category: "work",
-      a: { en: "Always succeed at last-minute studying", ko: "시험 전날 벼락치기 성공 능력" },
-      b: { en: "Have double focus while studying normally", ko: "평소 공부 집중력 2배 능력" }
-    },
-    {
-      id: "work-present-test",
-      category: "work",
-      a: { en: "Great at presentations, bad at tests", ko: "발표는 잘하지만 시험 못 봄" },
-      b: { en: "Great at tests, bad at presentations", ko: "시험은 잘 보지만 발표 못함" }
-    },
-    {
-      id: "work-strict-indifferent",
-      category: "work",
-      a: { en: "A boss or teacher who is too strict", ko: "상사/선생님이 너무 엄격함" },
-      b: { en: "A boss or teacher who does not care at all", ko: "상사/선생님이 너무 무관심함" }
-    },
-    {
-      id: "work-praise-reward",
-      category: "work",
-      a: { en: "Lots of praise, no rewards", ko: "칭찬은 많은데 보상 없음" },
-      b: { en: "No praise, guaranteed rewards", ko: "칭찬은 없는데 보상 확실함" }
-    },
-    {
-      id: "powers-teleport-time",
-      category: "powers",
-      a: { en: "Teleportation", ko: "순간이동 능력" },
-      b: { en: "Pause time", ko: "시간 멈추기 능력" }
-    },
-    {
-      id: "powers-animals-minds",
-      category: "powers",
-      a: { en: "Talk to animals", ko: "동물과 대화 가능" },
-      b: { en: "Read one person's mind once a day", ko: "사람의 속마음 하루 1번 읽기 가능" }
-    },
-    {
-      id: "powers-language-instrument",
-      category: "powers",
-      a: { en: "Speak every language", ko: "모든 언어 가능" },
-      b: { en: "Play every instrument", ko: "모든 악기 가능" }
-    },
-    {
-      id: "powers-wifi-battery",
-      category: "powers",
-      a: { en: "Have Wi-Fi everywhere", ko: "어디서든 와이파이 잡힘" },
-      b: { en: "Keep your battery at 100% everywhere", ko: "어디서든 배터리 100% 유지" }
-    },
-    {
-      id: "absurd-bgm-sfx",
-      category: "absurd",
-      a: { en: "Background music plays whenever you talk", ko: "말할 때마다 배경음악 나옴" },
-      b: { en: "Sound effects play whenever you walk", ko: "걸을 때마다 효과음 나옴" }
-    },
-    {
-      id: "absurd-subtitles-emojis",
-      category: "absurd",
-      a: { en: "Your thoughts appear as subtitles", ko: "내 생각이 자막으로 보임" },
-      b: { en: "Your emotions appear as emojis above your head", ko: "내 감정이 이모티콘으로 머리 위에 뜸" }
-    },
-    {
-      id: "absurd-news-variety",
-      category: "absurd",
-      a: { en: "Talk like a news anchor all day", ko: "하루 종일 말투가 뉴스 앵커 같아짐" },
-      b: { en: "Talk like a variety-show caption all day", ko: "하루 종일 말투가 예능 자막 같아짐" }
-    },
-    {
-      id: "absurd-selfie-photo",
-      category: "absurd",
-      a: { en: "Great selfies, terrible photos taken by others", ko: "셀카는 잘 나오는데 남이 찍어준 사진 망함" },
-      b: { en: "Great photos taken by others, terrible selfies", ko: "남이 찍어준 사진은 잘 나오는데 셀카 망함" }
-    },
-    {
-      id: "hygiene-shampoo-smell-fake-clean",
-      category: "hygiene",
-      a: { en: "Your shampoo smell stays way too strong for three days", ko: "머리 감았는데 샴푸 향이 3일 동안 너무 진하게 남기" },
-      b: { en: "You did not wash your hair but must act like nothing smells", ko: "머리 안 감았는데 아무 냄새도 안 나는 척하기" }
-    },
-    {
-      id: "hygiene-feet-body",
-      category: "hygiene",
-      a: { en: "Shower but somehow forget only your feet", ko: "샤워했는데 발만 안 씻기" },
-      b: { en: "Wash your feet properly but only rinse the rest with water", ko: "발은 씻었는데 몸 전체 물샤워만 하기" }
-    },
-    {
-      id: "hygiene-brush-tongue",
-      category: "hygiene",
-      a: { en: "Brush your teeth but never use a tongue scraper", ko: "양치했는데 혀클리너 못 쓰기" },
-      b: { en: "Use a tongue scraper but never brush your teeth", ko: "혀클리너는 했는데 양치 못 하기" }
-    },
-    {
-      id: "hygiene-old-clothes-new-clothes",
-      category: "hygiene",
-      a: { en: "Shower, then put your old clothes back on", ko: "샤워 후 깨끗한 옷 없어서 입던 옷 다시 입기" },
-      b: { en: "Do not shower, but wear fresh clothes", ko: "안 씻고 새 옷 입기" }
-    },
-    {
-      id: "hygiene-greasy-photo",
-      category: "hygiene",
-      a: { en: "Take a group photo on a greasy-hair day", ko: "머리 안 감았는데 갑자기 단체사진 찍기" },
-      b: { en: "Walk a long distance right after missing a shower", ko: "샤워 못 했는데 갑자기 오래 걸어야 하기" }
-    }
+    d("hygiene-hair-body-5-days", "hygiene", "Skip washing your hair for 5 days, but wash your body every day", "머리 5일 안 감고 몸은 매일 씻기", "Skip washing your body for 5 days, but wash your hair every day", "몸 5일 안 씻고 머리는 매일 감기"),
+    d("hygiene-teeth-3-hair-7", "hygiene", "Not brush your teeth for 3 days", "양치 3일 안 하기", "Not wash your hair for 7 days", "머리 7일 안 감기"),
+    d("hygiene-towel-shower-frequency", "hygiene", "Shower every day, but use the same towel for a week", "샤워는 매일 하는데 수건 1주일 같은 거 쓰기", "Use a fresh towel every day, but shower once every 3 days", "수건은 매일 새 거 쓰는데 샤워 3일에 한 번 하기"),
+    d("hygiene-socks-underwear", "hygiene", "Wear the same socks for 5 days", "양말 5일 같은 거 신기", "Wear the same underwear for 2 days", "속옷 2일 같은 거 입기"),
+    d("hygiene-no-dry-perfume", "hygiene", "Wash your hair but be unable to blow-dry it", "머리 감았는데 드라이 못 하기", "Skip washing your hair, spray perfume, and go out", "머리 안 감았는데 향수 뿌리고 나가기"),
+    d("hygiene-feet-breath-date", "hygiene", "Have bad foot odor at a restaurant where you must take off your shoes", "발 냄새 심한데 신발 벗어야 하는 식당 가기", "Go on a blind date with bad breath", "입 냄새 심한데 소개팅 가기"),
+    d("hygiene-sweat-rain", "hygiene", "Start sweating right after a shower", "샤워하고 나왔는데 땀 바로 나기", "Get rained on right after washing your hair", "머리 감고 나왔는데 비 맞기"),
+    d("hygiene-water-only", "hygiene", "Take water-only showers without soap for a week", "비누 없이 물샤워만 하기 1주일", "Wash your hair with only water and no shampoo for a week", "샴푸 없이 물로 머리만 감기 1주일"),
+    d("hygiene-oily-face-hair", "hygiene", "Clean hair, but your face is super oily", "머리는 깨끗한데 얼굴 기름 좔좔", "Fresh face, but your hair is greasy", "얼굴은 뽀송한데 머리 떡짐"),
+    d("hygiene-breath-armpit", "hygiene", "Have bad breath all day", "하루 종일 입 냄새 나기", "Have armpit odor all day", "하루 종일 겨드랑이 냄새 나기"),
+    d("hygiene-hands-feet", "hygiene", "Spend a whole day without washing your hands", "손 안 씻고 하루 보내기", "Spend a whole day without washing your feet", "발 안 씻고 하루 보내기"),
+    d("hygiene-face-hair-5-days", "hygiene", "Not wash your face for 5 days", "세수 5일 안 하기", "Not wash your hair for 5 days", "머리 5일 안 감기"),
+    d("hygiene-old-new-clothes", "hygiene", "Shower, then wear yesterday's clothes again", "샤워했는데 옷은 어제 입은 거 그대로 입기", "Not wash, but wear fresh clothes", "안 씻었는데 옷은 새 옷 입기"),
+    d("hygiene-unrinsed-shampoo-soap", "hygiene", "Feel like shampoo was not rinsed out of your hair all day", "머리 감았는데 샴푸 안 헹궈진 느낌으로 하루 보내기", "Feel like soap was not rinsed off your body all day", "몸 씻었는데 비누 안 헹궈진 느낌으로 하루 보내기"),
+    d("hygiene-eye-crust-greasy-hair", "hygiene", "Go to work or school with eye crust", "눈곱 낀 채로 출근/등교하기", "Go to work or school with greasy hair", "머리 떡진 채로 출근/등교하기"),
+    d("hygiene-chili-dandruff", "hygiene", "Brush your teeth, but spend the day with red pepper flakes stuck in them", "이 닦았는데 고춧가루 낀 채로 하루 보내기", "Wash your hair, but spend the day with visible dandruff", "머리 감았는데 비듬 보이는 채로 하루 보내기"),
+    d("hygiene-nails-ears", "hygiene", "Get caught with grime under your nails", "손톱 밑 때 낀 거 들키기", "Get caught by the smell behind your ears", "귀 뒤 안 씻은 냄새 들키기"),
+    d("hygiene-gym-pork-belly", "hygiene", "Go home from the gym without showering", "헬스장 다녀오고 샤워 못 하기", "Eat pork belly and be unable to wash your hair", "삼겹살 먹고 머리 못 감기"),
+    d("hygiene-fragrant-hair-sour-clothes", "hygiene", "Your hair smells good, but your clothes smell sour", "머리에서는 향기 나는데 옷에서 쉰내 나기", "Your clothes smell good, but your hair smells oily", "옷에서는 향기 나는데 머리에서 기름 냄새 나기"),
+    d("hygiene-shower-toothpaste", "hygiene", "Shower, but brush your teeth without toothpaste", "샤워는 했는데 치약 없이 양치하기", "Brush properly, but be unable to shower", "양치는 제대로 했는데 샤워 못 하기"),
+    d("hygiene-conditioner-bodywash", "hygiene", "Wash your hair but do not rinse out the conditioner", "머리 감고 린스만 안 헹구기", "Wash your body but do not rinse off the body wash", "몸 씻고 바디워시만 안 헹구기"),
+    d("hygiene-sweat-silence-callout", "hygiene", "Smell like sweat all day and nobody tells you", "하루 종일 땀 냄새 나는데 아무도 말 안 해줌", "One person says out loud, \"you smell\"", "한 명이 대놓고 “너 냄새나”라고 말함"),
+    d("hygiene-important-appointment", "hygiene", "Be unable to shower the night before an important plan", "중요한 약속 전날 샤워 못 하기", "Be unable to wash your hair on the day of an important plan", "중요한 약속 당일 머리 못 감기"),
+    d("hygiene-clean-body-dirty-room", "hygiene", "Wash every day, but do not clean your room for a month", "매일 씻지만 방 청소 1달 안 하기", "Keep your room clean, but wash once every 3 days", "방은 깨끗하지만 3일에 한 번 씻기"),
+    d("hygiene-pillowcase-hair", "hygiene", "Wash your hair daily, but do not change your pillowcase for a month", "매일 머리 감는데 베개 커버 1달 안 갈기", "Change your pillowcase daily, but wash your hair once every 3 days", "베개 커버 매일 갈지만 머리 3일에 한 번 감기"),
+    d("hygiene-wet-clothes-air-dry", "hygiene", "Put on clothes after a shower without drying off", "샤워 후 물기 안 닦고 옷 입기", "Have no towel after a shower and air-dry for 30 minutes", "샤워 후 수건 없어서 자연건조 30분 하기"),
+    d("hygiene-photo-hair-lips", "hygiene", "Get photographed with greasy hair", "머리 떡진 상태로 사진 찍히기", "Get photographed with severely chapped lips", "입술 각질 심한 상태로 사진 찍히기"),
+    d("hygiene-perfume-unwashed", "hygiene", "Be embarrassed because you wore way too much perfume", "향수 너무 많이 뿌려서 민망하기", "Be embarrassed because you feel like you smell unwashed", "아예 안 씻은 냄새 나는 것 같아서 민망하기"),
+    d("hygiene-bangs-armpits", "hygiene", "Wash your hair, but only your bangs turn greasy", "머리 감았는데 앞머리만 떡짐", "Wash your body, but only your armpits smell", "몸 씻었는데 겨드랑이만 냄새남"),
+    d("hygiene-shower-brushing-ban", "hygiene", "You can shower for 5 days, but brushing your teeth is banned", "5일 동안 샤워 가능하지만 양치 금지", "You can brush your teeth for 5 days, but showering is banned", "5일 동안 양치 가능하지만 샤워 금지"),
+    d("hygiene-food-cigarette-smell", "hygiene", "Have food smell stuck in your hair", "머리카락에 음식 냄새 배기", "Have cigarette smell stuck in your clothes", "옷에 담배 냄새 배기"),
+    d("hygiene-oily-face-messy-hair", "hygiene", "Endure an oily face all day without blotting paper", "하루 종일 기름종이 없이 얼굴 기름 참기", "Endure messy hair all day without a comb", "하루 종일 빗 없이 산발 참기"),
+    d("hygiene-cold-hot-shower", "hygiene", "Only take cold showers in winter", "겨울에 찬물 샤워만 하기", "Only take hot showers in summer", "여름에 뜨거운 물 샤워만 하기"),
+    d("hygiene-shampoo-smell-rinse", "hygiene", "You can wash your hair, but the shampoo smells weird", "머리 감을 수 있는데 샴푸 향이 이상함", "The shampoo smells good, but you cannot rinse it properly", "샴푸 향은 좋은데 제대로 못 헹굼"),
+    d("hygiene-feet-scalp-smell", "hygiene", "Your body is clean, but your feet smell bad", "몸은 깨끗한데 발 냄새 심함", "Your feet are clean, but your scalp smells bad", "발은 깨끗한데 두피 냄새 심함"),
+    d("hygiene-mask-hat-smell", "hygiene", "Smell your own breath inside a mask all day", "하루 종일 마스크 안에서 입 냄새 맡기", "Smell your own scalp inside a hat all day", "하루 종일 모자 안에서 두피 냄새 맡기"),
+    d("hygiene-crown-smell-unwashed-comment", "hygiene", "After washing your hair, hear that the crown of your head smells", "머리 감고 나왔는데 정수리 냄새난다는 말 듣기", "After showering, hear \"did you not wash?\"", "샤워했는데 “너 안 씻었어?”라는 말 듣기"),
+    d("hygiene-lotion", "hygiene", "Wash your face but be unable to apply lotion", "세수하고 로션 못 바르기", "Shower but be unable to apply body lotion", "샤워하고 바디로션 못 바르기"),
+    d("hygiene-damp-hair-clothes", "hygiene", "Spend the day with damp hair that never dried", "머리 감았는데 머리카락 안 말라서 축축하게 하루 보내기", "Spend the day in damp clothes that did not dry", "몸 씻었는데 옷이 덜 말라서 축축하게 하루 보내기"),
+    d("hygiene-friend-towel-pillow", "hygiene", "Shower at a friend's house, but the towel smells", "친구 집에서 샤워했는데 수건 냄새남", "Sleep at a friend's house, but the pillow smells", "친구 집에서 자는데 베개 냄새남"),
+
+    d("daily-morning-night", "daily", "Live as a morning person forever", "평생 아침형 인간으로 살기", "Live as a night owl forever", "평생 새벽형 인간으로 살기"),
+    d("daily-auto-wake-sleep", "daily", "Automatically wake up at 7 AM every day", "매일 7시에 자동 기상", "Sleep whenever you want and always get 8 perfect hours", "매일 원하는 시간에 자도 8시간 숙면 보장"),
+    d("daily-no-elevator-escalator", "daily", "Never use elevators again", "평생 엘리베이터 못 타기", "Never use escalators again", "평생 에스컬레이터 못 타기"),
+    d("daily-kakaotalk-phone", "daily", "Always reply to KakaoTalk within 10 minutes", "카톡 답장 10분 안에 무조건 해야 함", "Always answer every phone call", "전화 오면 무조건 받아야 함"),
+    d("daily-phone-wallet", "daily", "Spend a whole day without your phone", "하루 종일 핸드폰 없이 살기", "Spend a whole day without your wallet", "하루 종일 지갑 없이 살기"),
+    d("daily-summer-winter", "daily", "Live in endless summer", "평생 여름만 살기", "Live in endless winter", "평생 겨울만 살기"),
+    d("daily-same-clothes-food", "daily", "Wear the same outfit every day", "매일 같은 옷 입기", "Eat the same food every day", "매일 같은 음식 먹기"),
+    d("daily-wide-home-transit", "daily", "Huge home, terrible transit", "집은 엄청 넓은데 교통 최악", "Tiny home, perfect transit", "집은 좁은데 교통 최고"),
+    d("daily-no-delivery-convenience", "daily", "Ban delivery food forever", "평생 배달음식 금지", "Ban convenience store food forever", "평생 편의점 음식 금지"),
+    d("daily-early-late", "daily", "Arrive one hour early every day", "매일 1시간 일찍 도착하기", "Arrive five minutes late every day", "매일 5분 늦게 도착하기"),
+
+    d("food-no-chicken-pizza", "food", "Never eat fried chicken again", "평생 치킨 못 먹기", "Never eat pizza again", "평생 피자 못 먹기"),
+    d("food-no-tteokbokki-ramen", "food", "Give up tteokbokki forever", "떡볶이 평생 금지", "Give up ramen forever", "라면 평생 금지"),
+    d("food-icecream-fishbread", "food", "Only eat ice cream in winter", "아이스크림은 겨울에만 먹기", "Only eat bungeoppang in summer", "붕어빵은 여름에만 먹기"),
+    d("food-bland-salty", "food", "Every meal is slightly bland", "모든 음식이 조금 싱거움", "Every meal is slightly too salty", "모든 음식이 조금 짬"),
+    d("food-spicy-sweet", "food", "Never eat spicy food again", "평생 매운 음식 못 먹기", "Never eat sweet food again", "평생 단 음식 못 먹기"),
+    d("food-kimchi-soup", "food", "Need kimchi with every meal", "밥 먹을 때마다 김치 필수", "Need soup with every meal", "밥 먹을 때마다 국물 필수"),
+    d("food-americano-latte", "food", "Only drink Americanos forever", "평생 아메리카노만 마시기", "Only drink lattes forever", "평생 라떼만 마시기"),
+    d("food-favorite-disliked", "food", "Never eat your favorite food again", "좋아하는 음식 평생 못 먹기", "Eat a food you hate once a week", "싫어하는 음식 일주일에 한 번 먹기"),
+    d("food-night-breakfast", "food", "Late-night snacks are allowed, but breakfast is banned", "야식은 가능한데 아침 금지", "Breakfast is allowed, but late-night snacks are banned", "아침은 가능한데 야식 금지"),
+    d("food-waiting-average", "food", "Wait two hours for a famous restaurant", "맛집 웨이팅 2시간 하기", "Eat immediately somewhere average", "바로 먹지만 맛은 평범한 집 가기"),
+
+    d("money-now-billion-monthly", "money", "Get $100,000 right now", "지금 당장 1억 받기", "Get $1,000 every month for life", "매달 100만 원씩 평생 받기"),
+    d("money-daily-random", "money", "Receive $100 automatically every day", "하루에 10만 원씩 자동 입금", "Receive a random $5,000 deposit once a month", "한 달에 한 번 500만 원 랜덤 입금"),
+    d("money-time", "money", "Have money but no time", "돈은 많은데 시간이 없음", "Have time but not enough money", "시간은 많은데 돈이 부족함"),
+    d("money-six-four-work", "money", "Double salary, six-day workweek", "월급 2배지만 주 6일 근무", "Same salary, four-day workweek", "월급 그대로지만 주 4일 근무"),
+    d("money-delivery-taxi", "money", "Free delivery forever", "평생 공짜 배달", "Free taxis forever", "평생 공짜 택시"),
+    d("money-shopping-dining", "money", "50% off whenever you shop", "쇼핑할 때 50% 할인", "50% off whenever you eat out", "외식할 때 50% 할인"),
+    d("money-rent-food", "money", "Never pay rent again", "평생 집세 없음", "Never pay for food again", "평생 식비 없음"),
+    d("money-lotto-now", "money", "Guaranteed lottery jackpot in 10 years", "10년 뒤 로또 1등 확정", "Get $50,000 right now", "지금 바로 5천만 원 받기"),
+
+    d("friends-many-one", "friends", "Have 100 friends but no deep connection", "친구 100명인데 깊은 친구 없음", "Have one truly ride-or-die friend", "친구 1명인데 완전 찐친"),
+    d("friends-secret-history", "friends", "One friend knows your secret", "내 비밀을 친구 1명이 알기", "100 strangers know your most embarrassing era", "내 흑역사를 모르는 사람 100명이 알기"),
+    d("friends-late-early", "friends", "Your friend is always 10 minutes late", "친구가 약속 매번 10분 늦음", "Your friend always arrives one hour early", "친구가 약속 매번 1시간 일찍 옴"),
+    d("friends-fact-comfort", "friends", "A friend who tells brutal truths", "친구가 팩폭 잘함", "A friend who only comforts you", "친구가 위로만 해줌"),
+    d("friends-daily-monthly", "friends", "Contact your friend every day", "친구랑 매일 연락하기", "Meet once a month and never feel awkward", "친구랑 한 달에 한 번 만나도 안 어색하기"),
+    d("friends-remember-forget", "friends", "A friend remembers everything you say", "친구가 내 말 다 기억함", "A friend forgets almost everything you say", "친구가 내 말 거의 다 까먹음"),
+    d("friends-chat-talk-read", "friends", "Talk a lot in the group chat", "단톡방에서 말 많기", "Often leave messages on read in the group chat", "단톡방에서 읽씹 자주 하기"),
+    d("friends-taste-opposite-same", "friends", "A friend has the complete opposite taste from you", "친구가 내 취향 완전 반대", "A friend has taste that is way too similar to yours", "친구가 내 취향이랑 너무 똑같음"),
+    d("friends-travel-plan", "friends", "Travel with a friend whose schedule is too packed", "친구랑 여행 갔는데 계획이 너무 빡셈", "Travel with a friend who has no plan at all", "친구랑 여행 갔는데 계획이 아예 없음"),
+    d("friends-photo-slow-fast", "friends", "A friend takes great photos but takes forever", "친구가 사진을 잘 찍어주지만 오래 걸림", "A friend takes photos quickly but badly", "친구가 빨리 찍어주지만 못 찍음"),
+
+    d("dating-contact-trust", "dating", "A partner who texts every day", "매일 연락하는 애인", "A partner you trust even without constant texts", "자주 안 해도 믿음 가는 애인"),
+    d("dating-taste-personality", "dating", "A partner with exactly your taste", "취향이 완전 같은 애인", "A partner whose personality fits perfectly", "성격이 완전 잘 맞는 애인"),
+    d("dating-words-actions", "dating", "Someone who says beautiful things", "말을 예쁘게 하는 애인", "Someone who proves it through actions", "행동으로 잘 보여주는 애인"),
+    d("dating-fast-cold-slow-warm", "dating", "Fast replies, stiff tone", "연락은 빠른데 말투 딱딱함", "Slow replies, warm tone", "연락은 느린데 말투 다정함"),
+    d("dating-cost-split-natural", "dating", "A partner who splits date costs exactly", "데이트 비용 반반 확실한 사람", "A partner who pays naturally depending on the situation", "상황 따라 자연스럽게 내는 사람"),
+    d("dating-home-outgoing", "dating", "A homebody partner", "집돌이/집순이 애인", "A partner who loves going out", "밖에 나가는 거 좋아하는 애인"),
+    d("dating-anniversary-everyday", "dating", "Someone who never forgets anniversaries", "기념일 잘 챙기는 사람", "Someone who cares for you often in everyday life", "평소에 자주 챙겨주는 사람"),
+    d("dating-jealousy", "dating", "A partner with almost no jealousy", "질투 거의 없는 애인", "A partner who gets a little jealous but communicates well", "질투 조금 있지만 표현 잘하는 애인"),
+    d("dating-course-me-them", "dating", "You always choose the date course", "데이트 코스 항상 내가 정하기", "Your partner always chooses the date course", "데이트 코스 항상 상대가 정하기"),
+    d("dating-hobby-same-new", "dating", "Someone who shares your hobby", "나랑 취미가 같은 사람", "Someone who introduces you to a new hobby", "나한테 새로운 취미를 알려주는 사람"),
+
+    d("work-cramming-focus", "work", "Always succeed at last-minute studying", "시험 전날 벼락치기 성공 능력", "Have double focus while studying normally", "평소 공부 집중력 2배 능력"),
+    d("work-present-test", "work", "Great at presentations, bad at tests", "발표는 잘하지만 시험 못 봄", "Great at tests, bad at presentations", "시험은 잘 보지만 발표 못함"),
+    d("work-strict-indifferent", "work", "A boss or teacher who is too strict", "상사/선생님이 너무 엄격함", "A boss or teacher who does not care at all", "상사/선생님이 너무 무관심함"),
+    d("work-praise-reward", "work", "Lots of praise, no rewards", "칭찬은 많은데 보상 없음", "No praise, guaranteed rewards", "칭찬은 없는데 보상 확실함"),
+    d("work-team-leader-silent", "work", "Become the team project leader", "팀플에서 조장이 되기", "Become the silent teammate in a group project", "팀플에서 아무 말 없는 조원 되기"),
+    d("work-deadline-exam-range", "work", "Get assignment deadline alerts only one day before", "과제 마감 하루 전 알림 받기", "Find out the exam range only one day before", "시험 범위 하루 전 공개되기"),
+    d("work-many-short-few-long", "work", "Many meetings, but each one is short", "회의가 많지만 짧음", "Few meetings, but each one is way too long", "회의가 적지만 너무 김"),
+    d("work-close-bad-far-good", "work", "Commute is 10 minutes, but the vibe is bad", "출근/등교 10분 거리지만 분위기 별로", "Commute is one hour, but the vibe is good", "출근/등교 1시간 거리지만 분위기 좋음"),
+    d("work-busy-fast-bored-slow", "work", "Always busy, but time flies", "항상 바쁘지만 시간 빨리 감", "Always free, but time crawls", "항상 한가하지만 시간 느리게 감"),
+
+    d("powers-teleport-time", "powers", "Teleportation", "순간이동 능력", "Pause time", "시간 멈추기 능력"),
+    d("powers-animals-minds", "powers", "Talk to animals", "동물과 대화 가능", "Read one person's mind once a day", "사람의 속마음 하루 1번 읽기 가능"),
+    d("powers-past-future", "powers", "Go 10 minutes into the past once a day", "하루에 한 번 과거로 10분 돌아가기", "See 10 minutes into the future once a day", "하루에 한 번 미래 10분 보기"),
+    d("powers-sleep-weight", "powers", "Never feel tired without sleeping", "잠 안 자도 피곤하지 않기", "Eat anything without gaining weight", "먹어도 살 안 찌기"),
+    d("powers-language-instrument", "powers", "Speak every language", "모든 언어 가능", "Play every instrument", "모든 악기 가능"),
+    d("powers-sing-dance", "powers", "Top-tier singing skills", "노래 실력 최상급", "Top-tier dancing skills", "춤 실력 최상급"),
+    d("powers-memory-focus", "powers", "Perfect memory for life", "평생 기억력 최고", "Perfect focus for life", "평생 집중력 최고"),
+    d("powers-wifi-battery", "powers", "Have Wi-Fi everywhere", "어디서든 와이파이 잡힘", "Keep your battery at 100% everywhere", "어디서든 배터리 100% 유지"),
+    d("powers-weather-traffic", "powers", "Change the weather once a day", "날씨를 하루에 한 번 바꾸기", "Remove traffic once a day", "교통체증을 하루에 한 번 없애기"),
+    d("powers-dream-control-memory", "powers", "Choose exactly what you dream about", "꿈을 원하는 대로 꾸기", "Remember every detail of your dreams", "꿈 내용을 전부 기억하기"),
+
+    d("absurd-laugh-cry", "absurd", "When you laugh, everyone around you laughs too", "내가 웃으면 주변 사람도 다 웃음", "When you cry, everyone around you cries too", "내가 울면 주변 사람도 다 울음"),
+    d("absurd-bgm-sfx", "absurd", "Background music plays whenever you talk", "말할 때마다 배경음악 나옴", "Sound effects play whenever you walk", "걸을 때마다 효과음 나옴"),
+    d("absurd-formal-casual", "absurd", "Randomly only speak formally once a day", "하루에 한 번 랜덤으로 존댓말만 가능", "Randomly only speak casually once a day", "하루에 한 번 랜덤으로 반말만 가능"),
+    d("absurd-really-maybe", "absurd", "Add \"really\" to the end of everything you say", "모든 말 끝에 “진짜로” 붙이기", "Add \"maybe\" to the end of everything you say", "모든 말 끝에 “아마도” 붙이기"),
+    d("absurd-photo-video", "absurd", "Close your eyes in every photo", "사진 찍을 때마다 눈 감기", "Stutter in every video", "영상 찍을 때마다 말 더듬기"),
+    d("absurd-subtitles-emojis", "absurd", "Your thoughts appear as subtitles", "내 생각이 자막으로 보임", "Your emotions appear as emojis above your head", "내 감정이 이모티콘으로 머리 위에 뜸"),
+    d("absurd-steam-heart", "absurd", "Steam appears above your head when you are angry", "화나면 머리 위에 김 나기", "A heart appears on your face when you are embarrassed", "부끄러우면 얼굴에 하트 표시 뜨기"),
+    d("absurd-news-variety", "absurd", "Talk like a news anchor all day", "하루 종일 말투가 뉴스 앵커 같아짐", "Talk like a variety-show caption all day", "하루 종일 말투가 예능 자막 같아짐"),
+    d("absurd-early-wrong-place", "absurd", "Arrive 30 minutes early to every plan", "모든 약속에 30분 일찍 도착", "Go to the wrong place once for every plan", "모든 약속 장소를 한 번씩 잘못 찾아감"),
+    d("absurd-selfie-photo", "absurd", "Great selfies, terrible photos taken by others", "셀카는 잘 나오는데 남이 찍어준 사진 망함", "Great photos taken by others, terrible selfies", "남이 찍어준 사진은 잘 나오는데 셀카 망함")
   ];
 
   window.BalanceDilemmas = { categories, dilemmas };

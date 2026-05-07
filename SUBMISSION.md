@@ -1,8 +1,10 @@
-# CipherDAO Submission
+# Would You DAO Submission
 
 ## Summary
 
-CipherDAO is a private DAO voting interface for Solana. It uses Arcium to keep ballots and interim tallies encrypted while a proposal is open, then publishes only the final aggregate result after the vote closes.
+Would You DAO? is a private balance-game DAO for Solana. It turns funny everyday "would you rather" questions into sealed voting rounds: live vote splits stay hidden while a round is open, and only the final result is published after Arcium finalization.
+
+Live site: https://wouldudao.vercel.app
 
 ## Arcium Usage
 
@@ -25,14 +27,20 @@ The compiled Arcis circuits are published as public off-chain artifacts and refe
 
 ## User Experience
 
-The web app starts directly in a working DAO dashboard. Users can connect a demo wallet, create proposals, cast encrypted votes, inspect encrypted receipts, and publish a final tally.
+The web app starts directly in a mobile-first voting feed with `Finalized`, `New`, and `Profile` navigation. Users can connect their own Solana wallet, create bilingual rounds from a single input form, cast encrypted A/B votes, and reveal final results after the broadcast window closes.
 
 ## Impact
 
-Private DAO voting can make governance more credible for treasuries, validator delegations, grant councils, and community decisions where early vote visibility changes voter behavior.
+The app uses a funny social format, but the privacy model is serious: people can answer awkward or socially loaded questions without exposing their choice before the final tally. The same pattern can extend to community governance, grant councils, validator delegations, and any decision where early vote visibility changes voter behavior.
 
 ## Repository
 
 The project is MIT licensed and published as an open-source GitHub repository:
 
 https://github.com/tenoli750/cipherdao-arcium
+
+## Deployment
+
+Production app:
+
+https://wouldudao.vercel.app

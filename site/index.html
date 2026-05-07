@@ -8,16 +8,27 @@
   </head>
   <body>
     <header class="app-topbar">
-      <div class="logo-mark" aria-hidden="true">?</div>
+      <div class="topbar-left">
+        <div class="logo-mark" aria-hidden="true">
+          <img src="./assets/sock-logo.png" alt="">
+        </div>
+        <button class="new-vote-button" type="button" data-topbar-new-vote aria-label="New Vote" hidden>+</button>
+      </div>
       <strong data-brand-title>Would You DAO?</strong>
-      <button class="connect-button" type="button" data-connect>
-        <span>Connect</span>
-      </button>
+      <div class="topbar-right">
+        <button class="about-button" type="button" data-about-open>
+          <span data-copy="aboutAction">About</span>
+        </button>
+        <button class="connect-button" type="button" data-connect>
+          <span>Connect</span>
+        </button>
+      </div>
     </header>
 
     <main class="mobile-shell">
       <section class="feed-view" data-feed-view aria-label="Voting feed">
         <div class="vote-feed" data-vote-feed></div>
+        <img class="feed-mascot" src="./assets/dao-girl-cutout.png" alt="" aria-hidden="true">
       </section>
 
       <section class="profile-view" data-profile-view hidden aria-label="Profile">
@@ -100,20 +111,12 @@
           <select name="category" required></select>
         </label>
         <label>
-          <span data-copy="optionAEnLabel">Option A in English</span>
-          <textarea name="optionAEn" rows="2" maxlength="140" required></textarea>
+          <span data-copy="optionALabel">Option A</span>
+          <textarea name="optionA" rows="2" maxlength="140" required></textarea>
         </label>
         <label>
-          <span data-copy="optionBEnLabel">Option B in English</span>
-          <textarea name="optionBEn" rows="2" maxlength="140" required></textarea>
-        </label>
-        <label>
-          <span data-copy="optionAKoLabel">Option A in Korean</span>
-          <textarea name="optionAKo" rows="2" maxlength="140"></textarea>
-        </label>
-        <label>
-          <span data-copy="optionBKoLabel">Option B in Korean</span>
-          <textarea name="optionBKo" rows="2" maxlength="140"></textarea>
+          <span data-copy="optionBLabel">Option B</span>
+          <textarea name="optionB" rows="2" maxlength="140" required></textarea>
         </label>
         <label>
           <span data-copy="durationLabel">Duration minutes</span>
@@ -123,6 +126,28 @@
           <span data-copy="submitRoundAction">Create sealed round</span>
         </button>
       </form>
+    </dialog>
+
+    <dialog class="round-dialog about-dialog" data-about-dialog>
+      <div class="about-content">
+        <div class="dialog-header">
+          <strong data-copy="aboutTitle">Why Arcium?</strong>
+          <button class="icon-button" type="button" data-close-about aria-label="Close about">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <p class="about-kicker" data-copy="aboutKicker">Absurd questions. Serious privacy.</p>
+        <p data-copy="aboutBody">Would You DAO asks questions people answer more honestly when nobody can watch the live split. Arcium lets each wallet submit an encrypted choice, keeps the shared tally sealed during the round, and publishes only the final verified result to Solana.</p>
+        <section class="about-point">
+          <h3 data-copy="aboutPrivateTitle">Private by default</h3>
+          <p data-copy="aboutPrivateBody">Your vote should not become a social signal before the round ends. Whether the question is silly, embarrassing, or oddly personal, voters can participate without broadcasting the choice early.</p>
+        </section>
+        <section class="about-point">
+          <h3 data-copy="aboutProofTitle">Still accountable</h3>
+          <p data-copy="aboutProofBody">Privacy does not mean vague results. The round publishes a final tally with correctness checks, so the community sees the outcome without exposing each voter’s path.</p>
+        </section>
+        <strong class="about-tagline" data-copy="aboutFooter">Funny choices, professional secrecy.</strong>
+      </div>
     </dialog>
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>

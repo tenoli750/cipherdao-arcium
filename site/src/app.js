@@ -6,8 +6,17 @@
     en: {
       brandTitle: "Would You DAO?",
       connect: "Connect",
+      aboutAction: "About",
+      aboutTitle: "Why Arcium?",
+      aboutKicker: "Absurd questions. Serious privacy.",
+      aboutBody: "Would You DAO asks questions people answer more honestly when nobody can watch the live split. Arcium lets each wallet submit an encrypted choice, keeps the shared tally sealed during the round, and publishes only the final verified result to Solana.",
+      aboutPrivateTitle: "Private by default",
+      aboutPrivateBody: "Your vote should not become a social signal before the round ends. Whether the question is silly, embarrassing, or oddly personal, voters can participate without broadcasting the choice early.",
+      aboutProofTitle: "Still accountable",
+      aboutProofBody: "Privacy does not mean vague results. The round publishes a final tally with correctness checks, so the community sees the outcome without exposing each voter's path.",
+      aboutFooter: "Funny choices, professional secrecy.",
       working: "Working",
-      hotTab: "Hot",
+      hotTab: "Finalized",
       newTab: "New",
       profileTab: "Profile",
       profileEyebrow: "Profile",
@@ -15,6 +24,7 @@
       profileBody: "Choose your language, connect your wallet, and launch custom sealed rounds.",
       walletLabel: "Wallet",
       connectWalletAction: "Connect wallet",
+      connectedWalletAction: "Wallet connected",
       languageLabel: "Language",
       liveRoundsLabel: "Live rounds",
       questionBankLabel: "Question bank",
@@ -24,35 +34,35 @@
       createRoundAction: "Create custom round",
       customRoundTitle: "Custom round",
       categoryLabel: "Category",
-      optionAEnLabel: "Option A in English",
-      optionBEnLabel: "Option B in English",
-      optionAKoLabel: "Option A in Korean",
-      optionBKoLabel: "Option B in Korean",
+      allCategories: "All",
+      optionALabel: "Option A",
+      optionBLabel: "Option B",
       durationLabel: "Duration minutes",
       submitRoundAction: "Create sealed round",
       notConnected: "Not connected",
       questionEyebrow: "Would you rather...",
-      sealed: "Sealed",
+      sealed: "Broadcasting",
       open: "Open",
       final: "Final",
       ready: "Reveal",
-      launch: "Launch round",
       voteA: "Vote A",
       voteB: "Vote B",
       skip: "Skip",
       reveal: "Reveal result",
       receipts: "receipts",
       noRounds: "No live rounds yet",
-      noRoundsBody: "Open New and launch the first sealed balance game.",
+      noRoundsBody: "Use the plus button to launch a sealed balance game.",
       sealedTitle: "Live split sealed",
-      sealedBody: "No one sees the result until Arcium finalizes the round.",
       finalResult: "Final result",
       optionAResult: "A",
       optionBResult: "B",
+      votesLabel: "votes",
       skips: "Skips",
       walletConnected: "Wallet connected",
       installWallet: "Install Phantom or another Solana wallet",
       fillFields: "Fill the required round fields",
+      translating: "Translating choices",
+      translateFailed: "Translation failed",
       preparingRound: "Preparing sealed round",
       approveRound: "Approve round in wallet",
       waitingInit: "Waiting for Arcium initialization",
@@ -76,8 +86,17 @@
     ko: {
       brandTitle: "씻었DAO",
       connect: "연결",
+      aboutAction: "소개",
+      aboutTitle: "왜 Arcium인가요?",
+      aboutKicker: "질문은 이상해도 프라이버시는 진지하게.",
+      aboutBody: "씻었DAO는 실시간 표 흐름이 보이면 사람들이 솔직하게 고르기 어려운 질문을 다룹니다. Arcium은 각 지갑의 선택을 암호화해서 제출하고, 라운드 중 공유 tally를 봉인한 뒤, Solana에는 검증 가능한 최종 결과만 공개하게 해줍니다.",
+      aboutPrivateTitle: "기본값은 비공개",
+      aboutPrivateBody: "투표가 끝나기도 전에 내 선택이 사회적 신호가 되면 사람들은 눈치를 보게 됩니다. 질문이 웃기거나, 민망하거나, 이상하게 개인적이어도 선택이 먼저 노출되지 않도록 설계했습니다.",
+      aboutProofTitle: "그래도 결과는 책임 있게",
+      aboutProofBody: "프라이버시가 대충 집계한다는 뜻은 아닙니다. 라운드는 정확성 검사를 거친 최종 tally를 공개하므로, 커뮤니티는 각자의 선택 경로를 보지 않고도 결과를 확인할 수 있습니다.",
+      aboutFooter: "웃긴 선택지, 프로페셔널한 비밀 유지.",
       working: "처리중",
-      hotTab: "핫",
+      hotTab: "완료",
       newTab: "뉴",
       profileTab: "프로필",
       profileEyebrow: "프로필",
@@ -85,6 +104,7 @@
       profileBody: "언어를 바꾸고, 지갑을 연결하고, 직접 봉인 라운드를 열 수 있어요.",
       walletLabel: "지갑",
       connectWalletAction: "지갑 연결",
+      connectedWalletAction: "지갑 연결됨",
       languageLabel: "언어",
       liveRoundsLabel: "진행 라운드",
       questionBankLabel: "질문 수",
@@ -94,35 +114,35 @@
       createRoundAction: "직접 라운드 만들기",
       customRoundTitle: "직접 만들기",
       categoryLabel: "카테고리",
-      optionAEnLabel: "A 선택지 영어",
-      optionBEnLabel: "B 선택지 영어",
-      optionAKoLabel: "A 선택지 한국어",
-      optionBKoLabel: "B 선택지 한국어",
+      allCategories: "전체",
+      optionALabel: "A 선택지",
+      optionBLabel: "B 선택지",
       durationLabel: "진행 시간(분)",
       submitRoundAction: "봉인 라운드 만들기",
       notConnected: "연결 안 됨",
       questionEyebrow: "당신의 선택은?",
-      sealed: "봉인됨",
+      sealed: "진행중",
       open: "진행중",
       final: "공개됨",
       ready: "공개",
-      launch: "라운드 열기",
       voteA: "A 투표",
       voteB: "B 투표",
       skip: "패스",
       reveal: "결과 공개",
       receipts: "영수증",
       noRounds: "아직 진행 라운드가 없어요",
-      noRoundsBody: "뉴 탭에서 첫 봉인 밸런스게임을 열어보세요.",
+      noRoundsBody: "+ 버튼으로 봉인 밸런스게임을 열어보세요.",
       sealedTitle: "실시간 결과 봉인",
-      sealedBody: "Arcium이 라운드를 최종화할 때까지 아무도 결과를 볼 수 없어요.",
       finalResult: "최종 결과",
       optionAResult: "A",
       optionBResult: "B",
+      votesLabel: "표",
       skips: "패스",
       walletConnected: "지갑 연결됨",
       installWallet: "Phantom 또는 Solana 지갑을 설치하세요",
       fillFields: "필수 항목을 채워주세요",
+      translating: "선택지 번역 중",
+      translateFailed: "번역 실패",
       preparingRound: "봉인 라운드 준비 중",
       approveRound: "지갑에서 라운드 생성을 승인하세요",
       waitingInit: "Arcium 초기화 대기 중",
@@ -149,21 +169,31 @@
     config: null,
     proposals: [],
     view: "hot",
+    categoryFilters: [],
     activeIndex: 0,
     language: readLanguage(),
     wallet: null,
     busy: false,
     loading: true,
     scrollCooldownUntil: 0,
+    wheelGestureLocked: false,
+    wheelIdleTimer: 0,
+    wheelFallbackTimer: 0,
     wheelDelta: 0,
     touchStartX: 0,
     touchStartY: 0,
-    touchStartIndex: 0
+    touchStartIndex: 0,
+    categoryDrag: null,
+    categoryDragSuppressClick: false
   };
 
   const els = {
     walletButton: document.querySelector("[data-connect]"),
+    topbarNewVote: document.querySelector("[data-topbar-new-vote]"),
     profileConnect: document.querySelector("[data-profile-connect]"),
+    aboutOpen: document.querySelector("[data-about-open]"),
+    aboutDialog: document.querySelector("[data-about-dialog]"),
+    closeAbout: document.querySelector("[data-close-about]"),
     brandTitle: document.querySelector("[data-brand-title]"),
     feedView: document.querySelector("[data-feed-view]"),
     profileView: document.querySelector("[data-profile-view]"),
@@ -202,7 +232,8 @@
 
   function text(value) {
     if (!value) return "";
-    return value[state.language] || value.en || value.ko || "";
+    const selected = value[state.language] || value.en || value.ko || "";
+    return /[A-Za-z]/.test(selected) ? normalizeEnglishPerspective(selected) : selected;
   }
 
   function showToast(message) {
@@ -342,39 +373,114 @@
     };
   }
 
-  function dilemmaPayload(dilemma, durationMinutes) {
-    const category = categoryById(dilemma.category);
+  const HANGUL_PATTERN = /[\u3131-\u318e\uac00-\ud7a3]/;
+
+  function formText(form, name) {
+    return String(form.get(name) || "").trim();
+  }
+
+  function detectOptionLanguage(value) {
+    return HANGUL_PATTERN.test(value) ? "ko" : "en";
+  }
+
+  async function translateItems(from, to, category, items) {
+    const data = await postJson("/api/translate", { from, to, category, items });
+    return data.items && typeof data.items === "object" ? data.items : {};
+  }
+
+  function formatDollarAmount(amount) {
+    const rounded = Math.round(amount * 100) / 100;
+    return "$" + rounded.toLocaleString("en-US", {
+      maximumFractionDigits: Number.isInteger(rounded) ? 0 : 2
+    });
+  }
+
+  function normalizeEnglishWonAmounts(value) {
+    return String(value).replace(/\b(\d+(?:,\d{3})*(?:\.\d+)?)\s*(thousand|million|billion)?\s+won\b/gi, function (_, rawAmount, unit) {
+      const base = Number(String(rawAmount).replaceAll(",", ""));
+      const multiplier = unit && unit.toLowerCase() === "billion"
+        ? 1000000000
+        : unit && unit.toLowerCase() === "million"
+          ? 1000000
+          : unit && unit.toLowerCase() === "thousand"
+            ? 1000
+            : 1;
+      return formatDollarAmount((base * multiplier) / 1000);
+    });
+  }
+
+  function normalizeEnglishPerspective(value) {
+    return String(value)
+      .replace(/\bMy\b/g, "Your")
+      .replace(/\bmy\b/g, "your");
+  }
+
+  function normalizeEnglishOptionText(value) {
+    return normalizeEnglishPerspective(normalizeEnglishWonAmounts(value));
+  }
+
+  async function localizeOptions(rawOptions, category) {
+    const groups = { en: {}, ko: {} };
+    const localized = { en: {}, ko: {} };
+    Object.entries(rawOptions).forEach(function ([key, value]) {
+      const language = detectOptionLanguage(value);
+      groups[language][key] = value;
+      localized[language][key] = value;
+    });
+
+    const jobs = [];
+    if (Object.keys(groups.en).length) {
+      jobs.push({ from: "en", to: "ko", items: groups.en });
+    }
+    if (Object.keys(groups.ko).length) {
+      jobs.push({ from: "ko", to: "en", items: groups.ko });
+    }
+
+    if (jobs.length) showToast(t("translating"));
+    const results = await Promise.allSettled(jobs.map(function (job) {
+      return translateItems(job.from, job.to, category, job.items).then(function (items) {
+        return { job, items };
+      });
+    }));
+
+    let failed = false;
+    results.forEach(function (result) {
+      if (result.status !== "fulfilled") {
+        failed = true;
+        return;
+      }
+      Object.entries(result.value.items).forEach(function ([key, value]) {
+        if (typeof value === "string" && value.trim()) {
+          localized[result.value.job.to][key] = value.trim();
+        }
+      });
+    });
+    if (failed) showToast(t("translateFailed"));
+
     return {
-      slug: dilemma.id,
-      title: dilemma.a.en + " vs " + dilemma.b.en,
-      summary: category.en + " balance round",
-      quorum: 1,
-      closesInSeconds: Math.max(1, durationMinutes) * 60,
-      prompt: {
-        en: "Would you rather...",
-        ko: "당신의 선택은?"
+      a: {
+        en: normalizeEnglishOptionText(localized.en.a || rawOptions.a),
+        ko: localized.ko.a || rawOptions.a
       },
-      category,
-      optionA: dilemma.a,
-      optionB: dilemma.b
+      b: {
+        en: normalizeEnglishOptionText(localized.en.b || rawOptions.b),
+        ko: localized.ko.b || rawOptions.b
+      }
     };
   }
 
-  function customPayload(form) {
+  async function customPayload(form) {
     const categoryId = String(form.get("category"));
     const category = categoryById(categoryId);
-    const optionAEn = String(form.get("optionAEn")).trim();
-    const optionBEn = String(form.get("optionBEn")).trim();
-    const optionAKo = String(form.get("optionAKo")).trim();
-    const optionBKo = String(form.get("optionBKo")).trim();
+    const optionARaw = formText(form, "optionA");
+    const optionBRaw = formText(form, "optionB");
     const durationMinutes = Number(form.get("duration"));
-    if (!optionAEn || !optionBEn || !durationMinutes) return null;
-    const optionA = { en: optionAEn, ...(optionAKo ? { ko: optionAKo } : {}) };
-    const optionB = { en: optionBEn, ...(optionBKo ? { ko: optionBKo } : {}) };
+    if (!optionARaw || !optionBRaw || !durationMinutes) return null;
+    const options = await localizeOptions({ a: optionARaw, b: optionBRaw }, category);
 
     return {
-      slug: "custom-" + core.stableHash(optionAEn + optionBEn + Date.now()),
-      title: optionA.en + " vs " + optionB.en,
+      slug: "custom-" + core.stableHash(options.a.en + options.b.en + Date.now()),
+      title: options.a.en + " vs " + options.b.en,
       summary: category.en + " balance round",
       quorum: 1,
       closesInSeconds: Math.max(1, durationMinutes) * 60,
@@ -383,8 +489,8 @@
         ko: "당신의 선택은?"
       },
       category,
-      optionA,
-      optionB
+      optionA: options.a,
+      optionB: options.b
     };
   }
 
@@ -393,11 +499,11 @@
   }
 
   function isVoteOpen(proposal) {
-    return Boolean(proposal && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0);
+    return Boolean(proposal && !proposal.demo && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0);
   }
 
   function canTally(proposal) {
-    return Boolean(state.wallet && proposal && !state.busy && !proposal.finalized && isClosed(proposal) && proposal.encryptedStateChunks > 0);
+    return Boolean(state.wallet && proposal && !proposal.demo && !state.busy && !proposal.finalized && isClosed(proposal) && proposal.encryptedStateChunks > 0);
   }
 
   function formatStatus(proposal) {
@@ -421,46 +527,105 @@
   }
 
   function feedItems() {
-    if (state.view === "new") {
-      return bank.dilemmas.map(function (dilemma) {
-        return { type: "template", id: dilemma.id, dilemma };
+    const filters = state.categoryFilters;
+    const proposals = state.proposals
+      .filter(function (proposal) {
+        return state.view === "new" ? !proposal.finalized && !isClosed(proposal) : proposal.finalized;
+      })
+      .sort(function (a, b) {
+        if (state.view === "new") return b.createdAt - a.createdAt;
+        return (b.closesAt || b.createdAt) - (a.closesAt || a.createdAt);
       });
-    }
 
-    const proposals = state.proposals.slice().sort(function (a, b) {
-      const heat = (b.receipts.length - a.receipts.length);
-      return heat || (b.createdAt - a.createdAt);
-    });
-
-    return proposals.map(function (proposal) {
-      return { type: "proposal", id: proposal.proposal, proposal };
-    });
+    return proposals
+      .filter(function (proposal) {
+        return !filters.length || filters.includes(roundMeta(proposal).categoryId);
+      })
+      .map(function (proposal) {
+        return { type: "proposal", id: proposal.proposal, proposal };
+      });
   }
 
-  function resultBars(proposal, meta) {
+  function resultStats(proposal) {
     const result = {
       yes: proposal.yes,
       no: proposal.no,
       abstain: proposal.abstain,
       total: proposal.total
     };
-    const percentages = core.resultPercentages(result);
+    return {
+      result,
+      percentages: core.resultPercentages(result)
+    };
+  }
+
+  function resultFooter(count, percent) {
+    return count + " " + t("votesLabel") + " · " + percent + "%";
+  }
+
+  function visibleVoteCount(proposal) {
+    return Math.max(Number(proposal.total) || 0, proposal.receipts.length);
+  }
+
+  function choiceCard(tone, label, body, footer, attributes) {
+    const tag = attributes ? "button" : "div";
+    const classes = "choice-button choice-button--" + tone + (attributes ? "" : " choice-button--static");
+    const attrs = attributes ? ' type="button" ' + attributes : "";
     return [
-      '<div class="result-block">',
-      '<span>' + escapeHtml(t("finalResult")) + '</span>',
-      resultRow("A · " + text(meta.optionA), result.yes, percentages.yes, "a"),
-      resultRow("B · " + text(meta.optionB), result.no, percentages.no, "b"),
-      resultRow(t("skips"), result.abstain, percentages.abstain, "skip"),
+      '<' + tag + ' class="' + classes + '"' + attrs + '>',
+      '<span>' + escapeHtml(label) + '</span>',
+      '<strong>' + escapeHtml(body) + '</strong>',
+      footer ? '<em>' + escapeHtml(footer) + '</em>' : "",
+      '</' + tag + '>'
+    ].join("");
+  }
+
+  function choiceDivider(label) {
+    return '<div class="choice-divider"><span>' + escapeHtml(label) + '</span></div>';
+  }
+
+  function categoryFilterLine() {
+    const preferredOrder = ["hygiene", "daily", "food", "money", "powers", "absurd", "friends", "dating", "work"];
+    const categories = Object.entries(bank.categories).sort(function ([a], [b]) {
+      return preferredOrder.indexOf(a) - preferredOrder.indexOf(b);
+    });
+    const buttons = [['', t("allCategories")]].concat(categories.map(function ([id, category]) {
+      return [id, text(category)];
+    }));
+    return [
+      '<div class="category-filter-row" aria-label="Category filter">',
+      buttons.map(function ([id, label]) {
+        const active = id ? state.categoryFilters.includes(id) : state.categoryFilters.length === 0;
+        return '<button type="button" data-category-filter="' + escapeHtml(id) + '"' + (active ? ' class="is-active"' : "") + '>' + escapeHtml(label) + '</button>';
+      }).join(""),
       '</div>'
     ].join("");
   }
 
-  function resultRow(label, count, percent, tone) {
+  function toggleCategoryFilter(categoryId) {
+    if (!categoryId) {
+      state.categoryFilters = [];
+      return;
+    }
+
+    if (state.categoryFilters.includes(categoryId)) {
+      state.categoryFilters = state.categoryFilters.filter(function (id) {
+        return id !== categoryId;
+      });
+      return;
+    }
+
+    state.categoryFilters = state.categoryFilters.concat(categoryId);
+  }
+
+  function choiceStage(label, categoryId, categoryLabel, status) {
     return [
-      '<div class="result-row result-row--' + tone + '">',
-      '<strong>' + escapeHtml(label) + '</strong>',
-      '<div><i style="width:' + percent + '%"></i></div>',
-      '<span>' + count + '</span>',
+      '<div class="choice-stage">',
+      '<div class="choice-headline">',
+      '<button class="choice-meta choice-meta--category" type="button" data-category-filter="' + escapeHtml(categoryId) + '">' + escapeHtml(categoryLabel) + '</button>',
+      choiceDivider(label),
+      '<strong class="choice-meta choice-meta--status">' + escapeHtml(status) + '</strong>',
+      '</div>',
       '</div>'
     ].join("");
   }
@@ -469,72 +634,57 @@
     const proposal = item.proposal;
     const meta = roundMeta(proposal);
     const disabled = !isVoteOpen(proposal) ? " disabled" : "";
+    const proposalId = escapeHtml(proposal.proposal);
     const status = proposal.finalized ? t("final") : isClosed(proposal) ? t("ready") : t("sealed");
+    const statusLine = status + " · " + formatStatus(proposal);
     const action = proposal.finalized
-      ? resultBars(proposal, meta)
+      ? (function () {
+          const stats = resultStats(proposal);
+          return [
+            choiceStage(text(meta.prompt), meta.categoryId, text(meta.category), statusLine),
+            '<div class="vote-actions vote-actions--result">',
+            choiceCard("a", "A", text(meta.optionA), resultFooter(stats.result.yes, stats.percentages.yes)),
+            choiceCard("b", "B", text(meta.optionB), resultFooter(stats.result.no, stats.percentages.no)),
+            '</div>',
+            '<div class="secondary-row">',
+            '<span>' + escapeHtml(t("finalResult") + ' · ' + stats.result.total + ' ' + t("votesLabel") + ' · ' + t("skips") + ' ' + stats.result.abstain) + '</span>',
+            '</div>'
+          ].join("");
+        })()
       : [
+          choiceStage(text(meta.prompt), meta.categoryId, text(meta.category), statusLine),
           '<div class="vote-actions">',
-          '<button class="choice-button choice-button--a" type="button" data-vote-proposal="' + proposal.proposal + '" data-choice="yes"' + disabled + '>',
-          '<span>A</span><strong>' + escapeHtml(t("voteA")) + '</strong>',
-          '</button>',
-          '<button class="choice-button choice-button--b" type="button" data-vote-proposal="' + proposal.proposal + '" data-choice="no"' + disabled + '>',
-          '<span>B</span><strong>' + escapeHtml(t("voteB")) + '</strong>',
-          '</button>',
+          choiceCard("a", "A", text(meta.optionA), t("voteA"), 'data-vote-proposal="' + proposalId + '" data-choice="yes"' + disabled),
+          choiceCard("b", "B", text(meta.optionB), t("voteB"), 'data-vote-proposal="' + proposalId + '" data-choice="no"' + disabled),
           '</div>',
           '<div class="secondary-row">',
-          '<button type="button" data-skip-proposal="' + proposal.proposal + '"' + disabled + '>' + escapeHtml(t("skip")) + '</button>',
+          '<button type="button" data-skip-proposal="' + proposalId + '"' + disabled + '>' + escapeHtml(t("skip")) + '</button>',
           isClosed(proposal) && !proposal.finalized
-            ? '<button type="button" data-reveal-proposal="' + proposal.proposal + '">' + escapeHtml(t("reveal")) + '</button>'
-            : '<span>' + proposal.receipts.length + ' ' + escapeHtml(t("receipts")) + '</span>',
+            ? '<button type="button" data-reveal-proposal="' + proposalId + '">' + escapeHtml(t("reveal")) + '</button>'
+            : '<span>' + visibleVoteCount(proposal) + ' ' + escapeHtml(t("votesLabel")) + '</span>',
           '</div>'
         ].join("");
 
     return [
       '<article class="vote-card" data-card-index="' + index + '">',
-      '<div class="card-topline">',
-      '<span>' + escapeHtml(text(meta.category)) + '</span>',
-      '<strong>' + escapeHtml(status) + ' · ' + escapeHtml(formatStatus(proposal)) + '</strong>',
-      '</div>',
-      '<div class="question-copy">',
-      '<span>' + escapeHtml(text(meta.prompt)) + '</span>',
-      '<h1>' + escapeHtml(text(meta.optionA)) + '</h1>',
-      '<div class="vs-line">vs</div>',
-      '<h1>' + escapeHtml(text(meta.optionB)) + '</h1>',
-      '</div>',
+      categoryFilterLine(),
+      '<div class="card-main">',
       action,
-      '<p class="privacy-note">' + escapeHtml(t("sealedBody")) + '</p>',
-      '</article>'
-    ].join("");
-  }
-
-  function templateCard(item, index) {
-    const dilemma = item.dilemma;
-    const category = categoryById(dilemma.category);
-    return [
-      '<article class="vote-card vote-card--template" data-card-index="' + index + '">',
-      '<div class="card-topline">',
-      '<span>' + escapeHtml(text(category)) + '</span>',
-      '<strong>' + escapeHtml(t("newTab")) + '</strong>',
       '</div>',
-      '<div class="question-copy">',
-      '<span>' + escapeHtml(t("questionEyebrow")) + '</span>',
-      '<h1>' + escapeHtml(text(dilemma.a)) + '</h1>',
-      '<div class="vs-line">vs</div>',
-      '<h1>' + escapeHtml(text(dilemma.b)) + '</h1>',
-      '</div>',
-      '<button class="full-action" type="button" data-launch-dilemma="' + dilemma.id + '">' + escapeHtml(t("launch")) + '</button>',
-      '<p class="privacy-note">' + escapeHtml(t("sealedBody")) + '</p>',
       '</article>'
     ].join("");
   }
 
   function emptyCard() {
     return [
-      '<article class="vote-card">',
+      '<article class="vote-card vote-card--empty">',
+      categoryFilterLine(),
+      '<div class="card-main">',
       '<div class="question-copy">',
       '<span>' + escapeHtml(t("sealedTitle")) + '</span>',
       '<h1>' + escapeHtml(t("noRounds")) + '</h1>',
       '<p>' + escapeHtml(t("noRoundsBody")) + '</p>',
+      '</div>',
       '</div>',
       '</article>'
     ].join("");
@@ -547,7 +697,7 @@
       return;
     }
     els.voteFeed.innerHTML = items.map(function (item, index) {
-      return item.type === "proposal" ? proposalCard(item, index) : templateCard(item, index);
+      return proposalCard(item, index);
     }).join("");
     requestAnimationFrame(function () {
       scrollToIndex(state.activeIndex, "auto");
@@ -568,6 +718,7 @@
     document.querySelectorAll("[data-tab]").forEach(function (button) {
       button.classList.toggle("is-active", button.getAttribute("data-tab") === state.view);
     });
+    els.topbarNewVote.hidden = !state.wallet;
   }
 
   function renderDialogOptions() {
@@ -581,6 +732,8 @@
     els.profileView.hidden = state.view !== "profile";
     els.feedView.hidden = state.view === "profile";
     els.profileWallet.textContent = state.wallet ? short(state.wallet) : t("notConnected");
+    els.profileConnect.querySelector("span").textContent = state.wallet ? t("connectedWalletAction") : t("connectWalletAction");
+    els.profileConnect.disabled = Boolean(state.wallet);
     els.profileRounds.textContent = String(state.proposals.length);
     els.profileBank.textContent = String(bank.dilemmas.length);
     els.profileNetwork.textContent = t("solanaDevnet");
@@ -599,10 +752,15 @@
     if (!cards.length) return;
     const nextIndex = Math.max(0, Math.min(index, cards.length - 1));
     state.activeIndex = nextIndex;
-    els.voteFeed.scrollTo({
-      top: cards[nextIndex].offsetTop,
-      behavior: behavior || "smooth"
-    });
+    if (behavior === "auto") {
+      els.voteFeed.classList.add("is-jump");
+    }
+    els.voteFeed.style.transform = "translate3d(0, -" + (nextIndex * 100) + "%, 0)";
+    if (behavior === "auto") {
+      requestAnimationFrame(function () {
+        els.voteFeed.classList.remove("is-jump");
+      });
+    }
   }
 
   function navigateBy(direction, fromIndex, cooldown) {
@@ -612,6 +770,28 @@
     return true;
   }
 
+  function unlockWheelGesture() {
+    state.wheelGestureLocked = false;
+    state.wheelDelta = 0;
+    window.clearTimeout(state.wheelIdleTimer);
+    window.clearTimeout(state.wheelFallbackTimer);
+    state.wheelIdleTimer = 0;
+    state.wheelFallbackTimer = 0;
+  }
+
+  function scheduleWheelUnlock() {
+    window.clearTimeout(state.wheelIdleTimer);
+    window.clearTimeout(state.wheelFallbackTimer);
+    state.wheelIdleTimer = window.setTimeout(unlockWheelGesture, 520);
+    state.wheelFallbackTimer = window.setTimeout(unlockWheelGesture, 1800);
+  }
+
+  function wheelCardIndex(event) {
+    const card = event.target.closest && event.target.closest(".vote-card");
+    if (!card) return state.activeIndex;
+    return Number(card.getAttribute("data-card-index"));
+  }
+
   function handleWheel(event) {
     if (state.view === "profile") return;
     const deltaX = event.deltaX || 0;
@@ -619,19 +799,31 @@
     if (Math.abs(deltaY) <= Math.abs(deltaX) || Math.abs(deltaY) < 1) return;
     event.preventDefault();
 
+    if (wheelCardIndex(event) !== state.activeIndex) {
+      scheduleWheelUnlock();
+      return;
+    }
+
+    if (state.wheelGestureLocked) {
+      scheduleWheelUnlock();
+      return;
+    }
+
     state.wheelDelta = Math.sign(state.wheelDelta) === Math.sign(deltaY)
       ? state.wheelDelta + deltaY
       : deltaY;
     if (Math.abs(state.wheelDelta) < 28) return;
 
     if (navigateBy(state.wheelDelta > 0 ? 1 : -1)) {
+      state.wheelGestureLocked = true;
       state.wheelDelta = 0;
+      scheduleWheelUnlock();
     }
   }
 
   function resetScrollGuards() {
     state.scrollCooldownUntil = 0;
-    state.wheelDelta = 0;
+    unlockWheelGesture();
   }
 
   function handleTouchStart(event) {
@@ -675,6 +867,55 @@
     }
   }
 
+  function handleCategoryPointerDown(event) {
+    const row = event.target.closest && event.target.closest(".category-filter-row");
+    if (!row) return;
+    state.categoryDrag = {
+      row,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: row.scrollLeft,
+      moved: false,
+      captured: false
+    };
+  }
+
+  function handleCategoryPointerMove(event) {
+    const drag = state.categoryDrag;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    const dx = event.clientX - drag.startX;
+    if (Math.abs(dx) > 8) {
+      drag.moved = true;
+      state.categoryDragSuppressClick = true;
+      drag.row.classList.add("is-dragging");
+      if (!drag.captured && drag.row.setPointerCapture) {
+        drag.row.setPointerCapture(event.pointerId);
+        drag.captured = true;
+      }
+    }
+    if (drag.moved) {
+      drag.row.scrollLeft = drag.scrollLeft - dx;
+      event.preventDefault();
+    }
+  }
+
+  function handleCategoryPointerUp(event) {
+    const drag = state.categoryDrag;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    drag.row.classList.remove("is-dragging");
+    if (drag.captured && drag.row.releasePointerCapture) {
+      drag.row.releasePointerCapture(event.pointerId);
+    }
+    state.categoryDrag = null;
+    if (drag.moved) {
+      window.setTimeout(function () {
+        state.categoryDragSuppressClick = false;
+      }, 120);
+    } else {
+      state.categoryDragSuppressClick = false;
+    }
+  }
+
   async function createRound(payload) {
     const wallet = await ensureWallet();
     if (!wallet) return null;
@@ -701,6 +942,7 @@
       category: prepared.category,
       optionA: prepared.optionA,
       optionB: prepared.optionB,
+      images: prepared.images,
       initComputationOffset: prepared.initComputationOffset,
       signature
     });
@@ -827,14 +1069,25 @@
   els.voteFeed.addEventListener("touchstart", handleTouchStart, { passive: true });
   els.voteFeed.addEventListener("touchmove", handleTouchMove, { passive: false });
   els.voteFeed.addEventListener("touchend", handleTouchEnd, { passive: true });
+  els.voteFeed.addEventListener("pointerdown", handleCategoryPointerDown);
+  els.voteFeed.addEventListener("pointermove", handleCategoryPointerMove);
+  els.voteFeed.addEventListener("pointerup", handleCategoryPointerUp);
+  els.voteFeed.addEventListener("pointercancel", handleCategoryPointerUp);
   window.addEventListener("keydown", handleKeyDown);
 
   els.voteFeed.addEventListener("click", async function (event) {
+    const categoryButton = event.target.closest("[data-category-filter]");
     const voteButton = event.target.closest("[data-vote-proposal]");
     const skipButton = event.target.closest("[data-skip-proposal]");
     const revealButton = event.target.closest("[data-reveal-proposal]");
-    const launchButton = event.target.closest("[data-launch-dilemma]");
 
+    if (categoryButton) {
+      if (state.categoryDragSuppressClick) return;
+      toggleCategoryFilter(categoryButton.getAttribute("data-category-filter"));
+      resetScrollGuards();
+      render();
+      return;
+    }
     if (voteButton) {
       await submitVote(voteButton.getAttribute("data-choice"), voteButton.getAttribute("data-vote-proposal"));
       return;
@@ -847,24 +1100,22 @@
       await revealResult(revealButton.getAttribute("data-reveal-proposal"));
       return;
     }
-    if (launchButton) {
-      const dilemma = bank.dilemmas.find(function (item) {
-        return item.id === launchButton.getAttribute("data-launch-dilemma");
-      });
-      if (!dilemma) return;
-      try {
-        await createRound(dilemmaPayload(dilemma, 5));
-      } catch (error) {
-        showToast(error.message);
-      } finally {
-        state.busy = false;
-        render();
-      }
-    }
   });
 
   els.openDialog.addEventListener("click", function () {
     els.dialog.showModal();
+  });
+
+  els.topbarNewVote.addEventListener("click", function () {
+    els.dialog.showModal();
+  });
+
+  els.aboutOpen.addEventListener("click", function () {
+    els.aboutDialog.showModal();
+  });
+
+  els.closeAbout.addEventListener("click", function () {
+    els.aboutDialog.close();
   });
 
   els.closeDialog.addEventListener("click", function () {
@@ -873,7 +1124,7 @@
 
   els.createForm.addEventListener("submit", async function (event) {
     event.preventDefault();
-    const payload = customPayload(new FormData(els.createForm));
+    const payload = await customPayload(new FormData(els.createForm));
     if (!payload) {
       showToast(t("fillFields"));
       return;

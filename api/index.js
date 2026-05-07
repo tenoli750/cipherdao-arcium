@@ -1,7 +1,4 @@
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
-require("./load-env");
+require("../scripts/load-env");
 require("tsx/cjs");
 
 const {
@@ -19,30 +16,29 @@ const {
   translateRoundOptions
 } = require("../app/siteApi.ts");
 
-const root = path.join(__dirname, "..", "site");
-const port = Number(process.env.PORT || 4173);
-const host = process.env.HOST || "127.0.0.1";
-
-const types = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript; charset=utf-8",
-  ".svg": "image/svg+xml; charset=utf-8",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".webp": "image/webp"
-};
-
 function sendJson(res, statusCode, payload) {
-  res.writeHead(statusCode, {
-    "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store"
-  });
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store");
   res.end(JSON.stringify(payload));
 }
 
+function parseBodyValue(body) {
+  if (!body) return {};
+  if (typeof body === "object") return body;
+  if (typeof body === "string") return body.trim() ? JSON.parse(body) : {};
+  if (Buffer.isBuffer(body)) {
+    const text = body.toString("utf8");
+    return text.trim() ? JSON.parse(text) : {};
+  }
+  return {};
+}
+
 function readJsonBody(req) {
+  if (req.body !== undefined) {
+    return Promise.resolve(parseBodyValue(req.body));
+  }
+
   return new Promise((resolve, reject) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -53,18 +49,20 @@ function readJsonBody(req) {
       }
     });
     req.on("end", () => {
-      if (!body.trim()) {
-        resolve({});
-        return;
-      }
       try {
-        resolve(JSON.parse(body));
+        resolve(parseBodyValue(body));
       } catch {
         reject(new Error("Invalid JSON body"));
       }
     });
     req.on("error", reject);
   });
+}
+
+function apiPath(req) {
+  const raw = req.url || "/";
+  const pathname = decodeURIComponent(raw.split("?")[0]);
+  return pathname.startsWith("/api/") ? pathname : `/api${pathname}`;
 }
 
 async function handleApi(req, res, cleanUrl) {
@@ -138,52 +136,15 @@ async function handleApi(req, res, cleanUrl) {
     return true;
   }
 
-  if (cleanUrl.startsWith("/api/")) {
-    sendJson(res, 404, { error: "API route not found" });
-    return true;
-  }
-
-  return false;
+  sendJson(res, 404, { error: "API route not found" });
+  return true;
 }
 
-const server = http.createServer(async (req, res) => {
-  const cleanUrl = decodeURIComponent((req.url || "/").split("?")[0]);
-
+module.exports = async function handler(req, res) {
   try {
-    if (await handleApi(req, res, cleanUrl)) return;
+    await handleApi(req, res, apiPath(req));
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     sendJson(res, 500, { error: message });
-    return;
   }
-
-  const requestPath = cleanUrl === "/" ? "/index.html" : cleanUrl;
-  const filePath = path.normalize(path.join(root, requestPath));
-
-  if (!filePath.startsWith(root)) {
-    res.writeHead(403);
-    res.end("Forbidden");
-    return;
-  }
-
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(404);
-      res.end("Not found");
-      return;
-    }
-    res.writeHead(200, {
-      "Content-Type": types[path.extname(filePath)] || "application/octet-stream"
-    });
-    res.end(data);
-  });
-});
-
-server.on("error", (err) => {
-  console.error(`Unable to start Would You DAO server on ${host}:${port}: ${err.message}`);
-  process.exit(1);
-});
-
-server.listen(port, host, () => {
-  console.log(`Would You DAO running at http://${host}:${port}`);
-});
+};

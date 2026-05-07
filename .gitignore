@@ -8,3 +8,9 @@ node_modules/
 dist/
 coverage/
 *.log
+.vercel
+*.zip
+image*.png
+Screenshot*.png
+would-you-dao-windows-*/
+site/generated/
