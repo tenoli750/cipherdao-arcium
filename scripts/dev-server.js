@@ -42,6 +42,26 @@ function sendJson(res, statusCode, payload) {
   res.end(JSON.stringify(payload));
 }
 
+function headerValue(req, name) {
+  const value = req.headers[name.toLowerCase()];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function assertServerProposalAccess(req) {
+  const token = process.env.SERVER_PROPOSAL_TOKEN || "";
+  if (!token && process.env.ALLOW_UNPROTECTED_SERVER_PROPOSALS !== "1") {
+    const error = new Error("Server proposal route is disabled");
+    error.statusCode = 403;
+    throw error;
+  }
+  const authorization = headerValue(req, "authorization") || "";
+  const supplied = headerValue(req, "x-server-proposal-token") || "";
+  if (supplied === token || authorization === `Bearer ${token}`) return;
+  const error = new Error("Server proposal token is required");
+  error.statusCode = 401;
+  throw error;
+}
+
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
     let body = "";
@@ -85,6 +105,7 @@ async function handleApi(req, res, cleanUrl) {
   }
 
   if (req.method === "POST" && cleanUrl === "/api/proposals") {
+    assertServerProposalAccess(req);
     const body = await readJsonBody(req);
     sendJson(res, 200, await createSiteProposal(body));
     return true;
@@ -153,7 +174,7 @@ const server = http.createServer(async (req, res) => {
     if (await handleApi(req, res, cleanUrl)) return;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    sendJson(res, 500, { error: message });
+    sendJson(res, error.statusCode || 500, { error: message });
     return;
   }
 

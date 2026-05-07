@@ -11,6 +11,7 @@
     "image:sd-webui": "node scripts/sd-webui-generator.js",
     "build:site-crypto": "esbuild site/src/arcium-vote-client.js --bundle --format=iife --global-name=CipherDaoCrypto --alias:crypto=./site/src/node-crypto-shim.js --outfile=site/vendor/arcium-vote.js",
     "dao:bootstrap": "tsx app/scripts/bootstrapDao.ts",
+    "dao:precreate": "node scripts/precreate-rounds.js",
     "dao:vote": "tsx app/scripts/castVote.ts",
     "dao:tally": "tsx app/scripts/publishTally.ts",
     "deploy:devnet": "scripts/deploy-devnet.sh",

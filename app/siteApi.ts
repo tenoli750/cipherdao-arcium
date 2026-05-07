@@ -19,7 +19,6 @@ import {
   fetchMxePublicKey,
   initComputationDefinitions,
   initializeDao,
-  initPrivateBallot,
   publishPrivateTally,
   waitForPrivateComputationFinalization,
   voterHashFromWallet
@@ -1267,10 +1266,18 @@ export async function createSiteProposal(params: {
     title,
     closesAtUnix
   });
-  const initialized = await initPrivateBallot({
+  const initBuilt = await buildInitPrivateBallotInstruction({
     program,
     proposal: created.proposal,
     clusterOffset: clusterOffset()
+  });
+  const initSignature = await provider.sendAndConfirm(new anchor.web3.Transaction().add(initBuilt.instruction), [], {
+    commitment: "confirmed",
+    preflightCommitment: "confirmed"
+  });
+  const initFinalization = await waitForFinalizationOrPending({
+    program,
+    computationOffset: initBuilt.computationOffset
   });
 
   const record: ProposalRecord = {
@@ -1282,8 +1289,8 @@ export async function createSiteProposal(params: {
     createdAt: Math.floor(Date.now() / 1000),
     receipts: [],
     ...roundMetadata({ ...params, images }),
-    initSignature: initialized.signature,
-    initFinalizeSignature: initialized.finalizeSignature
+    initSignature,
+    initFinalizeSignature: initFinalization.signature
   };
 
   const state = await readState();
@@ -1294,8 +1301,9 @@ export async function createSiteProposal(params: {
     proposal: await fetchProposal(record),
     transactions: {
       createProposal: created.signature,
-      initPrivateBallot: initialized.signature,
-      initFinalized: initialized.finalizeSignature
+      initPrivateBallot: initSignature,
+      initFinalized: initFinalization.signature,
+      finalizationStatus: initFinalization.status
     }
   };
 }
