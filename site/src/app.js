@@ -47,7 +47,7 @@
       ready: "Reveal",
       voteA: "Vote A",
       voteB: "Vote B",
-      skip: "Skip",
+      skip: "Next vote",
       reveal: "Reveal result",
       receipts: "receipts",
       noRounds: "No live rounds yet",
@@ -131,7 +131,7 @@
       ready: "공개",
       voteA: "A 투표",
       voteB: "B 투표",
-      skip: "패스",
+      skip: "다음 투표",
       reveal: "결과 공개",
       receipts: "영수증",
       noRounds: "아직 진행 라운드가 없어요",
@@ -681,7 +681,7 @@
           choiceCard("b", "B", text(meta.optionB), t("voteB"), 'data-vote-proposal="' + proposalId + '" data-choice="no"' + disabled),
           '</div>',
           '<div class="secondary-row">',
-          '<button type="button" data-skip-proposal="' + proposalId + '"' + disabled + '>' + escapeHtml(t("skip")) + '</button>',
+          '<button type="button" data-skip-next>' + escapeHtml(t("skip")) + '</button>',
           isClosed(proposal) && !proposal.finalized
             ? '<button type="button" data-reveal-proposal="' + proposalId + '">' + escapeHtml(t("reveal")) + '</button>'
             : '<span>' + visibleVoteCount(proposal) + ' ' + escapeHtml(t("votesLabel")) + '</span>',
@@ -1130,6 +1130,13 @@
     }
   }
 
+  function skipToNextCard(button) {
+    const card = button.closest && button.closest(".vote-card");
+    const index = card ? Number(card.getAttribute("data-card-index")) : state.activeIndex;
+    resetScrollGuards();
+    scrollToIndex((Number.isFinite(index) ? index : state.activeIndex) + 1);
+  }
+
   document.querySelectorAll("[data-tab]").forEach(function (button) {
     button.addEventListener("click", function () {
       state.view = button.getAttribute("data-tab");
@@ -1171,7 +1178,7 @@
   els.voteFeed.addEventListener("click", async function (event) {
     const categoryButton = event.target.closest("[data-category-filter]");
     const voteButton = event.target.closest("[data-vote-proposal]");
-    const skipButton = event.target.closest("[data-skip-proposal]");
+    const skipButton = event.target.closest("[data-skip-next]");
     const revealButton = event.target.closest("[data-reveal-proposal]");
 
     if (categoryButton) {
@@ -1186,7 +1193,7 @@
       return;
     }
     if (skipButton) {
-      await submitVote("abstain", skipButton.getAttribute("data-skip-proposal"));
+      skipToNextCard(skipButton);
       return;
     }
     if (revealButton) {

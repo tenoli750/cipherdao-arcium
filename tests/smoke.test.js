@@ -99,6 +99,9 @@ assert(app.includes('"hygiene", "daily", "food"'), "category filter should put h
 assert(app.includes("visibleVoteCount"), "new broadcasts should show vote counts without ratios");
 assert(app.includes("materializeSeedProposal"), "seed broadcasts should launch real on-chain rounds before voting");
 assert(app.includes("launchingSeed"), "seed round votes should explain the initial on-chain launch step");
+assert(app.includes("data-skip-next"), "skip action should advance to the next vote instead of submitting a transaction");
+assert(app.includes("skipToNextCard"), "skip action should page the feed locally");
+assert(!app.includes('submitVote("abstain"'), "skip action should not submit an abstain transaction");
 assert(app.includes('choiceCard("a", "A", text(meta.optionA)'), "proposal option A text should render inside its card");
 assert(app.includes("choiceStage(text(meta.prompt), meta.categoryId"), "proposal prompt should render with category and status metadata");
 assert(!app.includes("choice-placeholder.png"), "feed should not render image placeholders");
