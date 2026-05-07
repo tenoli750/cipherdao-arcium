@@ -167,7 +167,9 @@ assert(packageJson.includes('"deploy:vercel"'), "package script should expose Ve
 assert(packageJson.includes('"dao:precreate"'), "package script should precreate launched rounds");
 assert(packageJson.includes('"pg"'), "package should include node-postgres for Supabase pooler storage");
 assert(precreateRounds.includes("PRECREATE_TARGET"), "precreate script should support target round counts");
-assert(precreateRounds.includes("X-Server-Proposal-Token"), "precreate script should use the protected server route");
+assert(precreateRounds.includes("/api/wallet/proposal-tx"), "precreate script should use connected-wallet transaction preparation");
+assert(precreateRounds.includes("/api/wallet/proposal-confirm"), "precreate script should confirm precreated rounds through production metadata");
+assert(precreateRounds.includes("transaction.sign(keypair)"), "precreate script should sign locally with the devnet test wallet");
 assert(precreateRounds.includes("site\", \"src\", \"dilemmas.js"), "precreate script should use the provided dilemma bank");
 assert(supabaseSchema.includes("create table if not exists public.would_you_dao_state"), "Supabase schema should create the metadata state table");
 assert(supabaseSchema.includes("enable row level security"), "Supabase schema should enable RLS");
