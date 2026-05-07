@@ -64,6 +64,8 @@
       translating: "Translating choices",
       translateFailed: "Translation failed",
       preparingRound: "Preparing sealed round",
+      launchingSeed: "Launching this seeded round on Solana",
+      seedPending: "Round submitted. Arcium is preparing the private state; try voting again soon.",
       approveRound: "Approve round in wallet",
       waitingInit: "Waiting for Arcium initialization",
       roundReady: "Round sealed on devnet",
@@ -146,6 +148,8 @@
       translating: "선택지 번역 중",
       translateFailed: "번역 실패",
       preparingRound: "봉인 라운드 준비 중",
+      launchingSeed: "이 시드 질문을 Solana 라운드로 런치하는 중",
+      seedPending: "라운드가 제출됐고 Arcium 비공개 상태를 준비 중이에요. 잠시 후 다시 투표해 주세요.",
       approveRound: "지갑에서 라운드 생성을 승인하세요",
       waitingInit: "Arcium 초기화 대기 중",
       roundReady: "Devnet에 라운드가 봉인됐어요",
@@ -238,6 +242,11 @@
     if (!value) return "";
     const selected = value[state.language] || value.en || value.ko || "";
     return /[A-Za-z]/.test(selected) ? normalizeEnglishPerspective(selected) : selected;
+  }
+
+  function englishText(value, fallback) {
+    if (!value) return fallback || "";
+    return normalizeEnglishOptionText(value.en || value.ko || fallback || "");
   }
 
   function showToast(message) {
@@ -513,7 +522,7 @@
   }
 
   function isVoteOpen(proposal) {
-    return Boolean(proposal && !proposal.demo && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0);
+    return Boolean(proposal && !state.busy && !proposal.finalized && !isClosed(proposal) && (proposal.demo || proposal.encryptedStateChunks > 0));
   }
 
   function canTally(proposal) {
@@ -967,8 +976,72 @@
     return data;
   }
 
+  function seededRoundPayload(proposal) {
+    const meta = roundMeta(proposal);
+    const optionA = meta.optionA;
+    const optionB = meta.optionB;
+    const category = meta.category;
+    const now = Math.floor(Date.now() / 1000);
+    const remaining = Math.max(45, Math.min(7 * 24 * 60 * 60, Math.floor((proposal.closesAt || now + 7 * 24 * 60 * 60) - now)));
+
+    return {
+      slug: proposal.slug,
+      title: englishText(optionA, text(optionA)) + " vs " + englishText(optionB, text(optionB)),
+      summary: englishText(category, "Community") + " weekly broadcast round",
+      quorum: proposal.quorum || 1,
+      closesInSeconds: remaining,
+      prompt: meta.prompt,
+      category,
+      optionA,
+      optionB,
+      images: proposal.images
+    };
+  }
+
+  async function materializeSeedProposal(proposal, wallet) {
+    if (!proposal.demo) return proposal;
+
+    showToast(t("launchingSeed"));
+    const prepared = await postJson("/api/wallet/proposal-tx", {
+      publicKey: wallet,
+      ...seededRoundPayload(proposal)
+    });
+    showToast(t("approveRound"));
+    const signature = await signAndSend(prepared.transaction.transaction);
+    showToast(t("waitingInit"));
+    const confirmed = await postJson("/api/wallet/proposal-confirm", {
+      publicKey: wallet,
+      proposal: prepared.proposal,
+      proposalId: prepared.proposalId,
+      title: prepared.title,
+      summary: prepared.summary,
+      quorum: prepared.quorum,
+      slug: prepared.slug,
+      prompt: prepared.prompt,
+      category: prepared.category,
+      optionA: prepared.optionA,
+      optionB: prepared.optionB,
+      images: prepared.images,
+      initComputationOffset: prepared.initComputationOffset,
+      signature
+    });
+
+    await refresh({ silent: true });
+    if (
+      confirmed.transactions && confirmed.transactions.finalizationStatus === "pending"
+      || !confirmed.proposal
+      || confirmed.proposal.encryptedStateChunks === 0
+      || confirmed.proposal.stateNonce === "0"
+    ) {
+      showToast(t("seedPending"));
+      return null;
+    }
+    showToast(t("roundReady"));
+    return confirmed.proposal;
+  }
+
   async function submitVote(choice, proposalKey) {
-    const proposal = state.proposals.find(function (item) {
+    let proposal = state.proposals.find(function (item) {
       return item.proposal === proposalKey;
     });
     if (!proposal || !isVoteOpen(proposal)) return;
@@ -979,6 +1052,8 @@
       if (!window.CipherDaoCrypto) throw new Error("Arcium browser crypto bundle did not load");
       state.busy = true;
       render();
+      proposal = await materializeSeedProposal(proposal, wallet);
+      if (!proposal) return;
       showToast(t("encrypting"));
       const encryption = await api("/api/vote-encryption");
       const encryptedVote = await window.CipherDaoCrypto.encryptVote({

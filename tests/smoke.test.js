@@ -97,7 +97,8 @@ assert(!app.includes("data-launch-dilemma"), "question feed should not expose te
 assert(app.includes("handleCategoryPointerDown"), "category filter should support pointer dragging");
 assert(app.includes('"hygiene", "daily", "food"'), "category filter should put hygiene near the front");
 assert(app.includes("visibleVoteCount"), "new broadcasts should show vote counts without ratios");
-assert(app.includes("!proposal.demo"), "demo broadcasts should not submit fake on-chain votes");
+assert(app.includes("materializeSeedProposal"), "seed broadcasts should launch real on-chain rounds before voting");
+assert(app.includes("launchingSeed"), "seed round votes should explain the initial on-chain launch step");
 assert(app.includes('choiceCard("a", "A", text(meta.optionA)'), "proposal option A text should render inside its card");
 assert(app.includes("choiceStage(text(meta.prompt), meta.categoryId"), "proposal prompt should render with category and status metadata");
 assert(!app.includes("choice-placeholder.png"), "feed should not render image placeholders");
@@ -131,6 +132,8 @@ assert(siteApi.includes("readStateFromPostgres"), "server should read metadata f
 assert(siteApi.includes("writeStateToPostgres"), "server should write metadata to Postgres when configured");
 assert(siteApi.includes("waitForFinalizationOrPending"), "serverless vote confirmation should return JSON before Vercel timeouts");
 assert(siteApi.includes("ARCIUM_FINALIZATION_WAIT_MS"), "finalization wait should be configurable");
+assert(siteApi.includes("materializedSlugs"), "seeded demo rounds should disappear after they are launched on-chain");
+assert(siteApi.includes("finalizationStatus: finalization.status"), "proposal confirmation should report pending Arcium initialization");
 assert(siteApi.includes("metadataStorageMode"), "status should report the active metadata storage mode");
 assert(siteApi.includes("writeStateToSupabase"), "server should persist metadata to Supabase when configured");
 assert(siteApi.includes("persistentState"), "server should not persist regenerated demo rounds as durable metadata");

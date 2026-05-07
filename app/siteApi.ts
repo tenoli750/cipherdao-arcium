@@ -386,8 +386,12 @@ function isDemoProposal(record: ProposalRecord) {
 
 function withSeededDemoRounds(state: SiteState): SiteState {
   const userRounds = state.proposals.filter((record) => !isDemoProposal(record));
+  const materializedSlugs = new Set(userRounds.map((record) => record.slug).filter(Boolean));
   return {
-    proposals: [...demoProposalRecords(), ...userRounds]
+    proposals: [
+      ...demoProposalRecords().filter((record) => !record.slug || !materializedSlugs.has(record.slug)),
+      ...userRounds
+    ]
   };
 }
 
@@ -1371,10 +1375,11 @@ export async function confirmWalletProposalTransaction(params: WalletProposalMet
   }
 
   await confirmSubmittedTransaction(provider, params.signature);
-  const finalizeSignature = await waitForPrivateComputationFinalization({
+  const finalization = await waitForFinalizationOrPending({
     program,
     computationOffset: new anchor.BN(params.initComputationOffset)
   });
+  const finalizeSignature = finalization.signature;
 
   const state = await readState();
   let record = state.proposals.find((item) => item.proposal === params.proposal);
@@ -1401,7 +1406,8 @@ export async function confirmWalletProposalTransaction(params: WalletProposalMet
     proposal: await fetchProposal(record),
     transactions: {
       createAndInit: params.signature,
-      initFinalized: finalizeSignature
+      initFinalized: finalizeSignature,
+      finalizationStatus: finalization.status
     }
   };
 }
