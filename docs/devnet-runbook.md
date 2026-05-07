@@ -15,7 +15,7 @@ Completed:
 - MXE initialized.
 - DAO account initialized.
 - v2 computation definition accounts initialized with off-chain circuit sources.
-- Public GitHub repository published at `https://github.com/tenoli750/cipherdao-arcium`.
+- Public GitHub repository published at `https://github.com/tenoli750/wouldudao-arcium`.
 - Private proposal bootstrap, encrypted vote, and private tally flow verified on devnet.
 
 Verified proposal:

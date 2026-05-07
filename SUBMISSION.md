@@ -37,7 +37,7 @@ The app uses a funny social format, but the privacy model is serious: people can
 
 The project is MIT licensed and published as an open-source GitHub repository:
 
-https://github.com/tenoli750/cipherdao-arcium
+https://github.com/tenoli750/wouldudao-arcium
 
 ## Deployment
 

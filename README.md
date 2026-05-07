@@ -4,7 +4,7 @@ Would You DAO? is a private balance-game DAO for funny everyday dilemmas. It sta
 
 Live site: https://wouldudao.vercel.app
 
-Open-source repository: https://github.com/tenoli750/cipherdao-arcium
+Open-source repository: https://github.com/tenoli750/wouldudao-arcium
 
 ## Why this matters
 
@@ -116,4 +116,4 @@ npm run check
 
 Public repository:
 
-https://github.com/tenoli750/cipherdao-arcium
+https://github.com/tenoli750/wouldudao-arcium
