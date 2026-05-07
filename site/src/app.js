@@ -64,8 +64,6 @@
       translating: "Translating choices",
       translateFailed: "Translation failed",
       preparingRound: "Preparing sealed round",
-      launchingSeed: "Launching this seeded round on Solana",
-      seedPending: "Round submitted. Arcium is preparing the private state; try voting again soon.",
       approveRound: "Approve round in wallet",
       waitingInit: "Waiting for Arcium initialization",
       roundReady: "Round sealed on devnet",
@@ -80,6 +78,7 @@
       resultPublished: "Final result published",
       resultQueued: "Reveal submitted. Arcium finalization is still running.",
       alreadyFinalized: "Final result already published",
+      walletUnexpected: "Wallet returned an unexpected error. Please wait a moment and try again.",
       solanaDevnet: "Solana devnet",
       loading: "Loading",
       seconds: "s",
@@ -148,8 +147,6 @@
       translating: "선택지 번역 중",
       translateFailed: "번역 실패",
       preparingRound: "봉인 라운드 준비 중",
-      launchingSeed: "이 시드 질문을 Solana 라운드로 런치하는 중",
-      seedPending: "라운드가 제출됐고 Arcium 비공개 상태를 준비 중이에요. 잠시 후 다시 투표해 주세요.",
       approveRound: "지갑에서 라운드 생성을 승인하세요",
       waitingInit: "Arcium 초기화 대기 중",
       roundReady: "Devnet에 라운드가 봉인됐어요",
@@ -164,6 +161,7 @@
       resultPublished: "최종 결과 공개 완료",
       resultQueued: "결과 공개가 제출됐고 Arcium 최종화가 계속 진행 중이에요",
       alreadyFinalized: "이미 최종 결과가 공개됐어요",
+      walletUnexpected: "지갑에서 알 수 없는 오류가 났어요. 잠시 후 다시 시도해 주세요.",
       solanaDevnet: "Solana devnet",
       loading: "로딩",
       seconds: "초",
@@ -244,11 +242,6 @@
     return /[A-Za-z]/.test(selected) ? normalizeEnglishPerspective(selected) : selected;
   }
 
-  function englishText(value, fallback) {
-    if (!value) return fallback || "";
-    return normalizeEnglishOptionText(value.en || value.ko || fallback || "");
-  }
-
   function showToast(message) {
     els.toast.textContent = message;
     els.toast.classList.add("is-visible");
@@ -256,6 +249,12 @@
     showToast.timer = window.setTimeout(function () {
       els.toast.classList.remove("is-visible");
     }, 3200);
+  }
+
+  function errorMessage(error) {
+    const message = error && error.message ? error.message : String(error);
+    if (/unexpected error/i.test(message)) return t("walletUnexpected");
+    return message;
   }
 
   async function api(path, options) {
@@ -296,7 +295,7 @@
       state.proposals = data.proposals || [];
       state.activeIndex = Math.min(state.activeIndex, Math.max(feedItems().length - 1, 0));
     } catch (error) {
-      showToast(error.message);
+      showToast(errorMessage(error));
     } finally {
       state.loading = false;
       render();
@@ -522,7 +521,7 @@
   }
 
   function isVoteOpen(proposal) {
-    return Boolean(proposal && !state.busy && !proposal.finalized && !isClosed(proposal) && (proposal.demo || proposal.encryptedStateChunks > 0));
+    return Boolean(proposal && !proposal.demo && !state.busy && !proposal.finalized && !isClosed(proposal) && proposal.encryptedStateChunks > 0);
   }
 
   function canTally(proposal) {
@@ -553,7 +552,9 @@
     const filters = state.categoryFilters;
     const proposals = state.proposals
       .filter(function (proposal) {
-        return state.view === "new" ? !proposal.finalized && !isClosed(proposal) : proposal.finalized;
+        return state.view === "new"
+          ? !proposal.demo && !proposal.finalized && !isClosed(proposal)
+          : proposal.finalized;
       })
       .sort(function (a, b) {
         if (state.view === "new") return b.createdAt - a.createdAt;
@@ -940,120 +941,63 @@
   }
 
   async function createRound(payload) {
-    const wallet = await ensureWallet();
-    if (!wallet) return null;
-
+    if (state.busy) return null;
     state.busy = true;
     render();
-    showToast(t("preparingRound"));
-    const prepared = await postJson("/api/wallet/proposal-tx", {
-      publicKey: wallet,
-      ...payload
-    });
-    showToast(t("approveRound"));
-    const signature = await signAndSend(prepared.transaction.transaction);
-    showToast(t("waitingInit"));
-    const data = await postJson("/api/wallet/proposal-confirm", {
-      publicKey: wallet,
-      proposal: prepared.proposal,
-      proposalId: prepared.proposalId,
-      title: prepared.title,
-      summary: prepared.summary,
-      quorum: prepared.quorum,
-      slug: prepared.slug,
-      prompt: prepared.prompt,
-      category: prepared.category,
-      optionA: prepared.optionA,
-      optionB: prepared.optionB,
-      images: prepared.images,
-      initComputationOffset: prepared.initComputationOffset,
-      signature
-    });
-    state.view = "hot";
-    state.activeIndex = 0;
-    await refresh({ silent: true });
-    showToast(t("roundReady"));
-    return data;
-  }
-
-  function seededRoundPayload(proposal) {
-    const meta = roundMeta(proposal);
-    const optionA = meta.optionA;
-    const optionB = meta.optionB;
-    const category = meta.category;
-    const now = Math.floor(Date.now() / 1000);
-    const remaining = Math.max(45, Math.min(7 * 24 * 60 * 60, Math.floor((proposal.closesAt || now + 7 * 24 * 60 * 60) - now)));
-
-    return {
-      slug: proposal.slug,
-      title: englishText(optionA, text(optionA)) + " vs " + englishText(optionB, text(optionB)),
-      summary: englishText(category, "Community") + " weekly broadcast round",
-      quorum: proposal.quorum || 1,
-      closesInSeconds: remaining,
-      prompt: meta.prompt,
-      category,
-      optionA,
-      optionB,
-      images: proposal.images
-    };
-  }
-
-  async function materializeSeedProposal(proposal, wallet) {
-    if (!proposal.demo) return proposal;
-
-    showToast(t("launchingSeed"));
-    const prepared = await postJson("/api/wallet/proposal-tx", {
-      publicKey: wallet,
-      ...seededRoundPayload(proposal)
-    });
-    showToast(t("approveRound"));
-    const signature = await signAndSend(prepared.transaction.transaction);
-    showToast(t("waitingInit"));
-    const confirmed = await postJson("/api/wallet/proposal-confirm", {
-      publicKey: wallet,
-      proposal: prepared.proposal,
-      proposalId: prepared.proposalId,
-      title: prepared.title,
-      summary: prepared.summary,
-      quorum: prepared.quorum,
-      slug: prepared.slug,
-      prompt: prepared.prompt,
-      category: prepared.category,
-      optionA: prepared.optionA,
-      optionB: prepared.optionB,
-      images: prepared.images,
-      initComputationOffset: prepared.initComputationOffset,
-      signature
-    });
-
-    await refresh({ silent: true });
-    if (
-      confirmed.transactions && confirmed.transactions.finalizationStatus === "pending"
-      || !confirmed.proposal
-      || confirmed.proposal.encryptedStateChunks === 0
-      || confirmed.proposal.stateNonce === "0"
-    ) {
-      showToast(t("seedPending"));
+    try {
+      const wallet = await ensureWallet();
+      if (!wallet) return null;
+      showToast(t("preparingRound"));
+      const prepared = await postJson("/api/wallet/proposal-tx", {
+        publicKey: wallet,
+        ...payload
+      });
+      showToast(t("approveRound"));
+      const signature = await signAndSend(prepared.transaction.transaction);
+      showToast(t("waitingInit"));
+      const data = await postJson("/api/wallet/proposal-confirm", {
+        publicKey: wallet,
+        proposal: prepared.proposal,
+        proposalId: prepared.proposalId,
+        title: prepared.title,
+        summary: prepared.summary,
+        quorum: prepared.quorum,
+        slug: prepared.slug,
+        prompt: prepared.prompt,
+        category: prepared.category,
+        optionA: prepared.optionA,
+        optionB: prepared.optionB,
+        images: prepared.images,
+        initComputationOffset: prepared.initComputationOffset,
+        signature
+      });
+      state.view = "hot";
+      state.activeIndex = 0;
+      await refresh({ silent: true });
+      showToast(t("roundReady"));
+      return data;
+    } catch (error) {
+      showToast(errorMessage(error));
       return null;
+    } finally {
+      state.busy = false;
+      render();
     }
-    showToast(t("roundReady"));
-    return confirmed.proposal;
   }
 
   async function submitVote(choice, proposalKey) {
-    let proposal = state.proposals.find(function (item) {
+    if (state.busy) return;
+    const proposal = state.proposals.find(function (item) {
       return item.proposal === proposalKey;
     });
     if (!proposal || !isVoteOpen(proposal)) return;
 
+    state.busy = true;
+    render();
     try {
       const wallet = await ensureWallet();
       if (!wallet) return;
       if (!window.CipherDaoCrypto) throw new Error("Arcium browser crypto bundle did not load");
-      state.busy = true;
-      render();
-      proposal = await materializeSeedProposal(proposal, wallet);
-      if (!proposal) return;
       showToast(t("encrypting"));
       const encryption = await api("/api/vote-encryption");
       const encryptedVote = await window.CipherDaoCrypto.encryptVote({
@@ -1081,7 +1025,7 @@
         ? t("voteQueued")
         : t("voteFinalized"));
     } catch (error) {
-      showToast(error.message);
+      showToast(errorMessage(error));
     } finally {
       state.busy = false;
       render();
@@ -1089,16 +1033,17 @@
   }
 
   async function revealResult(proposalKey) {
+    if (state.busy) return;
     const proposal = state.proposals.find(function (item) {
       return item.proposal === proposalKey;
     });
     if (!proposal || !canTally(proposal)) return;
 
+    state.busy = true;
+    render();
     try {
       const wallet = await ensureWallet();
       if (!wallet) return;
-      state.busy = true;
-      render();
       showToast(t("preparingReveal"));
       const prepared = await postJson("/api/wallet/tally-tx", {
         publicKey: wallet,
@@ -1123,7 +1068,7 @@
         ? t("resultQueued")
         : t("resultPublished"));
     } catch (error) {
-      showToast(error.message);
+      showToast(errorMessage(error));
     } finally {
       state.busy = false;
       render();
@@ -1160,7 +1105,7 @@
         const wallet = await connectWallet();
         if (wallet) showToast(t("walletConnected") + " " + short(wallet));
       } catch (error) {
-        showToast(error.message);
+        showToast(errorMessage(error));
       }
     });
   });
@@ -1230,15 +1175,9 @@
       return;
     }
 
-    try {
-      els.dialog.close();
-      await createRound(payload);
+    els.dialog.close();
+    if (await createRound(payload)) {
       els.createForm.reset();
-    } catch (error) {
-      showToast(error.message);
-    } finally {
-      state.busy = false;
-      render();
     }
   });
 

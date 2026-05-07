@@ -91,14 +91,14 @@ assert(app.includes("categoryFilters"), "feed should support multi-category filt
 assert(app.includes("data-category-filter"), "category labels should be clickable filters");
 assert(app.includes("toggleCategoryFilter"), "category labels should toggle without forcing a single category");
 assert(app.includes('hotTab: "Finalized"'), "first tab should be labeled Finalized");
-assert(app.includes('return state.view === "new" ? !proposal.finalized && !isClosed(proposal) : proposal.finalized'), "new tab should only show active broadcasts and finalized tab should only show final rounds");
+assert(app.includes("!proposal.demo && !proposal.finalized && !isClosed(proposal)"), "new tab should only show launched active broadcasts");
 assert(app.includes('if (state.view === "new") return b.createdAt - a.createdAt'), "new tab should show launched rounds by newest first");
 assert(!app.includes("data-launch-dilemma"), "question feed should not expose template launch buttons");
 assert(app.includes("handleCategoryPointerDown"), "category filter should support pointer dragging");
 assert(app.includes('"hygiene", "daily", "food"'), "category filter should put hygiene near the front");
 assert(app.includes("visibleVoteCount"), "new broadcasts should show vote counts without ratios");
-assert(app.includes("materializeSeedProposal"), "seed broadcasts should launch real on-chain rounds before voting");
-assert(app.includes("launchingSeed"), "seed round votes should explain the initial on-chain launch step");
+assert(!app.includes("materializeSeedProposal"), "vote clicks should not ask users to sign a proposal creation transaction");
+assert(app.includes("walletUnexpected"), "wallet unexpected errors should be converted to readable copy");
 assert(app.includes("data-skip-next"), "skip action should advance to the next vote instead of submitting a transaction");
 assert(app.includes("skipToNextCard"), "skip action should page the feed locally");
 assert(!app.includes('submitVote("abstain"'), "skip action should not submit an abstain transaction");
