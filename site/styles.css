@@ -238,12 +238,6 @@ svg {
   line-height: 1.35;
 }
 
-.landing-korean-name {
-  color: var(--blue);
-  font-size: 13px;
-  font-weight: 950;
-}
-
 .landing-actions {
   display: flex;
   flex-wrap: wrap;
