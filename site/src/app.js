@@ -6,6 +6,39 @@
     en: {
       brandTitle: "Would You DAO?",
       connect: "Connect",
+      landingKicker: "Powered by Solana + Arcium",
+      landingTitle: "Would You DAO?",
+      landingBody: "Started with hygiene dilemmas. Now judging all of life’s impossible choices with Arcium-sealed voting on Solana.",
+      landingPrimaryAction: "Start voting",
+      landingConnectAction: "Connect wallet",
+      landingSecondaryAction: "Why Arcium?",
+      landingEnterSmall: "Enter app",
+      landingPreviewNote: "Your vote is encrypted until the round ends.",
+      landingProofOneLabel: "Absurd dilemmas",
+      landingProofOne: "From hygiene horrors to existential daily choices.",
+      landingProofTwoLabel: "Private votes",
+      landingProofTwo: "No public live split while the round is active.",
+      landingProofThreeLabel: "Public results",
+      landingProofThree: "Aggregate outcomes are revealed on Solana.",
+      landingArciumKicker: "Why Arcium",
+      landingArciumTitle: "The funny part needs serious privacy.",
+      landingArciumBody: "Would-you-rather votes are small decisions, but the pattern is the same as real governance: if everyone can watch the live split, people may vote strategically or avoid answering honestly. Arcium lets the app keep each choice encrypted until the final result is ready.",
+      landingArciumPointOneLabel: "Before tally",
+      landingArciumPointOne: "No public live leaderboard to influence the room.",
+      landingArciumPointTwoLabel: "During voting",
+      landingArciumPointTwo: "Each wallet submits a sealed choice into shared encrypted state.",
+      landingArciumPointThreeLabel: "After close",
+      landingArciumPointThree: "Only the aggregate outcome and correctness proof are published.",
+      landingStepsKicker: "How it works",
+      landingStepsTitle: "Three simple steps to chaos.",
+      landingStepOneTitle: "Connect wallet",
+      landingStepOneBody: "Link your Solana wallet to join the private voting feed.",
+      landingStepTwoTitle: "Vote privately",
+      landingStepTwoBody: "Choose A or B. Your answer is sealed through Arcium.",
+      landingStepThreeTitle: "Reveal final result",
+      landingStepThreeBody: "See aggregate results and correctness proofs on Solana.",
+      landingFinalTitle: "Enter the weirdest private DAO on Solana.",
+      landingFinalBody: "Where silly questions meet encrypted computation, and every vote counts without showing what you picked.",
       aboutAction: "About",
       aboutTitle: "Why Arcium?",
       aboutKicker: "Absurd questions. Serious privacy.",
@@ -47,6 +80,9 @@
       ready: "Reveal",
       voteA: "Vote A",
       voteB: "Vote B",
+      previousVote: "Previous vote",
+      nextVote: "Next vote",
+      onlyOneVote: "Only one vote in this tab",
       skip: "Next vote",
       reveal: "Reveal result",
       receipts: "receipts",
@@ -89,6 +125,39 @@
     ko: {
       brandTitle: "씻었DAO",
       connect: "연결",
+      landingKicker: "Solana + Arcium 기반",
+      landingTitle: "씻었DAO",
+      landingBody: "위생 밸런스게임에서 시작했지만, 이제 인생의 모든 애매한 선택을 Arcium으로 봉인해서 판단합니다.",
+      landingPrimaryAction: "투표 시작",
+      landingConnectAction: "지갑 연결",
+      landingSecondaryAction: "왜 Arcium?",
+      landingEnterSmall: "앱 열기",
+      landingPreviewNote: "라운드가 끝날 때까지 투표는 암호화됩니다.",
+      landingProofOneLabel: "이상한 선택지",
+      landingProofOne: "위생 참사부터 일상의 애매한 선택까지 다룹니다.",
+      landingProofTwoLabel: "비공개 투표",
+      landingProofTwo: "라운드가 진행되는 동안 실시간 표 흐름은 공개되지 않습니다.",
+      landingProofThreeLabel: "공개 결과",
+      landingProofThree: "최종 집계 결과는 Solana에 공개됩니다.",
+      landingArciumKicker: "왜 Arcium인가요?",
+      landingArciumTitle: "웃긴 선택에도 진짜 프라이버시가 필요합니다.",
+      landingArciumBody: "밸런스게임은 가벼운 선택처럼 보이지만, 실시간 표 흐름이 보이면 사람들이 눈치를 보거나 전략적으로 고르게 됩니다. 이 구조는 실제 DAO 거버넌스와 같습니다. Arcium은 최종 결과가 준비될 때까지 각자의 선택을 암호화된 상태로 유지해줍니다.",
+      landingArciumPointOneLabel: "집계 전",
+      landingArciumPointOne: "실시간 순위표가 공개되지 않아 분위기에 휩쓸리지 않습니다.",
+      landingArciumPointTwoLabel: "투표 중",
+      landingArciumPointTwo: "각 지갑은 공유 암호화 상태에 봉인된 선택을 제출합니다.",
+      landingArciumPointThreeLabel: "마감 후",
+      landingArciumPointThree: "집계 결과와 correctness proof만 공개됩니다.",
+      landingStepsKicker: "작동 방식",
+      landingStepsTitle: "혼돈까지 세 단계.",
+      landingStepOneTitle: "지갑 연결",
+      landingStepOneBody: "Solana 지갑을 연결하고 비공개 투표 피드에 참여합니다.",
+      landingStepTwoTitle: "비공개 투표",
+      landingStepTwoBody: "A 또는 B를 고르면 Arcium을 통해 답변이 봉인됩니다.",
+      landingStepThreeTitle: "최종 결과 공개",
+      landingStepThreeBody: "Solana에서 집계 결과와 correctness proof를 확인합니다.",
+      landingFinalTitle: "Solana에서 가장 이상한 비공개 DAO에 들어오세요.",
+      landingFinalBody: "웃긴 질문과 암호화 연산이 만나는 곳. 표는 집계되지만, 내 선택은 먼저 보이지 않습니다.",
       aboutAction: "소개",
       aboutTitle: "왜 Arcium인가요?",
       aboutKicker: "질문은 이상해도 프라이버시는 진지하게.",
@@ -130,6 +199,9 @@
       ready: "공개",
       voteA: "A 투표",
       voteB: "B 투표",
+      previousVote: "이전 투표",
+      nextVote: "다음 투표",
+      onlyOneVote: "이 탭에는 투표가 하나뿐이에요",
       skip: "다음 투표",
       reveal: "결과 공개",
       receipts: "영수증",
@@ -175,6 +247,7 @@
     config: null,
     proposals: [],
     view: "hot",
+    landing: window.location.hash !== "#app",
     categoryFilters: [],
     activeIndex: 0,
     language: readLanguage(),
@@ -194,6 +267,12 @@
   };
 
   const els = {
+    landingView: document.querySelector("[data-landing-view]"),
+    landingEnterButtons: document.querySelectorAll("[data-landing-enter]"),
+    landingJumpButtons: document.querySelectorAll("[data-landing-jump]"),
+    landingConnect: document.querySelector("[data-landing-connect]"),
+    appShell: document.querySelector("[data-app-shell]"),
+    bottomNav: document.querySelector("[data-bottom-nav]"),
     walletButton: document.querySelector("[data-connect]"),
     topbarNewVote: document.querySelector("[data-topbar-new-vote]"),
     profileConnect: document.querySelector("[data-profile-connect]"),
@@ -654,7 +733,17 @@
     ].join("");
   }
 
-  function proposalCard(item, index) {
+  function pagerRow(index, total, middleHtml) {
+    return [
+      '<div class="secondary-row secondary-row--pager">',
+      '<button type="button" data-previous-vote>' + escapeHtml(t("previousVote")) + '</button>',
+      '<div class="secondary-center">' + middleHtml + '</div>',
+      '<button type="button" data-next-vote>' + escapeHtml(t("nextVote")) + '</button>',
+      '</div>'
+    ].join("");
+  }
+
+  function proposalCard(item, index, total) {
     const proposal = item.proposal;
     const meta = roundMeta(proposal);
     const disabled = !isVoteOpen(proposal) ? " disabled" : "";
@@ -670,9 +759,7 @@
             choiceCard("a", "A", text(meta.optionA), resultFooter(stats.result.yes, stats.percentages.yes)),
             choiceCard("b", "B", text(meta.optionB), resultFooter(stats.result.no, stats.percentages.no)),
             '</div>',
-            '<div class="secondary-row">',
-            '<span>' + escapeHtml(t("finalResult") + ' · ' + stats.result.total + ' ' + t("votesLabel") + ' · ' + t("skips") + ' ' + stats.result.abstain) + '</span>',
-            '</div>'
+            pagerRow(index, total, '<span>' + escapeHtml(t("finalResult") + ' · ' + stats.result.total + ' ' + t("votesLabel") + ' · ' + t("skips") + ' ' + stats.result.abstain) + '</span>')
           ].join("");
         })()
       : [
@@ -681,12 +768,9 @@
           choiceCard("a", "A", text(meta.optionA), t("voteA"), 'data-vote-proposal="' + proposalId + '" data-choice="yes"' + disabled),
           choiceCard("b", "B", text(meta.optionB), t("voteB"), 'data-vote-proposal="' + proposalId + '" data-choice="no"' + disabled),
           '</div>',
-          '<div class="secondary-row">',
-          '<button type="button" data-skip-next>' + escapeHtml(t("skip")) + '</button>',
-          isClosed(proposal) && !proposal.finalized
+          pagerRow(index, total, isClosed(proposal) && !proposal.finalized
             ? '<button type="button" data-reveal-proposal="' + proposalId + '">' + escapeHtml(t("reveal")) + '</button>'
-            : '<span>' + visibleVoteCount(proposal) + ' ' + escapeHtml(t("votesLabel")) + '</span>',
-          '</div>'
+            : '<span>' + visibleVoteCount(proposal) + ' ' + escapeHtml(t("votesLabel")) + '</span>')
         ].join("");
 
     return [
@@ -721,11 +805,27 @@
       return;
     }
     els.voteFeed.innerHTML = items.map(function (item, index) {
-      return proposalCard(item, index);
+      return proposalCard(item, index, items.length);
     }).join("");
     requestAnimationFrame(function () {
       scrollToIndex(state.activeIndex, "auto");
     });
+  }
+
+  function enterApp() {
+    state.landing = false;
+    if (window.location.hash !== "#app") {
+      history.pushState(null, "", "#app");
+    }
+    resetScrollGuards();
+    render();
+  }
+
+  function renderLanding() {
+    document.body.classList.toggle("is-landing", state.landing);
+    els.landingView.hidden = !state.landing;
+    els.appShell.hidden = state.landing;
+    els.bottomNav.hidden = state.landing;
   }
 
   function renderCopy() {
@@ -766,7 +866,9 @@
 
   function render() {
     renderCopy();
+    renderLanding();
     renderDialogOptions();
+    if (state.landing) return;
     renderProfile();
     if (state.view !== "profile") renderFeed();
   }
@@ -864,7 +966,9 @@
     const deltaX = touch.clientX - state.touchStartX;
     const deltaY = state.touchStartY - touch.clientY;
     if (Math.abs(deltaY) < 28 || Math.abs(deltaY) < Math.abs(deltaX)) return;
-    navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex, 100);
+    if (navigateBy(deltaY > 0 ? 1 : -1, state.touchStartIndex, 100)) {
+      event.preventDefault();
+    }
   }
 
   function handleTouchMove(event) {
@@ -1075,11 +1179,18 @@
     }
   }
 
-  function skipToNextCard(button) {
+  function goToAdjacentCard(button, direction) {
     const card = button.closest && button.closest(".vote-card");
     const index = card ? Number(card.getAttribute("data-card-index")) : state.activeIndex;
+    const cards = els.voteFeed.querySelectorAll(".vote-card");
+    if (cards.length <= 1) {
+      showToast(t("onlyOneVote"));
+      return;
+    }
+    const baseIndex = Number.isFinite(index) ? index : state.activeIndex;
+    const nextIndex = (baseIndex + direction + cards.length) % cards.length;
     resetScrollGuards();
-    scrollToIndex((Number.isFinite(index) ? index : state.activeIndex) + 1);
+    scrollToIndex(nextIndex);
   }
 
   document.querySelectorAll("[data-tab]").forEach(function (button) {
@@ -1110,20 +1221,50 @@
     });
   });
 
+  els.landingEnterButtons.forEach(function (button) {
+    button.addEventListener("click", enterApp);
+  });
+
+  els.landingJumpButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const target = document.querySelector(button.getAttribute("data-landing-jump"));
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  if (els.landingConnect) {
+    els.landingConnect.addEventListener("click", async function () {
+      enterApp();
+      try {
+        const wallet = await connectWallet();
+        if (wallet) showToast(t("walletConnected") + " " + short(wallet));
+      } catch (error) {
+        showToast(errorMessage(error));
+      }
+    });
+  }
+
   els.voteFeed.addEventListener("wheel", handleWheel, { passive: false });
   els.voteFeed.addEventListener("touchstart", handleTouchStart, { passive: true });
   els.voteFeed.addEventListener("touchmove", handleTouchMove, { passive: false });
-  els.voteFeed.addEventListener("touchend", handleTouchEnd, { passive: true });
+  els.voteFeed.addEventListener("touchend", handleTouchEnd, { passive: false });
+  els.voteFeed.addEventListener("touchcancel", resetScrollGuards, { passive: true });
   els.voteFeed.addEventListener("pointerdown", handleCategoryPointerDown);
   els.voteFeed.addEventListener("pointermove", handleCategoryPointerMove);
   els.voteFeed.addEventListener("pointerup", handleCategoryPointerUp);
   els.voteFeed.addEventListener("pointercancel", handleCategoryPointerUp);
   window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("hashchange", function () {
+    state.landing = window.location.hash !== "#app";
+    resetScrollGuards();
+    render();
+  });
 
   els.voteFeed.addEventListener("click", async function (event) {
     const categoryButton = event.target.closest("[data-category-filter]");
     const voteButton = event.target.closest("[data-vote-proposal]");
-    const skipButton = event.target.closest("[data-skip-next]");
+    const previousButton = event.target.closest("[data-previous-vote]");
+    const nextButton = event.target.closest("[data-next-vote]");
     const revealButton = event.target.closest("[data-reveal-proposal]");
 
     if (categoryButton) {
@@ -1137,8 +1278,12 @@
       await submitVote(voteButton.getAttribute("data-choice"), voteButton.getAttribute("data-vote-proposal"));
       return;
     }
-    if (skipButton) {
-      skipToNextCard(skipButton);
+    if (previousButton) {
+      goToAdjacentCard(previousButton, -1);
+      return;
+    }
+    if (nextButton) {
+      goToAdjacentCard(nextButton, 1);
       return;
     }
     if (revealButton) {

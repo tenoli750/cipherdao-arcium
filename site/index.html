@@ -8,7 +8,135 @@
     <link rel="apple-touch-icon" href="./favicon.png">
     <link rel="stylesheet" href="./styles.css">
   </head>
-  <body>
+  <body class="is-landing">
+    <section class="landing-view" data-landing-view aria-label="Would You DAO landing page">
+      <nav class="landing-nav" aria-label="Landing">
+        <a class="landing-brand" href="./" aria-label="Would You DAO home">
+          <span class="landing-brand-mark">
+            <img src="./assets/sock-logo.png" alt="">
+          </span>
+          <strong data-copy="brandTitle">Would You DAO?</strong>
+        </a>
+        <button class="landing-nav-button" type="button" data-landing-enter>
+          <span data-copy="landingEnterSmall">Enter app</span>
+        </button>
+      </nav>
+
+      <main class="landing-main">
+        <section class="landing-hero">
+          <div class="landing-hero-backdrop" aria-hidden="true">
+            <img src="./assets/sock-logo.png" alt="">
+          </div>
+          <div class="landing-copy">
+            <span class="landing-kicker" data-copy="landingKicker">Powered by Solana + Arcium</span>
+            <h1 data-copy="landingTitle">Would You DAO?</h1>
+            <p data-copy="landingBody">Started with hygiene dilemmas. Now judging all of life’s impossible choices with Arcium-sealed voting on Solana.</p>
+            <strong class="landing-korean-name">씻었DAO</strong>
+            <div class="landing-actions">
+              <button class="landing-primary" type="button" data-landing-enter>
+                <span data-copy="landingPrimaryAction">Start voting</span>
+              </button>
+              <button class="landing-secondary" type="button" data-landing-jump="#why-arcium">
+                <span data-copy="landingSecondaryAction">Why Arcium?</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="landing-preview" aria-label="Voting preview">
+            <div class="landing-preview-top">
+              <span>Round #42</span>
+              <strong>Hygiene Crisis</strong>
+            </div>
+            <div class="landing-preview-grid">
+              <button type="button">
+                <span>A</span>
+                <strong>Never shower again, but smell like fresh cookies</strong>
+              </button>
+              <button type="button">
+                <span>B</span>
+                <strong>Shower 3x daily, but always smell like gym socks</strong>
+              </button>
+            </div>
+            <p data-copy="landingPreviewNote">Your vote is encrypted until the round ends.</p>
+          </div>
+        </section>
+
+        <section class="landing-proof" aria-label="Privacy benefits">
+          <div>
+            <span>01</span>
+            <strong data-copy="landingProofOneLabel">Absurd dilemmas</strong>
+            <p data-copy="landingProofOne">From hygiene horrors to existential daily choices.</p>
+          </div>
+          <div>
+            <span>02</span>
+            <strong data-copy="landingProofTwoLabel">Private votes</strong>
+            <p data-copy="landingProofTwo">No public live split while the round is active.</p>
+          </div>
+          <div>
+            <span>03</span>
+            <strong data-copy="landingProofThreeLabel">Public results</strong>
+            <p data-copy="landingProofThree">Aggregate outcomes are revealed on Solana.</p>
+          </div>
+        </section>
+
+        <section class="landing-arcium" id="why-arcium" aria-label="Why Arcium">
+          <img class="landing-statue-cutout" src="./assets/arcium-statue.png" alt="" aria-hidden="true">
+          <div class="landing-arcium-copy">
+            <span data-copy="landingArciumKicker">Why Arcium</span>
+            <h2 data-copy="landingArciumTitle">The funny part needs serious privacy.</h2>
+            <p data-copy="landingArciumBody">Would-you-rather votes are small decisions, but the pattern is the same as real governance: if everyone can watch the live split, people may vote strategically or avoid answering honestly. Arcium lets the app keep each choice encrypted until the final result is ready.</p>
+          </div>
+          <div class="landing-arcium-points">
+            <div>
+              <span data-copy="landingArciumPointOneLabel">Before tally</span>
+              <strong data-copy="landingArciumPointOne">No public live leaderboard to influence the room.</strong>
+            </div>
+            <div>
+              <span data-copy="landingArciumPointTwoLabel">During voting</span>
+              <strong data-copy="landingArciumPointTwo">Each wallet submits a sealed choice into shared encrypted state.</strong>
+            </div>
+            <div>
+              <span data-copy="landingArciumPointThreeLabel">After close</span>
+              <strong data-copy="landingArciumPointThree">Only the aggregate outcome and correctness proof are published.</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="landing-steps" aria-label="How it works">
+          <img class="landing-girl-cutout" src="./assets/dao-girl-cutout.png" alt="" aria-hidden="true">
+          <div class="landing-section-heading">
+            <span data-copy="landingStepsKicker">How it works</span>
+            <h2 data-copy="landingStepsTitle">Three simple steps to chaos.</h2>
+          </div>
+          <div class="landing-step-grid">
+            <div>
+              <span>01</span>
+              <strong data-copy="landingStepOneTitle">Connect wallet</strong>
+              <p data-copy="landingStepOneBody">Link your Solana wallet to join the private voting feed.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <strong data-copy="landingStepTwoTitle">Vote privately</strong>
+              <p data-copy="landingStepTwoBody">Choose A or B. Your answer is sealed through Arcium.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <strong data-copy="landingStepThreeTitle">Reveal final result</strong>
+              <p data-copy="landingStepThreeBody">See aggregate results and correctness proofs on Solana.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="landing-final" aria-label="Start voting">
+          <h2 data-copy="landingFinalTitle">Enter the weirdest private DAO on Solana.</h2>
+          <p data-copy="landingFinalBody">Where silly questions meet encrypted computation, and every vote counts without showing what you picked.</p>
+          <button class="landing-primary" type="button" data-landing-enter>
+            <span data-copy="landingPrimaryAction">Start voting</span>
+          </button>
+        </section>
+      </main>
+    </section>
+
     <header class="app-topbar">
       <div class="topbar-left">
         <div class="logo-mark" aria-hidden="true">
@@ -27,9 +155,10 @@
       </div>
     </header>
 
-    <main class="mobile-shell">
+    <main class="mobile-shell" data-app-shell hidden>
       <section class="feed-view" data-feed-view aria-label="Voting feed">
         <div class="vote-feed" data-vote-feed></div>
+        <img class="feed-statue" src="./assets/arcium-statue.png" alt="" aria-hidden="true">
         <img class="feed-mascot" src="./assets/dao-girl-cutout.png" alt="" aria-hidden="true">
       </section>
 
@@ -88,7 +217,7 @@
       </section>
     </main>
 
-    <nav class="bottom-nav" aria-label="Primary">
+    <nav class="bottom-nav" data-bottom-nav aria-label="Primary" hidden>
       <button type="button" data-tab="hot" class="is-active">
         <span data-copy="hotTab">Hot</span>
       </button>
